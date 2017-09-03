@@ -163,9 +163,7 @@ main(int argc, char** argv) {
 	//Iterate through the line and just get everything...
 	for (pos = 0; cn_sstream_get(ss) != NULL; pos++) {
 		char a = cn_sstream_get(ss)[0];
-
 		cn_map_insert(nfa.alphabet, &a, &pos);
-		printf("Alphabet %d - %c\n", pos, a);
 		cn_sstream_next(ss);
 	}
 
