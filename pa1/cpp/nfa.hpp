@@ -1,13 +1,22 @@
 #include <vector>
 #include <map>
+#include <string>
 
 using namespace std;
+
+typedef unsigned int uint;
+
+struct NFA_NODE {
+	string name;
+	vector< vector<string> > states;
+	bool final_state;
+};
 
 class NFA {
 	public:
 		//Constructors
-		nfa();
-		nfa(const string&);
+		NFA();
+		NFA(const string&);
 		
 		//Process Functions
 		void                   read(const string&);
@@ -26,4 +35,4 @@ class NFA {
 		vector<NFA_NODE> nodes;         //Nodes
 		map<string, int> alphabet;      //Pair of Alphabet string and identifier
 		map<string, NFA_NODE*> node_id; //Pointer to a node accessable via name
-}
+};

@@ -11,10 +11,10 @@
 
 //Library Includes
 #include "nfa.hpp"
+#include "lib/handy/file.h"
 
 using namespace std;
 
-typedef uint unsigned int;
 
 uint error_check(int argc, char** argv) {
 	//Check Program Parametre

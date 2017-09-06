@@ -23,7 +23,7 @@ map<string, int>& NFA::get_alphabet() {
 	return alphabet;
 }
 
-map<string, NFA_NODE*> get_node_id_map() {
+map<string, NFA_NODE*> NFA::get_node_id_map() {
 	return node_id;
 }
 
