@@ -35,7 +35,7 @@
 
 typedef struct nfa_node {
 	char* name;
-	CN_VEC states;
+	CN_VEC states; //CN_VEC< CN_VEC<char*> >
 	CN_BOOL final;
 } NFA_NODE;
 
@@ -84,23 +84,33 @@ int error_check(int argc, char** argv) {
 
 void explode_bracket(CN_VEC vec, char* str) {
 	//Gets values inside of a {} bracket and puts them into a specified CN_VEC
-	int i = 1, j, s;
+	int i = 1, j, s, c = 0;
 	char* tmp;
 
 	CN_UINT len = strlen(str);
 	for (; i < len - 1; i++) {
 		if (str[i] != ',') {
-			for (j = 0; str[i + j] != ','; j++);
-			s = atoi(str + i);
-			cn_vec_push_back(vec, &s);
+			for (j = 0; str[i + j] != ',' && str[i + j] != '}'; j++);
+			if (j == 0)
+				continue;
+			char* t = (char*) malloc(sizeof(char) * (j + 1));
+			memcpy(t, &str[i], j);
+			t[j] = '\0';
+			printf("DEMUX: %s", t);
+			cn_vec_push_back(vec, t);
+			printf(" (0x%08x)\n", &cn_vec_back(vec, char*));
 			i += j;
+			c++;
 		}
 	}
+	printf("READ: %d\n", c);
 }
 
 main(int argc, char** argv) {
 	//Perform Error Checking... These things matter y'know.
 	CN_UINT error_code = error_check(argc, argv);
+	CN_UINT i;
+
 	if (error_code != 0)
 		return;
 
@@ -111,11 +121,12 @@ main(int argc, char** argv) {
 	//Initialise the NFA
 	NFA nfa;
 	nfa.alphabet = cn_map_init(char, int, cn_cmp_char);
+	nfa.nodes    = cn_vec_init(NFA_NODE);
 
 	//Now let's get the information about the state machine.
 	CN_SSTREAM ss;
 	CN_UINT pos, init_state, total_states;
-	CN_VEC final_states = cn_vec_init(CN_UINT);
+	CN_VEC final_states = cn_vec_init(char*);
 	char* final_state_str;
 	
 	//Basically, we will use CN_SSTREAMS and a cool for loop to "skip" to the
@@ -166,6 +177,72 @@ main(int argc, char** argv) {
 		cn_map_insert(nfa.alphabet, &a, &pos);
 		cn_sstream_next(ss);
 	}
+
+	//Print out Available Alphabet
+	CNM_ITERATOR* beg = cn_map_begin(nfa.alphabet);
+	for (; beg->node != NULL; cn_map_next(nfa.alphabet, beg)) {
+		printf("%c - %d\n", *(char*)beg->node->key, *(int*)beg->node->data);
+	}
+
+	//Set up node Vector, then load in the states.
+	NFA_NODE* node_line;
+	CN_VEC    push_vec;
+
+	cn_vec_resize(nfa.nodes, total_states);
+	NFA_NODE* node_vec = cn_vec_array(nfa.nodes, NFA_NODE);
+
+	for (i = 0; i < cn_vec_size(nfa.nodes); i++) {
+		ss = cn_sstream_init(lines[4 + i]);
+		cn_sstream_next(ss);
+		node_vec[i].name = strdup(cn_sstream_get(ss));
+
+		//Set up state vector as vector of vectors.
+		node_vec[i].states = cn_vec_init(CN_VEC*);
+
+		CN_UINT j = 0;
+		for (; j < cn_map_size(nfa.alphabet); j++) {
+			push_vec = cn_vec_init(char*);
+			cn_sstream_next(ss);
+			if (cn_sstream_get(ss) == NULL)
+				break;
+
+			explode_bracket(push_vec, cn_sstream_get(ss));
+			
+			CN_UINT k = 0;
+			char** ar = cn_vec_array(push_vec, char*);
+			printf("---\n%d\n---\n", cn_vec_size(push_vec));
+			for (; k < cn_vec_size(push_vec); k++) {
+				printf("0x%08x - %s\n", ar + k * 4, (char*)ar + k * 4);
+			}
+			cn_vec_push_back(node_vec[i].states, &push_vec);
+		}
+
+		cn_sstream_free(ss);
+	}
+
+	//Let's make sure we have all of the data we need. Loop through and print.
+	//Final States
+	for (i = 0; i < cn_vec_size(final_states); i++) {
+		printf("%s\n", (char *) cn_vec_at(final_states, i));
+	}
+
+	//The actual states
+	NFA_NODE* nfa_array = cn_vec_array(nfa.nodes, NFA_NODE);
+	CN_UINT j, k;
+	for (i = 0; i < cn_vec_size(nfa.nodes); i++) {
+		printf("%s ", nfa_array[i].name);
+		
+		//Now let's look at the states of them
+		CN_VEC* arr = cn_vec_array(nfa_array[i].states, CN_VEC);
+		for (j = 0; j < cn_vec_size(nfa_array[i].states); j++) {
+			for (k = 0; k < cn_vec_size(arr[j]); k++) {
+				printf("%s ", cn_vec_get(arr[j], char*, k));
+			}
+		}
+
+		printf("\n");
+	}
+
 
 	//Free the file line array from memory.
 	free_cstr_array(lines);
