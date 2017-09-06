@@ -35,7 +35,7 @@
 
 typedef struct nfa_node {
 	char* name;
-	CN_VEC states; //CN_VEC< CN_VEC<char*> >
+	CN_VEC states; //CN_VEC< CN_VEC< CN_STRING > >
 	CN_BOOL final;
 } NFA_NODE;
 
@@ -84,11 +84,27 @@ int error_check(int argc, char** argv) {
 
 void explode_bracket(CN_VEC vec, char* str) {
 	//Gets values inside of a {} bracket and puts them into a specified CN_VEC
-	int i = 1, j, s, c = 0;
+	int i = 1, j, s, c = 0, noc = 0;
 	char* tmp;
 
+	//First run, count the number of entries even in the string
 	CN_UINT len = strlen(str);
 	for (; i < len - 1; i++) {
+		if (str[i] != ',') {
+			for (j = 0; str[i + j]  != ',' && str[i + j] != '}'; j++);
+			if (j == 0)
+				continue;
+			i += j;
+			noc++;
+		}
+	}
+
+	//Setup Vector
+	cn_vec_clear(vec);
+	cn_vec_resize(vec, noc);
+	printf("VEC ADDR: 0x%08x\n", vec->data);
+
+	for (i = 1; i < len - 1; i++) {
 		if (str[i] != ',') {
 			for (j = 0; str[i + j] != ',' && str[i + j] != '}'; j++);
 			if (j == 0)
@@ -96,9 +112,11 @@ void explode_bracket(CN_VEC vec, char* str) {
 			char* t = (char*) malloc(sizeof(char) * (j + 1));
 			memcpy(t, &str[i], j);
 			t[j] = '\0';
-			printf("DEMUX: %s", t);
-			cn_vec_push_back(vec, t);
-			printf(" (0x%08x)\n", &cn_vec_back(vec, char*));
+
+			cn_vec_get(vec, CN_STRING, c) = cn_string_from_cstr(t);
+			CN_STRING entry = *(CN_STRING*)cn_vec_at(vec, c); //cn_vec_get(vec, CN_STRING, c);
+
+			printf("%s / %s (0x%08x)\n", cn_string_str(entry), t, cn_string_str(entry));
 			i += j;
 			c++;
 		}
@@ -126,7 +144,7 @@ main(int argc, char** argv) {
 	//Now let's get the information about the state machine.
 	CN_SSTREAM ss;
 	CN_UINT pos, init_state, total_states;
-	CN_VEC final_states = cn_vec_init(char*);
+	CN_VEC final_states = cn_vec_init(CN_STRING);
 	char* final_state_str;
 	
 	//Basically, we will use CN_SSTREAMS and a cool for loop to "skip" to the
@@ -159,6 +177,13 @@ main(int argc, char** argv) {
 	
 	//Explode the string and put the entries in a CN_VEC
 	explode_bracket(final_states, final_state_str);
+
+	//Print out the Alphabet...
+	CN_STRING* str_arr = cn_vec_array(final_states, CN_STRING);
+	for (i = 0; i < cn_vec_size(final_states); i++) {
+		CN_STRING val = str_arr[i];
+		printf("ALPHABET: %s\n", cn_string_str(val));
+	}
 
 	//Now for state information
 	CN_STRING state = cn_string_init();
@@ -201,7 +226,7 @@ main(int argc, char** argv) {
 
 		CN_UINT j = 0;
 		for (; j < cn_map_size(nfa.alphabet); j++) {
-			push_vec = cn_vec_init(char*);
+			push_vec = cn_vec_init(CN_STRING);
 			cn_sstream_next(ss);
 			if (cn_sstream_get(ss) == NULL)
 				break;
@@ -209,10 +234,11 @@ main(int argc, char** argv) {
 			explode_bracket(push_vec, cn_sstream_get(ss));
 			
 			CN_UINT k = 0;
-			char** ar = cn_vec_array(push_vec, char*);
+			CN_STRING* ar = cn_vec_array(push_vec, CN_STRING);
 			printf("---\n%d\n---\n", cn_vec_size(push_vec));
 			for (; k < cn_vec_size(push_vec); k++) {
-				printf("0x%08x - %s\n", ar + k * 4, (char*)ar + k * 4);
+				//printf("0x%08x - %s\n", ar + k * 4, (char*)ar + k * 4);
+				printf("0x%08x - %s\n", (void*)cn_string_str(ar[k]), cn_string_str(ar[k]));
 			}
 			cn_vec_push_back(node_vec[i].states, &push_vec);
 		}
@@ -220,7 +246,7 @@ main(int argc, char** argv) {
 		cn_sstream_free(ss);
 	}
 
-	//Let's make sure we have all of the data we need. Loop through and print.
+	//Let's make sure we have everything..
 	//Final States
 	for (i = 0; i < cn_vec_size(final_states); i++) {
 		printf("%s\n", (char *) cn_vec_at(final_states, i));
@@ -235,8 +261,11 @@ main(int argc, char** argv) {
 		//Now let's look at the states of them
 		CN_VEC* arr = cn_vec_array(nfa_array[i].states, CN_VEC);
 		for (j = 0; j < cn_vec_size(nfa_array[i].states); j++) {
+			CN_STRING* str_arr = cn_vec_array(arr[j], CN_STRING);
+			if (cn_vec_size(arr[j]) == 0)
+				printf("(null) ");
 			for (k = 0; k < cn_vec_size(arr[j]); k++) {
-				printf("%s ", cn_vec_get(arr[j], char*, k));
+				printf("%s ", cn_string_str(str_arr[k]));
 			}
 		}
 
