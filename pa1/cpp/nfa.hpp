@@ -1,10 +1,14 @@
+#include <iostream>
 #include <vector>
 #include <map>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
 typedef unsigned int uint;
+
+void explode_bracket(const string&, vector<string>&);
 
 struct NFA_NODE {
 	string name;
@@ -17,9 +21,11 @@ class NFA {
 		//Constructors
 		NFA();
 		NFA(const string&);
+		NFA(const char*);
 		
 		//Process Functions
 		void                   read(const string&);
+		void                   read(const char*);
 
 		//Accessor Functions
 		vector<NFA_NODE>&      get_nodes();
@@ -32,7 +38,10 @@ class NFA {
 		NFA_NODE&              get_node_via_id(const string&);
 	
 	private:
-		vector<NFA_NODE> nodes;         //Nodes
-		map<string, int> alphabet;      //Pair of Alphabet string and identifier
-		map<string, NFA_NODE*> node_id; //Pointer to a node accessable via name
+		vector<NFA_NODE>       nodes;        //Nodes
+		map<string, int>       alphabet;     //Pair of Alphabet string and identifier
+		map<string, NFA_NODE*> node_id;      //Pointer to a node accessable via name
+		map<string, bool>      final_states; //IDs of all final states
+		vector<string>         final_state_strs;
+		NFA_NODE*              init_state;   //Pointer to initial state
 };

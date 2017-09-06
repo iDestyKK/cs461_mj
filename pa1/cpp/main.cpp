@@ -11,6 +11,10 @@
 
 //Library Includes
 #include "nfa.hpp"
+
+//Handy (Surprise! It works in C++ too!)
+#include "lib/handy/handy.h"
+#include "lib/handy/types.h"
 #include "lib/handy/file.h"
 
 using namespace std;
@@ -55,4 +59,22 @@ uint error_check(int argc, char** argv) {
 
 int main(int argc, char** argv) {
 	uint error_code = error_check(argc, argv);
+
+	//Assume the user input arguments correctly. Now let us begin.
+	//Let's initialise the NFA
+	NFA nfa(argv[1]);
+
+	//Now let's make sure everything works.
+	vector<NFA_NODE>& ref = nfa.get_nodes();
+	for (int i = 0; i < ref.size(); i++) {
+		printf("%s ", ref[i].name.c_str());
+		for (int j = 0; j < ref[i].states.size(); j++) {
+			printf("{");
+			for (int k = 0; k < ref[i].states[j].size(); k++) {
+				printf("%s%s", ref[i].states[j][k].c_str(), (k != ref[i].states[j].size() - 1) ? " " : "");
+			}
+			printf("} ");
+		}
+		printf("\n");
+	}
 }
