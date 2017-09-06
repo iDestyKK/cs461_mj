@@ -201,6 +201,7 @@ void cn_vec_free(CN_VEC vec) {
     if (vec->size != 0)
         free(vec->data);
     free(vec);
+	vec = NULL;
 }
 
 //Functions you won't use if you are sane

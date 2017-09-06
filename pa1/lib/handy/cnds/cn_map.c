@@ -258,6 +258,7 @@ void cn_map_free(CN_MAP map) {
 	if (map->size > 0)
 		cn_map_clear(map);
 	free(map);
+	map = NULL;
 }
 
 //Functions you won't use if you are sane
@@ -285,6 +286,7 @@ void __cn_map_free_node(CNM_NODE* ptr) {
 	if (ptr->data != NULL) free(ptr->data);
 
 	free(ptr);
+	ptr = NULL;
 }
 
 void __cn_map_print_tree(CN_MAP map) {

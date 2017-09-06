@@ -284,6 +284,7 @@ CNL_NODE* cn_list_next(CN_LIST list, CNL_NODE* node) {
 void cn_list_free(CN_LIST list) {
     cn_list_clear(list);
     free(list);
+	list = NULL;
 }
 
 //Functions you won't use if you are sane

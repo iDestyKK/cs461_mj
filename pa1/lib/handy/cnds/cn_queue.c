@@ -92,6 +92,7 @@ cnq_byte cn_queue_empty(CN_QUEUE queue) {
 void cn_queue_free(CN_QUEUE queue) {
 	cn_queue_clear(queue);
 	free(queue);
+	queue = NULL:
 }
 
 //Functions you won't use if you are sane
@@ -111,4 +112,5 @@ CNQ_NODE* __cn_queue_create_node(void* ptr, cnq_uint elem_size) {
 void __cn_queue_free_node(CNQ_NODE* ptr) {
 	free(ptr->data);
 	free(ptr);
+	ptr = NULL;
 }
