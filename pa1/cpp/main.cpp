@@ -58,7 +58,7 @@ uint error_check(int argc, char** argv) {
 }
 
 int main(int argc, char** argv) {
-	uint error_code = error_check(argc, argv);
+	//uint error_code = error_check(argc, argv);
 
 	//Assume the user input arguments correctly. Now let us begin.
 	//Let's initialise the NFA
