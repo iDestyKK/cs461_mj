@@ -78,5 +78,5 @@ int main(int argc, char** argv) {
 		printf("\n");
 	}
 	printf("\n\n");
-	eclosure_calculate(nfa, nfa.get_nodes()[0]);
+	eclosure_calculate(nfa, nfa.get_nodes()[6]);
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <set>
 #include <map>
 #include <string>
 #include <sstream>
@@ -48,3 +49,4 @@ class NFA {
 
 void explode_bracket(const string&, vector<string>&);
 void eclosure_calculate(NFA&, NFA_NODE&);
+void eclosure_calculate_recursive(NFA&, NFA_NODE&, vector<NFA_NODE*>&, set<string>&);
