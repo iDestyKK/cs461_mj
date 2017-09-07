@@ -9,12 +9,16 @@ using namespace std;
 
 typedef unsigned int uint;
 
-
-
 struct NFA_NODE {
 	string name;
 	vector< vector<string> > states;
 	bool final_state;
+};
+
+struct DFA_NODE {
+	string name;
+	vector<NFA_NODE*> nodes;  //Collection of nodes.
+	vector<DFA_NODE*> states; //Guaranteed to only have one entry
 };
 
 class NFA {
@@ -45,6 +49,8 @@ class NFA {
 		map<string, bool>      final_states; //IDs of all final states
 		vector<string>         final_state_strs;
 		NFA_NODE*              init_state;   //Pointer to initial state
+
+		vector<DFA_NODE*>      dnodes;       //Nodes when converting to DFA
 };
 
 void explode_bracket(const string&, vector<string>&);
