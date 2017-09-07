@@ -4,6 +4,9 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include <queue>
+
+#include "lib/handy/types.h"
 
 using namespace std;
 
@@ -31,6 +34,7 @@ class NFA {
 		//Process Functions
 		void                   read(const string&);
 		void                   read(const char*);
+		void                   convert_to_dfa();
 
 		//Accessor Functions
 		vector<NFA_NODE>&      get_nodes();
@@ -50,9 +54,14 @@ class NFA {
 		vector<string>         final_state_strs;
 		NFA_NODE*              init_state;   //Pointer to initial state
 
-		vector<DFA_NODE*>      dnodes;       //Nodes when converting to DFA
+		vector<DFA_NODE>      dnodes;       //Nodes when converting to DFA
+		set<string>           dnames;       //Names to make sure no duplicates exist
 };
 
 void explode_bracket(const string&, vector<string>&);
-void eclosure_calculate(NFA&, NFA_NODE&);
-void eclosure_calculate_recursive(NFA&, NFA_NODE&, vector<NFA_NODE*>&, set<string>&);
+void eclosure_calculate(NFA&, DFA_NODE&, DFA_NODE&);
+void eclosure_calculate_recursive(NFA&, DFA_NODE&, DFA_NODE&, vector<NFA_NODE*>&, set<string>&);
+void node_nfa_to_dfa(NFA_NODE&, DFA_NODE&);
+void move_dfa(NFA&, DFA_NODE&, CN_UINT, DFA_NODE&);
+void move_dfa_recursive(NFA&, DFA_NODE&, DFA_NODE&, CN_UINT, set<string>&);
+void generate_dfa_name(DFA_NODE&);
