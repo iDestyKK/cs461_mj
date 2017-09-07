@@ -20,6 +20,25 @@ void explode_bracket(const string& str, vector<string>& vec_ref) {
 	}
 }
 
+void eclosure_calculate(NFA& nfa, NFA_NODE& node) {
+	//Computes the Eclosure of a node.
+	vector<NFA_NODE*> closure;
+	closure.push_back(&node);
+
+	//Go into the node and find out what nodes follow this with "E".
+	vector<string>& ref = node.states.back();
+	for (int i = 0; i < ref.size(); i++) {
+		closure.push_back(nfa.get_node_id_map()[ref[i]]);
+		printf("[CHK] %s - 0x%08x vs 0x%08x\n", ref[i].c_str(), &ref[i], nfa.get_node_id_map()[ref[i]]);
+	}
+
+	//Make sure we did it right.
+	for (int i = 0; i < closure.size(); i++) {
+		printf("%s\n", closure[i]->name.c_str());
+		//while(1) {};
+	}
+}
+
 //Constructors
 NFA::NFA() {
 
@@ -94,6 +113,8 @@ void NFA::read(const char* fname) {
 		string tmp;
 		is >> tmp;
 		ref.name = tmp;
+		node_id[tmp] = &nodes.back();
+		printf("[NOTE] Added %s to map. (0x%08x)\n", ref.name.c_str(), &nodes.back());
 		
 		//Load the transitions
 		vector<string> brackets;

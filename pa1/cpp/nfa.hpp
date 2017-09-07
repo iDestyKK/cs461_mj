@@ -8,7 +8,7 @@ using namespace std;
 
 typedef unsigned int uint;
 
-void explode_bracket(const string&, vector<string>&);
+
 
 struct NFA_NODE {
 	string name;
@@ -45,3 +45,6 @@ class NFA {
 		vector<string>         final_state_strs;
 		NFA_NODE*              init_state;   //Pointer to initial state
 };
+
+void explode_bracket(const string&, vector<string>&);
+void eclosure_calculate(NFA&, NFA_NODE&);
