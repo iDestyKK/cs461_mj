@@ -41,7 +41,6 @@ void eclosure_calculate(NFA& nfa, DFA_NODE& node, DFA_NODE& res) {
 	}
 
 	generate_dfa_name(res);
-	printf("%s\n", res.name.c_str());
 }
 
 void eclosure_calculate_recursive(NFA& nfa, DFA_NODE& node, DFA_NODE& construct, vector<NFA_NODE*>& closure, set<string>& tally) {
@@ -81,18 +80,15 @@ void eclosure_calculate_recursive(NFA& nfa, DFA_NODE& node, DFA_NODE& construct,
 void move_dfa(NFA& nfa, DFA_NODE& node, CN_UINT a_id, DFA_NODE& new_node) {
 	new_node = DFA_NODE();
 	set<string> tally;
-	printf("Testing %s\n", node.name.c_str());
 
 	move_dfa_recursive(nfa, node, new_node, a_id, tally);
 	generate_dfa_name(new_node);
-	printf("%s\n", new_node.name.c_str());
 }
 
 void move_dfa_recursive(NFA& nfa, DFA_NODE& node, DFA_NODE& new_node, CN_UINT a_id, set<string>& tally) {
 	//Generates a DFA Node of nodes that we can go to when given an alphabet char
 	for (CN_UINT i = 0; i < node.nodes.size(); i++) {
 		if (node.nodes[i] == NULL) {
-			printf("Nothing here (%d %d). Moving on!\n", a_id, node.nodes.size());
 			continue;
 		}
 		NFA_NODE& ref_node = *node.nodes[i];
@@ -198,6 +194,7 @@ void NFA::read(const char* fname) {
 	is >> letter;
 	while (is >> letter) {
 		alphabet[letter] = alphabet.size();
+		rev_alphabet.push_back(letter);
 	}
 
 	//Finally, let's read the state information.
@@ -215,7 +212,6 @@ void NFA::read(const char* fname) {
 		is >> tmp;
 		ref.name = tmp;
 		//node_id.insert(make_pair(tmp, &nodes.back()));
-		printf("[NOTE] Added %s to map. (0x%08x)\n", ref.name.c_str(), &nodes.back());
 		
 		//Load the transitions
 		vector<string> brackets;
@@ -239,34 +235,82 @@ void NFA::read(const char* fname) {
 			nodes[i].name,
 			&nodes[i]
 		));
-		printf("[NOTE] Added %s to map. (0x%08x)\n", nodes[i].name.c_str(), &nodes[i]);
 	}
 }
 
 void NFA::convert_to_dfa() {
 	//Here is where the magic happens... I guess.
 	DFA_NODE dn, res;
+	vector< vector< CN_UINT > > transition_states;
 	
 	//Initial node
 	node_nfa_to_dfa(nodes[0], dn);
 	eclosure_calculate(*this, dn, res);
 	dnodes.push_back(res);
 	dnames.insert(make_pair(res.name, 0));
+	transition_states.push_back(
+		vector<CN_UINT>(alphabet.size() - 1)
+	);
 
 	//Account for all possibilities and traverse the "graph"
 	for (int i = 0; i < dnodes.size(); i++) {
 		for (int j = 0; j < alphabet.size() - 1; j++) {
 			move_dfa(*this, dnodes[i], j, res);
-			if (res.name != "" && dnames.find(res.name) == dnames.end()) {
-				dnames.insert(make_pair(res.name, dnames.size()));
-				dnodes.push_back(res);
+			if (res.name != "") {
+				map<string, int>::iterator ii = dnames.find(res.name);
+				if (ii == dnames.end()) {
+					dnames.insert(make_pair(res.name, dnames.size()));
+					dnodes.push_back(res);
+					transition_states.push_back(
+						vector<CN_UINT>(alphabet.size() - 1)
+					);
+					transition_states[i][j] = dnodes.size();
+				}
+				else {
+					//Already exists in the DFA Node List. So...
+					transition_states[i][j] = ii->second + 1;
+				}
 			}
 		}
 	}
 
+	//Print out information.
+	//TODO: Do this shit.	
+
+	//Print out the nodes
+	ostringstream os_line;
+	os_line.clear();
+	os_line << "State   ";
+	for (int i = 0; i < rev_alphabet.size() - 1; i++) {
+		os_line << setw(16) << left << rev_alphabet[i] << " ";
+	}
+	printf("%s\n", os_line.str().c_str());
+
 	//Now let's print out each of the nodes
 	for (int i = 0; i < dnodes.size(); i++) {
-		printf("%d - %s\n", dnames[dnodes[i].name], dnodes[i].name.c_str());
+		os_line.clear();
+		os_line.str(string());
+		os_line << setw(8) << left << dnames[dnodes[i].name] + 1;
+		/*printf("%-7d ", dnames[dnodes[i].name] + 1); //, dnodes[i].name.c_str());
+		for (int j = 0; j < transition_states[i].size(); j++) {
+			printf("%-16d ", transition_states[i][j]);
+		}
+		printf("\n");*/
+
+		ostringstream os;
+		os.clear();
+		for (int j = 0; j < transition_states[i].size(); j++) {
+			os.clear();
+			os.str(string());
+			if (transition_states[i][j] != 0)
+				os << "{" << transition_states[i][j] << "}";
+			else
+				os << "{}";
+
+			os_line << setw(16) << left << os.str() << " ";
+		}
+
+		printf("%s\n", os_line.str().c_str());
 	}
 }
 

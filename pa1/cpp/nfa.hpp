@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <set>
 #include <map>
@@ -50,6 +51,7 @@ class NFA {
 	private:
 		vector<NFA_NODE>       nodes;        //Nodes
 		map<string, int>       alphabet;     //Pair of Alphabet string and identifier
+		vector<string>         rev_alphabet; //Reverse lookup for Alphabet.
 		map<string, NFA_NODE*> node_id;      //Pointer to a node accessable via name
 		map<string, bool>      final_states; //IDs of all final states
 		vector<string>         final_state_strs;
