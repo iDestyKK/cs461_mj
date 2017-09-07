@@ -81,7 +81,7 @@ CN_BFSTREAM cn_bfstream_init(char* fname) {
 	size_t sz = get_file_size(fname);
 
 	//Read entire file into buffer
-	stream->str = malloc(sizeof(char) * (sz + 1));
+	stream->str = (char *) malloc(sizeof(char) * (sz + 1));
 	stream->val = NULL;
 	stream->pos = 0;
 	stream->len = sz;
