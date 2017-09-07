@@ -274,10 +274,40 @@ void NFA::convert_to_dfa() {
 		}
 	}
 
+	//Find all final states.
+	ostringstream fstates;
+	fstates.clear();
+	bool cool = false;
+
+	for (int i = 0; i < dnodes.size(); i++) {
+		dnodes[i].final_state = false;
+		for (int j = 0; j < final_state_strs.size(); j++) {
+			if (!dnodes[i].final_state && dnodes[i].name.find(final_state_strs[j]) != string::npos) {
+				dnodes[i].final_state = true;
+				fstates << ((cool) ? "," : "") << (i + 1);
+				cool = true;
+			}
+		}
+	}
+
 	//Print out information.
-	//TODO: Do this shit.	
+	printf("\ncreating corresponding DFA ...\n");
+	for (int i = 0; i < dnodes.size(); i++) {
+		printf("new DFA state:  %-4d -->  {%s}\n", i + 1, dnodes[i].name.c_str());
+	}
+	printf("done.\n");
 
 	//Print out the nodes
+	printf(
+		"\nfinal DFA:\n"
+		"Initial State:  1\n" //This is pretty much guaranteed...
+		"Final States:   {%s}\n"
+		"Total States:   %d\n",
+		fstates.str().c_str(),
+		dnodes.size()
+	);
+	
+
 	ostringstream os_line;
 	os_line.clear();
 	os_line << "State   ";

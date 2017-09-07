@@ -24,6 +24,7 @@ struct DFA_NODE {
 	string name;
 	vector<NFA_NODE*> nodes;  //Collection of nodes.
 	vector<DFA_NODE*> states; //Guaranteed to only have one entry
+	bool final_state;
 };
 
 class NFA {

@@ -57,14 +57,7 @@ uint error_check(int argc, char** argv) {
 	return 0;
 }
 
-int main(int argc, char** argv) {
-	//uint error_code = error_check(argc, argv);
-
-	//Assume the user input arguments correctly. Now let us begin.
-	//Let's initialise the NFA
-	NFA nfa(argv[1]);
-
-	//Now let's make sure everything works.
+void print_nfa(NFA& nfa) {
 	vector<NFA_NODE>& ref = nfa.get_nodes();
 	for (int i = 0; i < ref.size(); i++) {
 		printf("%s ", ref[i].name.c_str());
@@ -78,6 +71,24 @@ int main(int argc, char** argv) {
 		printf("\n");
 	}
 	printf("\n\n");
+}
 
+int main(int argc, char** argv) {
+	//uint error_code = error_check(argc, argv);
+
+	//Assume the user input arguments correctly. Now let us begin.
+	//Let's initialise the NFA
+	printf("reading NFA... ");
+	NFA nfa(argv[1]);
+	printf("done.\n");
+
+	
+	//Make sure it actually works (Debug)
+	//print_nfa(nfa);
+
+	//Do stuff
 	nfa.convert_to_dfa();
+
+	//Have a nice day. :)
+	return 0;
 }
