@@ -92,7 +92,7 @@ void move_dfa_recursive(NFA& nfa, DFA_NODE& node, DFA_NODE& new_node, CN_UINT a_
 	//Generates a DFA Node of nodes that we can go to when given an alphabet char
 	for (CN_UINT i = 0; i < node.nodes.size(); i++) {
 		if (node.nodes[i] == NULL) {
-			printf("Nothing here (%d). Moving on!\n", node.nodes.size());
+			printf("Nothing here (%d %d). Moving on!\n", a_id, node.nodes.size());
 			continue;
 		}
 		NFA_NODE& ref_node = *node.nodes[i];
@@ -135,6 +135,12 @@ void generate_dfa_name(DFA_NODE& node) {
 }
 
 //Constructors
+DFA_NODE::DFA_NODE() {
+	name = "";
+	nodes.clear();
+	states.clear();
+}
+
 NFA::NFA() {
 
 }
@@ -241,28 +247,26 @@ void NFA::convert_to_dfa() {
 	//Here is where the magic happens... I guess.
 	DFA_NODE dn, res;
 	
-	queue<DFA_NODE*> node_q;
-
 	//Initial node
 	node_nfa_to_dfa(nodes[0], dn);
 	eclosure_calculate(*this, dn, res);
 	dnodes.push_back(res);
-	node_q.push(&dnodes.back());
-	dnames.insert(res.name);
+	dnames.insert(make_pair(res.name, 0));
 
-	//Account for all possibilities
-	while (!node_q.empty()) {
-		DFA_NODE* ntop = node_q.front();
-		node_q.pop();
-
-		for (int i = 0; i < alphabet.size() - 1; i++) {
-			move_dfa(*this, *ntop, i, res);
+	//Account for all possibilities and traverse the "graph"
+	for (int i = 0; i < dnodes.size(); i++) {
+		for (int j = 0; j < alphabet.size() - 1; j++) {
+			move_dfa(*this, dnodes[i], j, res);
 			if (res.name != "" && dnames.find(res.name) == dnames.end()) {
+				dnames.insert(make_pair(res.name, dnames.size()));
 				dnodes.push_back(res);
-				node_q.push(&dnodes.back());
-				dnames.insert(res.name);
 			}
 		}
+	}
+
+	//Now let's print out each of the nodes
+	for (int i = 0; i < dnodes.size(); i++) {
+		printf("%d - %s\n", dnames[dnodes[i].name], dnodes[i].name.c_str());
 	}
 }
 

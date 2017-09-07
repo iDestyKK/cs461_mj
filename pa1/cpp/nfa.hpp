@@ -19,6 +19,7 @@ struct NFA_NODE {
 };
 
 struct DFA_NODE {
+	DFA_NODE();
 	string name;
 	vector<NFA_NODE*> nodes;  //Collection of nodes.
 	vector<DFA_NODE*> states; //Guaranteed to only have one entry
@@ -54,8 +55,8 @@ class NFA {
 		vector<string>         final_state_strs;
 		NFA_NODE*              init_state;   //Pointer to initial state
 
-		vector<DFA_NODE>      dnodes;       //Nodes when converting to DFA
-		set<string>           dnames;       //Names to make sure no duplicates exist
+		vector<DFA_NODE>       dnodes;       //Nodes when converting to DFA
+		map<string, int>       dnames;       //Names to make sure no duplicates exist
 };
 
 void explode_bracket(const string&, vector<string>&);
