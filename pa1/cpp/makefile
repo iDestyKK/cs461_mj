@@ -1,26 +1,26 @@
 CC      = g++
-CFLAGS  = --std=c++98 -g
+CFLAGS  = --std=c++98 -O2
 HANDY_P = ./lib/handy
 
-all: nfa2dfa
+nfa2dfa: obj/prog.o obj/nfa.o obj/handy.a
+	@#$(CC) $(CFLAGS) -L./obj -Wl,-rpath=./obj -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^
 
-nfa2dfa:
-	$(CC) $(CFLAGS) -o nfa2dfa main.cpp nfa.cpp $(HANDY_P)/file.c $(HANDY_P)/stream.c
+obj/handy.a: obj/handy_file.o obj/handy_stream.o
+	ar rcs $@ $^
+	rm $^
 
-#all: handy prog nfa nfa2dfa
+obj/handy_file.o: $(HANDY_P)/file.c
+	$(CC) $(CFLAGS) -o $@ -c $^
 
-#handy:
-#	$(CC) $(CFLAGS) -shared -o obj/handy.o $(HANDY_P)/file.c $(HANDY_P)/stream.c
-#	ar ruv obj/handy.a obj/handy.o
-#
-#prog:
-#	$(CC) $(CFLAGS) -o obj/prog.o -c main.cpp
-#
-#nfa:
-#	$(CC) $(CFLAGS) -o obj/nfa.o -c nfa.cpp
-#
-#nfa2dfa:
-#	$(CC) $(CFLAGS) -o nfa2dfa -I./obj/ obj/prog.o obj/nfa.o obj/handy.a obj/handy.o
-#
+obj/handy_stream.o: $(HANDY_P)/stream.c
+	$(CC) $(CFLAGS) -o $@ -c $^
+
+obj/prog.o: src/main.cpp
+	$(CC) $(CFLAGS) -o $@ -c $^
+
+obj/nfa.o: src/nfa.cpp
+	$(CC) $(CFLAGS) -o $@ -c $^
+
 clean:
-	rm nfa2dfa obj/*.o obj/*.a
+	rm -f nfa2dfa obj/*.o obj/*.a obj/*.so

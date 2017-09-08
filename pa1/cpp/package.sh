@@ -21,22 +21,22 @@ normal=$(tput sgr0)
 printf "COSC 461 PA1 Packager\n\n"
 
 # Forcibly remove the file (even if it doesn't exist!)
-printf "%-48s" "Checking if master.tar.gz already exists... "
+printf "%-48s" "(1/4) Checking if master.tar.gz already exists."
 rm -f "pkg/master.tar.gz"
 printf "[  ${green}OK${normal}  ]\n"
 
 # Copy the PDF documentation over
-printf "%-48s" "Copying PDF to working_directory... "
+printf "%-48s" "(2/4) Copying files to working_directory."
 cp "doc/pdf/NFA2DFA.pdf" .
 printf "[  ${green}OK${normal}  ]\n"
 
 # Tar that shit up
-printf "%-48s" "Creating Master TAR... "
-tar -czf "pkg/master.tar.gz" makefile *.cpp *.hpp *.pdf lib obj README.md
+printf "%-48s" "(3/4) Creating Master TAR."
+tar -czf "pkg/master.tar.gz" makefile *.txt *.pdf lib obj src README.md
 printf "[  ${green}OK${normal}  ]\n"
 
-# Delete the PDF Copy
-printf "%-48s" "Deleting PDF Copy... "
+# Clean Up
+printf "%-48s" "(4/4) Cleaning up."
 rm "NFA2DFA.pdf"
 printf "[  ${green}OK${normal}  ]\n"
 
