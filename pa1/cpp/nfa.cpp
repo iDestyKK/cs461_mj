@@ -236,6 +236,9 @@ void NFA::read(const char* fname) {
 			&nodes[i]
 		));
 	}
+
+	//Set up the init_state pointer.
+	init_state = node_id[init_state_str];
 }
 
 void NFA::convert_to_dfa() {
@@ -244,7 +247,7 @@ void NFA::convert_to_dfa() {
 	vector< vector< CN_UINT > > transition_states;
 	
 	//Initial node
-	node_nfa_to_dfa(nodes[0], dn);
+	node_nfa_to_dfa(*init_state, dn);
 	eclosure_calculate(*this, dn, res);
 	dnodes.push_back(res);
 	dnames.insert(make_pair(res.name, 0));

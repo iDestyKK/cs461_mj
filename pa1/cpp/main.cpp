@@ -1,3 +1,22 @@
+/*
+ * COSC 461 - Programming Assignment 1: NFA2DFA Converter
+ *
+ * Description:
+ *     Converts a (specifically formatted) NFA into a DFA, and exports it to a
+ *     humanly readable text file.
+ * 
+ * Compilation:
+ *     This is a C++ program that uses my Handy Library, written in C. As such,
+ *     compilation might not be trivial if attempted manually. Please use the
+ *     included "makefile".
+ *
+ * Synopsis:
+ *     ./nfa2dfa < nfa_file > dfa_file
+ *
+ * Author:
+ *     Clara Van Nguyen
+ */
+
 //C++ Includes
 #include <iostream>
 #include <string>
