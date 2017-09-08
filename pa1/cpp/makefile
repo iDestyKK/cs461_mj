@@ -8,7 +8,7 @@ nfa2dfa: obj/prog.o obj/nfa.o obj/handy.a
 
 obj/handy.a: obj/handy_file.o obj/handy_stream.o
 	ar rcs $@ $^
-	rm $^
+	@#rm $^
 
 obj/handy_file.o: $(HANDY_P)/file.c
 	$(CC) $(CFLAGS) -o $@ -c $^
