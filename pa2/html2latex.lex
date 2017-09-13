@@ -62,10 +62,6 @@ int list_type;
 	
 }
 
-<LI>[^<]* {
-	//TODO: this shit
-}
-
 <LI>"</li>" {
 	printf("hi");
 	BEGIN 0;
