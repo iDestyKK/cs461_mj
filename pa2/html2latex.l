@@ -47,56 +47,25 @@ int list_type;
 }
 
 "<ul>" {
-	//yytext[yyleng - 5] = 0;
 	printf("\\begin{itemize}\n");
-	BEGIN UL;
-	//printf("%s", yytext + 4);
 }
 
-<UL>"<li>"[^<]* {
-	printf("\\item ");
-	BEGIN LI;
-}
-
-<UL>"</li>" {
-	
-}
-
-<LI>"</li>" {
-	printf("hi");
-	BEGIN 0;
-}
-
-<LI>. {
-	printf("%s", yytext);
-	/*
-	printf("\"\" %s \"\"\n", yytext);
-	if (yytext[0] == '<' &&
-	    yytext[1] == '/' &&
-	    yytext[2] == 'l' &&
-	    yytext[3] == 'i' &&
-	    yytext[4] == '>') {
-		printf("Test\n");
-		BEGIN 0;
-	}
-	else
-		BEGIN FORMATTING;
-	*/
-}
-
-%{
-	/*
-	<UL>"<li>".*"</li>" {
-		yytext[yyleng - 5] = 0;
-		printf("-- %s --", yytext + 4);
-	}
-	*/
-%}
-
-
-<UL>"</ul>" {
+"</ul>" {
 	printf("\\end{itemize}\n");
-	BEGIN 0;
+}
+
+"<ol>" {
+	printf("\\begin{enumerate}\n");
+}
+
+"</ol>" {
+	printf("\\end{enumerate}");
+}
+
+"<li>"[^<]* {
+	//yytext[yyleng] = 0;
+	printf("\\item %s", yytext + 4);
+	BEGIN FORMATTING;
 }
 
 "<p>"[^<]* {
@@ -107,6 +76,11 @@ int list_type;
 
 <FORMATTING>"</p>" {
 	printf("\n");
+	BEGIN 0;
+}
+
+<FORMATTING>"</li>" {
+	printf("\n\n");
 	BEGIN 0;
 }
 
