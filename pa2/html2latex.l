@@ -23,7 +23,7 @@ int list_type;
 
 "<h2>"[^<]*"</h2>" {
     /**************************************************************************
-     * Matched an HTML H1 header so print it out as a LateX section title.
+     * Matched an HTML H2 header so print it out as a LateX section title.
      * The beginning and ending tags need to be stripped off before the
      * title can be formatted in LateX.
      *************************************************************************/
@@ -33,7 +33,7 @@ int list_type;
 
 "<h3>"[^<]*"</h3>" {
     /**************************************************************************
-     * Matched an HTML H1 header so print it out as a LateX section title.
+     * Matched an HTML H3 header so print it out as a LateX section title.
      * The beginning and ending tags need to be stripped off before the
      * title can be formatted in LateX.
      *************************************************************************/
@@ -42,29 +42,84 @@ int list_type;
 }
 
 "<pre>"[^<]*"</pre>" {
+	//Matched a PRE tag. Just print out everything inside literally
 	yytext[yyleng - 6] = 0;
 	printf("\\begin{verbatim}%s\\end{verbatim}\n", yytext + 5);
 }
 
 "<ul>" {
-	printf("\\begin{itemize}\n");
+	//This is a list with bullet points. Begin "itemize".
+	list_type = 0;
+	printf("\\begin{itemize}");
+	BEGIN UL;
 }
 
 "</ul>" {
+	//End of "itemize" (Oddly, this is actually captured inside of the <UL> tags).
+	//Kept to escape just in case of horrible formatting.
 	printf("\\end{itemize}\n");
 }
 
 "<ol>" {
-	printf("\\begin{enumerate}\n");
+	//This is a list with number points. Begin "enumerate".
+	list_type = 1;
+	printf("\\begin{enumerate}");
+	BEGIN OL;
 }
 
 "</ol>" {
-	printf("\\end{enumerate}");
+	//End of "enumerate" (Oddly, this is actually captured inside of the <UL> tags).
+	//Kept to escape just in case of horrible formatting.
+	printf("\\end{enumerate}\n");
 }
 
-"<li>"[^<]* {
-	//yytext[yyleng] = 0;
-	printf("\\item %s", yytext + 4);
+<UL>"<li>" {
+	//List Item for Bullet Points.
+	printf("\\item ");
+	BEGIN LI;
+}
+
+<UL>[ \n\r\t]+ {
+	//New Lines, Spaces, and Carriage Returns are handled by printing literally.
+	printf("%s", yytext);
+}
+
+<UL>. {
+	//Literally print whatever is inside but is not inside the "<li>" tags.
+	printf("%s", yytext);
+}
+
+<UL>"</ul>" {
+	//End of "itemize" (this one actually does get called)
+	printf("\\end{itemize}\n");
+	BEGIN 0;
+}
+
+<OL>"<li>" {
+	//List item for number points
+	printf("\\item ");
+	BEGIN LI;
+}
+
+<OL>[ \n\r\t]+ {
+	//New Lines, Spaces, and Carriage Returns are handled by printing literally.
+	printf("%s", yytext);
+}
+
+<OL>. {
+	//Literally print whatever is inside but is not inside the "<li>" tags.
+	printf("%s", yytext);
+}
+
+<OL>"</ol>" {
+	//End of "enumerate" (this one actually does get called)
+	printf("\\end{enumerate}\n");
+	BEGIN 0;
+}
+
+<LI>[^<]* {
+	//Unleash recursion and call formatting inside of the LI entry.
+	printf("%s", yytext);
 	BEGIN FORMATTING;
 }
 
@@ -75,57 +130,68 @@ int list_type;
 }
 
 <FORMATTING>"</p>" {
-	printf("\n");
-	BEGIN 0;
-}
-
-<FORMATTING>"</li>" {
+	//We hit the end of a paragraph statement.
 	printf("\n\n");
 	BEGIN 0;
 }
 
+<FORMATTING>"</li>" {
+	//We hit the end of a list entry.
+	printf("\n");
+
+	//Cheat
+	switch (list_type) {
+		case 0: BEGIN UL; break;
+		case 1: BEGIN OL; break;
+	}
+}
+
 <FORMATTING>"<big>"[^<]*"</big>" {
+	//Big Tag for making text... bigger (literally)
 	yytext[yyleng-6] = 0;
 	printf("{\\Large %s}", yytext + 5);
 }
 
 <FORMATTING>"<small>"[^<]*"</small>" {
+	//Makes text smaller...
 	yytext[yyleng-8] = 0;
 	printf("{\\scriptsize %s}", yytext + 7);
 }
 
 <FORMATTING>"<b>"[^<]*"</b>" {
+	//Bold
 	yytext[yyleng-4] = 0;
 	printf("\\textbf{%s}", yytext + 3);
 }
 
 <FORMATTING>"<i>"[^<]*"</i>" {
+	//Italics
 	yytext[yyleng-4] = 0;
 	printf("\\textit{%s}", yytext + 3);
 }
 
 <FORMATTING>"<em>"[^<]*"</em>" {
+	//Sorta Italics yeah sure
 	yytext[yyleng-5] = 0;
 	printf("\\emph{%s}", yytext + 4);
 }
 
 <FORMATTING>"<strong>"[^<]*"</strong>" {
+	//Puts more emphasis on text by making it bold.
 	yytext[yyleng-9] = 0;
 	printf("\\textmd{%s}", yytext + 8);
 }
 
 <FORMATTING>"<sup>"[^<]*"</sup>" {
+	//Superscript
 	yytext[yyleng-6] = 0;
 	printf("\\textsuperscript{%s}", yytext + 5);
 }
 
 <FORMATTING>"<sub>"[^<]*"</sub>" {
+	//Subscript
 	yytext[yyleng-6] = 0;
 	printf("\\textsubscript{%s}", yytext + 5);
-}
-
-[\n](\r)? {
-    printf("\n");
 }
 
 "<!--" {
