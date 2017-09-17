@@ -1,0 +1,12 @@
+<!-- From http://utk.claranguyen.me/guide/PPM.html -->
+<h1>PBM, PGM, and PPM files</h1>
+<h3>File Information</h3>
+<p>PBM, PGM, and PPM file are all image file formats that hold data in regards to pixels of an image.
+Compared to formats like PNG, JPG, etc, these formats are very simplistic, offering no compression.
+These are simple formats that store the colours of pixels as bytes which can be read into your program.</p>
+<p>There are 3 types for a reason:</p>
+<p>PBM (Portable BitMap) - 2 colours only. Black and White (0-1)</p>
+<p>PGM (Portable GrayMap) - 255 colours only. Black-Gray-White (0-255)</p>
+<p>PPM (Portable PixMap) - 16,777,216 colours. Coloured RGB (0-255, 0-255, 0-255)</p>
+<p>Each of these files also contain a magic number which tells if the information is stored as text or as bytes.
+We will cover this later in the documentation.</p>
