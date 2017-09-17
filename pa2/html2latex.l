@@ -41,10 +41,21 @@ int list_type;
     printf( "\\subsubsection{%s}", yytext+4 );
 }
 
-"<pre>"[^<]*"</pre>" {
+"<pre>" {
 	//Matched a PRE tag. Just print out everything inside literally
-	yytext[yyleng - 6] = 0;
-	printf("\\begin{verbatim}%s\\end{verbatim}\n", yytext + 5);
+	//yytext[yyleng - 6] = 0;
+	//printf("\\begin{verbatim}%s\\end{verbatim}\n", yytext + 5);
+	printf("\\begin{verbatim}");
+	BEGIN PRE;
+}
+
+<PRE>"</pre>" {
+	printf("\\end{verbatim}\n");
+	BEGIN 0;
+}
+
+<PRE>[^<]* {
+	printf("%s", yytext);
 }
 
 "<ul>" {
