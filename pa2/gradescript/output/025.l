@@ -1,0 +1,24 @@
+\documentclass[12pt]{article}
+\usepackage{fixltx2e}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.125in}
+
+
+\begin{document}
+% 
+% 	This is actually just one hugeass comment block.
+% 
+% 	<b>Bolded shouldn't work</b>
+% 	<pre>Pre shouldn't work</pre>
+% 	<u>Underscores shouldn't work (and aren't even in the assignment</u>
+% 	<sub><sup><i>Nested ones shouldn't work either.</i></sup></sub>
+% 
+% 	<p>Paragraphs of comments shouldn't work</p>
+% 	<h3>Headers anyone?</h3>
+% 	<h2>No?</h2>
+% 	<h1>:(</h3>
+% 	<p>^ Notice that this one was not closed properly...</p>
+% 	<p>I don't think it matters though, since it's in a comment! =D</p>
+% 
+\end{document}
