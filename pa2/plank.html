@@ -1,0 +1,1044 @@
+<title>CS302 Lecture Notes</title>
+<h2>CS302 Lecture Notes - Enumeration</h2>
+<UL>
+<LI> September, 2011.  Latest revision: September, 2016.
+<LI> James S. Plank
+<LI> Directory: <b>/home/plank/cs302/Notes/Enumeration</b>
+</UL>
+
+First, if you are rusty on your bit arithmetic, 
+please read
+<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Notes/Bits/>the lecture notes
+on Bit Operations</a>.
+
+<p>
+The following are topcoder problems that use enumeration to solve them.
+If you are finding enumeration difficult, then by all means, practice with these.
+
+<UL>
+<LI> <b>Div/Mod Enumeration:</b>
+<UL>
+<LI> <a href=http://community.topcoder.com/stat?c=problem_statement&pm=7625&rd=10668>SRM 344, D2 500-pointer (SimpleRotationDecoder)</a>: I go over this one in class, and in the lecture notes
+below.
+<LI> <a href=http://community.topcoder.com/stat?c=problem_statement&pm=7619&rd=10730>TCO 2007 Q1 500(Bigital)</a>: Moderately challenging - I often give this one in lab. (<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Notes/Bigital/TCO-07-Q1-500.html>Hints</a>)
+<LI> <a href=https://community.topcoder.com/stat?c=problem_statement&pm=14163&rd=16652>SRM 682, D2 550-pointer (TopBiologist)</a>: Enumerating strings with four potential characters.  I
+don't solve this one with div/mod, but you could if you wanted to. (<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Topcoder/TopBiologist>Hints</a>).
+<LI> <a href=https://community.topcoder.com/stat?c=problem_statement&pm=14324&rd=16748>SRM 693, D2 250-pointer (TriangleEasy)</a>: At the heart of this is a div/mod enumeration, but you implement
+it with a triply nested <b>for</b> loop.  Interestingly, if you try to implement this by enumerating
+a combination, you'll most likely get the problem incorrect (<a href=http://web.eecs.utk.edu/~plank/topcoder-writeups/2016/TriangleEasy/index.html>Hints</a>).
+</UL>
+<p>
+<LI> <b>Power Set Enumeration:</b>
+<UL>
+<LI> <a href=https://community.topcoder.com/stat?c=problem_statement&pm=12952&rd=15837>SRM 604, D2 500-pointer (PowerOfThreeEasy)</a>: I go over this in class. (<a href=http://web.eecs.utk.edu/~plank/topcoder-writeups/2014/PowerOfThreeEasy/index.html>Here are Lecture Notes</a>).
+<LI> <a href=https://community.topcoder.com/stat?c=problem_statement&pm=14630&rd=16932>SRM 717, D2, 250-pointer (NiceTable)</a>: You'll be tempted to reason through a solution, but given the constraints, a nested power set enumeration is much simpler. <a href=http://web.eecs.utk.edu/~plank/topcoder-writeups/2017/NiceTable/index.html>Hints and Code</a>.
+<LI> <a href=https://community.topcoder.com/stat?c=problem_statement&pm=14416&rd=16821>SRM 700, D2, 500-pointer (XMarksTheSpot)</a>: Straightforward. <a href=http://web.eecs.utk.edu/~plank/topcoder-writeups/2016/XMarksTheSpot/index.html>Hints and Code</a>.
+<LI> <a href=http://community.topcoder.com/stat?c=problem_statement&pm=11191&rd=14242>SRM 489, D2 500-pointer (BuyingFlowers)</a>: This one is more challenging. (<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Notes/Buying-Flowers/SRM-489-D2-500.html>Hints and Lecture Notes</a>).
+
+</UL>
+<p>
+<LI> <b>Permutations</b>:
+<UL>
+<LI> <a href=http://community.topcoder.com/stat?c=problem_statement&pm=11554&rd=14544>SRM 519, D2 600-pointer (ThreeTeleports)</a>: This one is challenging, and I go over it
+in class.  Think about this problem again when we go over Dijkstra's algorithm. (<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Notes/Three-Teleport-Enumeration/>Lecture Notes</a>).
+<LI> <a href=http://community.topcoder.com/stat?c=problem_statement&pm=12162&rd=15176>SRM 554, D2 500-pointer (TheBrickTowerMediumDivTwo)</a>: Straightforward. (<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Notes/TheBrickTowerMediumDivTwo/>Lecture Notes</a>).
+<LI> <a href=http://community.topcoder.com/stat?c=problem_statement&pm=12759&rd=15704>SRM 592, D2 500-pointer (LittleElephantAndPermutationDiv2)</a>: Another good practice problem. (<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Topcoder/LittleElephantAndPermutationDiv2>Hints</a>).
+</UL>
+<p>
+<LI> <b>Combinations (<i>k</i> of <i>n</i>)</b>:
+<UL>
+<LI> <a href=http://community.topcoder.com/stat?c=problem_statement&pm=12812&rd=15706>SRM 594, D2 500-pointer (AstronomicalRecordsEasy)</a>: This is a simple enumeration of two elements. 
+Although you implement it with two <b>for</b> loops, you can view it as a combination
+problem.  (<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Topcoder/AstronomicalRecordsEasy.html>hints</a>)
+</UL>
+</UL>
+
+<hr>
+<h3>Enumeration: Numbers, div and mod</h3>
+
+There are times in your CS careers where you will be called upon to perform
+an enumeration, and if you're not ready for it, it may be a bit confusing.
+The first type of enumeration is typically a problem where you have an 
+array of size <i>l</i>, and each element of the array can have one
+of <i>n</i> values (repetitions are fine).  To solve the problem with enumeration,
+you need to generate all possible values of the array.  There will be <i>n<sup>l</sup></i>
+ways to do this, so <i>n</i> and <i>l</i> will have to be be relatively small.
+<p>
+One example is typified by
+Topcoder problem SRM-344-D2-500 (Don't bother reading the description yet).
+This problem gives you an encrypted string, and a function for encrypting 
+and decrypting given a password, which is itself a three-letter string.
+However, you are not given the password.
+The problem description 
+gives you a way to say that decryption is successful.  Your job is to 
+to furnish the password that decrypts the string.
+<p>
+The way to solve this problem is to enumerate all possible passwords, and then
+test to see which of the possible ones decrypts successfully.  Here, <i>n</i> 
+is 26 (passwords are composed of lower-case letters) and <i>l</i> is three.
+Thus, there are 26<sup>3</sup> = 17576 potential passwords.  That's a pretty
+small number, so we should be able to perform the enumeration quickly.
+<p>
+Ok, now that I've given you an overview, let's solve the problem.  Go ahead
+and read it (<a href=http://community.topcoder.com/stat?c=problem_statement&pm=7625&rd=10668>http://community.topcoder.com/stat?c=problem_statement&pm=7625&rd=10668</a>).  
+You are given a parameter <b>cipherText</b> which is a string
+of 3 to 50 characters that contains only lowercase letters and spaces.
+You are to discover a password, which is a three-letter string containing only
+lowercase letters, that would generate the <b>cipherText</b> from a legal
+clear text string.  What is a legal clear text string?  It is one composed 
+of words and spaces, where words are contiguous lowercase letters between 2
+and 8 characters in size that contain at least one vowel.  Words are always
+separated by a single space.  When you discover the password, you are to
+return the clear text.
+<p>
+To generate <b>cipherText</b> from clear text, you associate each potential
+character <i>c</i> in the clear text with a number.  That number is (<i>c</i>-'a'+1)
+if <i>c</i> is a lowercase letter, and 0 if <i>c</i> is a space.  
+To generate the first character of <b>cipherText</b>, you add
+the first character of the clear text to the first letter of the password, 
+take the result modulo 27 and convert the number back to a character.  
+To generate the second character of <b>cipherText</b>, you add
+the second character of the clear text to the second letter of the password, 
+take the result modulo 27 and convert the number back to a character.  
+Keep doing this, and when you run out of password letters, start back at the
+beginning.
+<p>
+Thus, for example, if the clear text is "a bee" and the password is "abz", then
+the <b>cipherText</b> will be calculated with the following table:
+<p>
+<center><table border=3>
+<tr><td align=center><i>i</i></td>
+    <td align=center><b>clear_text[<i>i</i>]</b></td>
+    <td align=center><b>password[<i>i</i>%3]</b></td>
+    <td align=center><b>ciphertext[<i>i</i>]</b></td></tr>
+<tr><td align=center>0</td>
+    <td align=center>'a' = 1</td>
+    <td align=center>'a' = 1</td>
+    <td align=center>2 = 'b'</td></tr>
+<tr><td align=center>1</td>
+    <td align=center>' ' = 0</td>
+    <td align=center>'b' = 2</td>
+    <td align=center>2 = 'b'</td></tr>
+<tr><td align=center>2</td>
+    <td align=center>'b' = 2</td>
+    <td align=center>'z' = 26</td>
+    <td align=center>28%27=1 = 'a'</td></tr>
+<tr><td align=center>3</td>
+    <td align=center>'e' = 5</td>
+    <td align=center>'a' = 1</td>
+    <td align=center>6 = 'f'</td></tr>
+<tr><td align=center>3</td>
+    <td align=center>'e' = 5</td>
+    <td align=center>'b' = 2</td>
+    <td align=center>7 = 'g'</td></tr>
+</table></center><p>
+So, the <b>ciphertext</b> will be "bbafg".
+<p>
+Armed with this information, what we want to do is generate all 
+17576 potential passwords, and for each password, we decrypt the message and
+test whether it corresponds to legal clear text.  If so, we return the
+clear text.
+The problem description says that we are guaranteed that there will be one
+unique password that generates legal clear text, and that makes our life simpler.
+<p>
+We'll start by generating all of those passwords.  An easy way to do that is to have
+three nestesd <b>for</b> loops.  However, I'm not going to to that here, because I 
+want to show you a more general way to do it.
+What I'm going to do is 
+enumerate all numbers from 0 to 26<sup>3</sup>-1 and convert each number
+to a three-digit string.  Let the number be <i>i</i>.  
+Then <b>password[0]</b> will equal <i>i%26</i>.
+<b>Password[1]</b> will equal <i>(i/26)%26</i>, and 
+<b>password[2]</b> will equal <i>((i/26)/26)%26</i>.  The code is in
+<b><a href=gen-passwords.cpp>gen-passwords.cpp</a></b>.  Pay attention 
+to how each iteration divides <i>j</i> by 26 so that the password
+digits are calculated correctly:
+
+<p><center><table border=3 cellpadding=3><td><pre>
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+main()
+{
+  string password;
+  int i, j, k;
+
+  password.resize(3);
+  
+  for (i = 0; i &lt; 26*26*26; i++) {
+    j = i;
+    for (k = 0; k &lt; 3; k++) {
+      password[k] = 'a' + (j%26);
+      j /= 26;
+    }
+    cout &lt;&lt; password &lt;&lt; endl;
+  }
+}
+</pre></td></table></center><p>
+
+We run it, and all looks good:
+
+<pre>
+UNIX> <font color=darkred><b>g++ gen-passwords.cpp</b></font>
+UNIX> <font color=darkred><b>a.out | head</b></font>
+aaa
+baa
+caa
+daa
+eaa
+faa
+gaa
+haa
+iaa
+jaa
+UNIX> <font color=darkred><b>a.out | tail</b></font>
+qzz
+rzz
+szz
+tzz
+uzz
+vzz
+wzz
+xzz
+yzz
+zzz
+UNIX> <font color=darkred><b></b></font>
+</pre>
+
+Now, we can use this to solve the problem -- for each password, we decrypt and
+test the output:
+(in <b><a href=SimpleRotationDecoder.cpp>SimpleRotationDecoder.cpp</a></b>):
+
+<p><center><table border=3 cellpadding=3><td><pre>
+class SimpleRotationDecoder {
+  public:
+    string decode(string cipherText);
+    int is_legal();
+    string cleartext;
+};
+
+string SimpleRotationDecoder::decode(string ciphertext)
+{
+  string password;
+  string rv;
+  int i, j, k;
+
+<font color=darkblue>  /* Initialize password and cleartext.  
+     Convert all spaces in ciphertext to 'a'-1. */</font>
+
+  password.resize(3);
+  cleartext.resize(ciphertext.size()+1, 'a'-1);
+  for (i = 0; i &lt; ciphertext.size(); i++) { 
+    if (ciphertext[i] == ' ') ciphertext[i] = 'a'-1;
+  }
+  
+<font color=darkblue>  /* Next, enumerate all three-letter passwords */</font>
+
+  for (i = 0; i &lt; 26*26*26; i++) {
+    j = i;
+    for (k = 0; k &lt; 3; k++) {
+      password[k] = 'a' + (j%26);
+      j /= 26;
+    }
+
+<font color=darkblue>    /* Use the password to decipher "ciphertext" into "cleartext" */</font>
+
+    for (j = 0; j &lt; ciphertext.size(); j++) {
+      k = (ciphertext[j]-('a'-1)) - (password[j%3]-('a'-1));
+      if (k &lt; 0) k += 27;
+      k += ('a'-1);
+      cleartext[j] = k;
+    }
+
+<font color=darkblue>    /* If the cleartext is legal, convert 'a'-1 back to spaces, </font>
+<font color=darkblue>       remove that extra space at the end, and return the cleartext. */</font>
+
+    if (is_legal()) {
+      cleartext.resize(cleartext.size()-1);
+      for (i = 0; i &lt; cleartext.size(); i++) {
+        if (cleartext[i] == 'a'-1) cleartext[i] = ' ';
+      }
+      return cleartext;
+    }
+  }
+
+<font color=darkblue>  /* Return the empty string if you have failed. */</font>
+
+  return "";
+}
+</pre></td></table></center><p>
+
+A few things about this code.  First, we change all spaces to
+the character ('a'-1) (it's a backquote).  That way, we don't have
+to special-case the space, and we can simply add/subtract characters.
+Second, we sentinelize <b>cleartext</b> with a backquote at the end.
+It makes our life easier writing <b>is_legal()</b>.
+<p>
+Second, we perform the decryption calculation using an integer <i>k</i>
+rather than a big arithmetic calculation on chars.  That's because I
+don't want to worry about being constrained to a single char in the 
+calculation.  
+<p>
+When we find a legal clear text, we have to convert those backquotes
+back into spaces, remove the sentinel, and return it.
+<p>
+Now, look at <b>is_legal()</b>:
+
+<p><center><table border=3 cellpadding=3><td><pre>
+<font color=darkblue>/* This method tests to see if the string "cleartext" is legal, according to 
+   the topcoder definition of legal.  You should note first that I have changed
+   spaces to 'a'-1, because then I don't have to put special case in to recognize
+   spaces.  Also, you should note that I have put an extra space at the end of the
+   string, again to reduce the amount of special code that I have to write.  That
+   is a version of using a sentinel. */</font>
+
+int SimpleRotationDecoder::is_legal()
+{
+  string vowels = "aeiou";
+  int i, last_space, vowel_present;
+  
+  last_space = -1;
+  vowel_present = 0;
+  for (i = 0; i &lt; cleartext.size(); i++) {
+    if (cleartext[i] == 'a'-1) {
+      if (i-last_space &lt;= 2 || !vowel_present) return 0;
+      last_space = i;
+      vowel_present = 0;
+    } else {
+      if (vowels.find(cleartext[i]) != string::npos) vowel_present = 1;
+      if (i-last_space &gt; 8) return 0;
+    }
+  }
+  return 1;
+}
+</pre></td></table></center><p>
+
+It is straightforward code, but note how the sentinel and the use
+of <b>last_space</b> helps us, since
+we don't have to test explicitly that the first and last characters
+are lowercase letters.  Also, note how I use the <b>find()</b> method
+of strings to test whether the character is a vowel.
+<p>
+Compile, test, submit!
+<hr>
+Now, in general, if you are generating all <i>l</i>-length vectors <i>v</i>
+that contain numbers between zero and <i>n</i>, you enumerate
+<i>j</i> from zero to <i>n<sup>l</sup>-1</i>, and then:
+<p>
+<center>
+<i>v[i] = (j/(n<sup>i</sup>))%n</i>.
+</center><p>
+Another good Topcoder problem of this ilk is the Topcoder Open 2007, 
+Qualification Round 1, 500-pointer (The "Bigital" problem, 
+which I give in lab).  Problem description: <a href=http://community.topcoder.com/stat?c=problem_statement&pm=7619&rd=10730>http://community.topcoder.com/stat?c=problem_statement&pm=7619&rd=10730</a>.
+(<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Notes/Bigital/TCO-07-Q1-500.html>hints</a>).
+<hr>
+
+<h3>Power Set Enumeration (Enumeration of Subsets): Using bits</h3>
+
+Sometimes you need to enumerate all subsets of a set of <i>l</i>
+items.  This is called the <i>Power Set</i> of a set.  There are
+<i>2<sup>l</sup></i> such subsets, and the easiest way to visualize
+a subset is as a <i>l</i>-element bit string.  Each element in 
+the set corresponds to a digit in <i>l</i>, and if a digit's value
+is one, then the element belongs to the subset.
+<p>
+You'll note, this is the same problem as above -- you want to generate all
+<i>l</i>-length vectors <i>v</i> that contain numbers between zero and two.
+While we can use the same method as above with div and mod, when you are dealing
+with zeros and ones exclusively, you can use bit arithmetic to do the same
+task more quickly.
+<p>
+We'll motivate with an example.  Suppose I have four people, Larry, Curly, Moe and Shemp,
+and I want to enumerate all possible ways that I can make a team
+from them, where a team is a collection of one or more people.
+Each potential team may be represented by a bit string as defined
+above, and as long as the bit string has a one in it, it represents
+a valid team.  Here are all teams and their representative strings:
+
+<p><center><table border=3 cellpadding=3><td><pre>
+1000 Larry
+0100 Curly
+1100 Larry Curly
+0010 Moe
+1010 Larry Moe
+0110 Curly Moe
+1110 Larry Curly Moe
+0001 Shemp
+1001 Larry Shemp
+0101 Curly Shemp
+1101 Larry Curly Shemp
+0011 Moe Shemp
+1011 Larry Moe Shemp
+0111 Curly Moe Shemp
+1111 Larry Curly Moe Shemp
+</pre></td></table></center><p>
+
+Enumerating these bit strings can be done as in the previous
+section: <i>l</i> equals <i>4</i> and <i>n</i> equals 2.  Again,
+instead of using div and mod, we can use bit arithmetic.
+(Here is where you review the 
+<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Notes/Bits/>CS140 lecture notes on bit arithmetic</a> if you are hazy on bit arithmetic).  First, <i>2<sup>l</sup></i> may be calculated
+with bit arithmetic as (1 &lt;&lt; <i>l</i>).  Next, if you want
+to see if the <i>j</i>-th digit of the bit string <i>s</i> is one, test
+whether (<i>s</i> &amp; (1 &lt;&lt; <i>j</i>)) is non-zero.
+This gives us all we need to know to enumerate sets.  
+<p>
+For example, the program 
+<b><a href=gen-teams.cpp>gen-teams.cpp</a></b> reads in names from 
+standard input, and then generates all possible teams from those names.
+It is what I used to generate the teams above.
+
+<p><center><table border=3 cellpadding=3><td><pre>
+int main()
+{
+  vector &lt;string&gt; people;
+  string s;
+  int i, j;
+
+  while (cin &gt;&gt; s) people.push_back(s);
+  if (s.size() &gt; 30) {
+    cerr &lt;&lt; "Sorry, not generating more than 2^30 teams\n";
+    exit(1);
+  }
+
+  for (i = 1; i &lt; (1 &lt;&lt; people.size()); i++) {
+    for (j = 0; j &lt; people.size(); j++) {   <font color=blue>// Print the bit strings</font>
+      printf("%c", (i & (1 &lt;&lt; j)) ? '1' : '0');
+    }
+    for (j = 0; j &lt; people.size(); j++) {   <font color=blue>// Print the teams</font>
+      if (i & (1 &lt;&lt; j)) printf(" %s", people[j].c_str());
+    }
+    printf("\n");
+  }
+  exit(0);
+}
+</pre></td></table></center><p>
+
+There's not much subtle here -- once you know how to generate <i>2<sup>l</sup></i>
+and to test whether digit <i>j</i> is equal to one using bit arithmetic, the
+rest falls out naturally.
+<p>
+I'm reiterating here, but once again, what we are doing is representing sets
+using integers and bits rather than the STL.
+When I want to represent a set of distinct numbers between 0 and 31.
+I can do it using a 32-element bit string, where bit <i>j</i> is one if
+<i>j</i> is an element of the set.  Since <b>ints</b> are 32-bits, I can represent
+each set with one integer.  That's nice.  I can represent a set of distinct
+numbers between 0 and 63 with a <b>long long</b>.  That can also be nice.
+<p>
+An good example Topcoder problem that you can solve with a power set enumeration is SRM 604, D2, 500-pointer (PowerOfThreeEasy).
+I have lecture notes for that 
+<a href=http://web.eecs.utk.edu/~plank/topcoder-writeups/2014/PowerOfThreeEasy/index.html>here</a>, and I go over the program
+in class.
+<p>
+A second good Topcoder problem that uses this kind of enumeration is SRM 489, D2, 500-point problem. 
+(Problem description: <a href=http://community.topcoder.com/stat?c=problem_statement&pm=11191&rd=14242>http://community.topcoder.com/stat?c=problem_statement&pm=11191&rd=14242</a>).  This one is a little harder.  I have lecture notes about solving that problem 
+<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Notes/Buying-Flowers/SRM-489-D2-500.html>here</a>.
+
+<hr>
+<h3>Using Recursion to perform an "<i>n</i> choose <i>k</i>" Enumeration</h3>
+
+Sometimes enumerations are more subtle than the above.  For example,
+suppose I want to generate all three-person teams from a collection 
+of <i>n</i> people.  This is an "<i>n</i> choose <i>k</i>" enumeration, 
+where <i>k</i> is equal to 3.  It's not as easy to simply generate all numbers from 
+0 to <i>(n!)/((3!)((n-3)!))</i> and match each number to a team.  Or at
+least I don't see an easy way to do it.  
+<p>
+Instead, you can often write a recursive function to help you enumerate.
+An example is in 
+<b><a href=gen-3-teams.cpp>gen-3-teams.cpp</a></b>.
+This program generates all three-person teams from a collection of people
+entered on standard input.  The program maintains two variables: <b>people</b>,
+which is the vector of people, and <b>team</b>, which is a team that gets incrementally
+constructed.
+The heart of the program is <b>GenTeams(int index, int npeople)</b>, which is a recursive 
+method that builds all possible <b>team</b>s.  Its two parameters are as follows:
+<p>
+<UL>
+<LI> <b>index</b> is an index into <b>people</b>.  <b>GenTeams()</b> is initially called
+with <b>index = 0</b>, and every time it is called recursively, <b>index</b> is incremented.
+<LI> <b>npeople</b> is the number of people left to put on <b>teams</b>.  You could omit it
+and simply use <b>(3 - teams.size())</b>, but I think it's clearer to have <b>npeople</b> 
+be a parameter.
+</UL>
+<p>
+<b>GenTeams()</b> first checks base cases -- if <b>npeople</b> is zero, then there are no
+people left to put on <b>teams</b> -- you can print <b>teams</b> and return.  Next, check 
+to see if there are enough people left in <b>people</b> to make the team.  If not, return.
+Otherwise, you do two recursive calls.  The first puts <b>people[index]</b> on the team
+and calls <b>GenTeams(index+1, npeople-1)</b>.  The second skips <b>people[index]</b> 
+and simply calls <b>GenTeams(index+1, npeople)</b>.  In other words, you are enumerating
+all teams with <b>people[index]</b> on them, and all teams without <b>people[index]</b>.
+<p>
+Here is the code:
+<p><center><table border=3 cellpadding=3><td><pre>
+class People {
+  public:
+    vector &lt;string&gt; people;
+    vector &lt;string&gt; team;
+    void GenTeams(int index, int npeople);
+};
+
+void People::GenTeams(int index, int npeople)
+{
+  int i;
+
+  <font color=blue>/* Base case -- if there are no more people to add, 
+     print out the team and return */</font>
+
+  if (npeople == 0) {
+    cout &lt;&lt; team[0];
+    for (i = 1; i &lt; team.size(); i++) cout &lt;&lt; " " &lt;&lt; team[i];
+    cout &lt;&lt; endl;
+    return;
+  }
+
+  <font color=blue>/* This is a second base case -- if there are fewer people left to add
+     than there are places left on the team, then it's impossible to finish,
+     so simply return.  Ask yourself why this is better than testing whether
+     index is equal to people.size(), and returning if so. */</font>
+
+  if (npeople &gt; people.size() - index) return;
+
+  <font color=blue>/* Now, put the person in people[index] onto the team, and call GenTeams()
+     recursively.  Afterwards, take the person off of the team. */</font>
+  
+  team.push_back(people[index]);
+  GenTeams(index+1, npeople-1);
+  team.pop_back();
+
+  <font color=blue>/* Finally, call GenTeams() recursively without putting
+     people[index] on the team. */</font>
+
+  GenTeams(index+1, npeople);
+}
+
+int main()
+{
+  People P;
+  string s;
+  int i, j;
+
+  while (cin &gt;&gt; s) P.people.push_back(s);
+  
+  P.GenTeams(0, 3);
+}
+</pre></td></table></center><p>
+
+Trace through 
+the code if you find this confusing -- copy the code and put in some 
+extra print statements.
+
+<pre>
+UNIX> <font color=darkred><b>echo Larry Curly Moe Shemp | gen-3-teams</b></font>
+Larry Curly Moe
+Larry Curly Shemp
+Larry Moe Shemp
+Curly Moe Shemp
+UNIX> <font color=darkred><b>echo Larry Curly Moe Shemp Baby-Daisy | gen-3-teams</b></font>
+Larry Curly Moe
+Larry Curly Shemp
+Larry Curly Baby-Daisy
+Larry Moe Shemp
+Larry Moe Baby-Daisy
+Larry Shemp Baby-Daisy
+Curly Moe Shemp
+Curly Moe Baby-Daisy
+Curly Shemp Baby-Daisy
+Moe Shemp Baby-Daisy
+UNIX> <font color=darkred><b></b></font>
+</pre>
+
+<hr>
+<h3>Using Recursion to Permute</h3>
+
+<b><i>I am purposefully not using the STL Algorithm library here to permute.
+It has a functionality that allows you to generate the "next lexicographically
+ordered permutation" of a vector.  You should learn that on your own time, but I 
+want to you understand
+<font color=red>how</font> these things are done, not merely how you can get
+them done expediently.</b></i>
+<p>
+Finally, a very similar recursion may be used to generate all permutations
+of a collection of elements.  In the example, I again read in names, and
+this time print out all permutations.  The structure of the enumeration is
+again a recursion, which works as follows
+(in <b><a href=gen-permutations.cpp>gen-permutations.cpp</a></b>):
+
+<p><center><table border=3 cellpadding=3><td><pre>
+class People {
+  public:
+    vector &lt;string&gt; people;
+    void GenPermutations(int index);
+};
+
+void People::GenPermutations(int index)
+{
+  int i;
+  string tmp;
+
+  <font color=blue>/* Base case -- we're done - print out the vector */</font>
+
+  if (index == people.size()) {
+    cout &lt;&lt; people[0];
+    for (i = 1; i &lt; people.size(); i++) cout &lt;&lt; " " &lt;&lt; people[i];
+    cout &lt;&lt; endl;
+    return;
+  }
+
+  <font color=blue>/* Otherwise, for each element of the vector, swap it with the element
+     in index, call GenPermutations() recursively on the remainder of the
+     vector, and then swap it back. */</font>
+     
+  for (i = index; i &lt; people.size(); i++) {
+
+    tmp = people[i];         <font color=blue>/* Swap people[index] with people[i] */</font>
+    people[i] = people[index];
+    people[index] = tmp;
+
+    GenPermutations(index+1);  
+
+    tmp = people[i];          <font color=blue>/* Swap back */</font>
+    people[i] = people[index];
+    people[index] = tmp;
+  }
+}
+</pre></td></table></center><p>
+
+How many lines are there if you are permuting <i>n</i> items?  Well, there are <i>n</i> ways to choose the first item, then <i>n-1</i> to choose the second, etc.  So, there are <i>(n!)</i> ways to permute <i>n</i> items, which will lead to <i>n!</i> lines of output:
+<pre>
+UNIX> <font color=darkred><b>echo Larry Curly Moe | gen-permutations</b></font>
+Larry Curly Moe
+Larry Moe Curly
+Curly Larry Moe
+Curly Moe Larry
+Moe Curly Larry
+Moe Larry Curly
+UNIX> <font color=darkred><b>echo 1 2 3 4 | gen-permutations</b></font>
+1 2 3 4
+1 2 4 3
+1 3 2 4
+1 3 4 2
+1 4 3 2
+1 4 2 3
+2 1 3 4
+2 1 4 3
+2 3 1 4
+2 3 4 1
+2 4 3 1
+2 4 1 3
+3 2 1 4
+3 2 4 1
+3 1 2 4
+3 1 4 2
+3 4 1 2
+3 4 2 1
+4 2 3 1
+4 2 1 3
+4 3 2 1
+4 3 1 2
+4 1 3 2
+4 1 2 3
+UNIX> <font color=darkred><b>echo 1 2 3 | gen-permutations | wc</b></font>
+       6      18      36
+UNIX> <font color=darkred><b>echo 1 2 3 4 | gen-permutations | wc</b></font>
+      24      96     192
+UNIX> <font color=darkred><b>echo 1 2 3 4 5 | gen-permutations | wc</b></font>
+     120     600    1200
+UNIX> <font color=darkred><b>echo 1 2 3 4 5 6 | gen-permutations | wc</b></font>
+     720    4320    8640
+UNIX> <font color=darkred><b>echo 1 2 3 4 5 6 7 | gen-permutations | wc</b></font>
+    5040   35280   70560
+UNIX> <font color=darkred><b></b></font>
+</pre>
+
+A good example to test yourself is 
+<a href=http://community.topcoder.com/stat?c=problem_statement&pm=12162&rd=15176>Topcoder
+SRM 554, Division 2, 500-pointer</a>.  I have written up lecture notes for 
+it 
+<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Notes/TheBrickTowerMediumDivTwo/>here</a>.
+<p>
+A second problem is <a href=http://community.topcoder.com/stat?c=problem_statement&pm=12759&rd=15704>SRM 592, Division 2, 500-pointer</a>.  I used <b>next_permutation()</b> to solve it.
+Hints 
+<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Topcoder/LittleElephantAndPermutationDiv2>
+here</a>.
+<p>
+A third, more difficult problem is
+<a href=http://community.topcoder.com/stat?c=problem_statement&pm=11554&rd=14544>Topcoder
+SRM 519, Division 2, 600-pointer</a>.  I have written up lecture notes for it
+<a href=http://web.eecs.utk.edu/~plank/plank/classes/cs302/Notes/Three-Teleport-Enumeration>
+here</a>.
+<hr>
+<h3>Balls in Boxes</h3>
+
+The last two programs above are what I call "balls in boxes" problems.  The general
+form of this problem is that you have <i>n</i> different colored balls.  There are <i>c</i>
+distinct colors, labeled
+<i>c<sub>0</sub>, c<sub>1</sub> ...  c<sub>c-1</sub></i>.  For
+each color, <i>c<sub>i</sub></i>, there are <i>b<sub>i</sub></i> identical balls 
+of that color.  The sum of all 
+<i>b<sub>i</sub></i> is therefore <i>n</i>, and you have <i>n</i> boxes numbered 0 to <i>n-1</i>.
+The problem is to enumerate all
+distinct ways that you can put the balls into the boxes.
+<p>
+For example, in the
+<b>gen-3-teams</b> problem, you have <i>n</i> people and you want to enumerate the 
+number of three-person teams.  That is equivalent to having <i>n</i> boxes, and balls
+with two colors.  Call them black and white.  There are three black balls and <i>n-3</i>
+white balls. You want to enumerate all distinct ways to put the balls into the boxes.
+A configuration of balls and boxes is equivalant to a team -- associate each person with 
+a box, and if the box has a black ball, then the person is on the team.
+<p>
+In the permutation example, <i>b<sub>i</sub></i> equals one for all <i>i</i>.  Thus enumerating balls
+and boxes gives you permutations.
+<p>
+In my last example, I'll write a general balls-in-boxes program.  As with the others,
+it is recursive.  At each call, there is a vector (which represents the boxes)
+that has been partially filled in, and a map that contains the balls that have not
+been placed yet.  For each color in the map, we place a ball into the next element of
+the vector, remove the ball from the map, and call the procedure recursively.  After
+the recursive call, we replace the ball in the map.
+<p>
+Here it is, in 
+<b><a href=balls-in-boxes-1.cpp>balls-in-boxes-1.cpp</a></b>:
+
+<p><center><table border=3 cellpadding=3><td><pre>
+class BallsInBoxes {
+  public:
+    map &lt;string,int&gt; balls;
+    vector &lt;string&gt; boxes;
+    void GenInstances(int index);
+};
+
+void BallsInBoxes::GenInstances(int index)
+{
+  int i;
+  map &lt;string, int&gt;::iterator bit;
+
+  <font color=blue>/* Base case -- if you have placed all of the balls in boxes,
+     print them out, and return. */</font>
+
+  if (index == boxes.size()) {
+    cout &lt;&lt; boxes[0];
+    for (i = 1; i &lt; boxes.size(); i++) cout &lt;&lt; " " &lt;&lt; boxes[i];
+    cout &lt;&lt; endl;
+    return;
+  }
+
+  <font color=blue>/* For each color where you haven't placed a ball yet, place the ball, 
+     make a recursive call, and remove the ball. */</font>
+
+  for (bit = balls.begin(); bit != balls.end(); bit++) {
+    if (bit-&gt;second &gt; 0) {
+      boxes[index] = bit-&gt;first;
+      bit-&gt;second--;
+      GenInstances(index+1);  
+      bit-&gt;second++;
+      <font color=blue>/* I don't actually "remove" the ball here, because subsequent iterations
+         of the loop, or subsequent recursive calls will overwrite boxes[index]. */</font>
+    }
+  }
+}
+
+int main()
+{
+  BallsInBoxes B;
+  string s;
+  int nb;
+
+  nb = 0;
+  while (cin &gt;&gt; s) { 
+    B.balls[s]++; 
+    nb++; 
+  }
+  B.boxes.resize(nb);
+  
+  B.GenInstances(0);
+}
+</pre></td></table></center><p>
+
+Verify to yourself that it is giving you correct output in all of the examples below:
+
+<pre>
+UNIX> <font color=darkred><b>echo a a b b | balls-in-boxes-1</b></font>
+a a b b
+a b a b
+a b b a
+b a a b
+b a b a
+b b a a
+UNIX> <font color=darkred><b>echo a a a a | balls-in-boxes-1</b></font>
+a a a a
+UNIX> <font color=darkred><b>echo a b c | balls-in-boxes-1</b></font>
+a b c
+a c b
+b a c
+b c a
+c a b
+c b a
+UNIX> <font color=darkred><b>echo larry moe curly | balls-in-boxes-1</b></font>
+curly larry moe
+curly moe larry
+larry curly moe
+larry moe curly
+moe curly larry
+moe larry curly
+UNIX> <font color=darkred><b>echo B B B W | balls-in-boxes-1</b></font>
+B B B W
+B B W B
+B W B B
+W B B B
+UNIX> <font color=darkred><b></b></font>
+</pre>
+
+<hr>
+<h3>A very subtle bug with iterators</h3>
+
+Now, suppose it goes against my sensibilities in some respects to include 
+a ball in the <b>balls</b> map once its number of balls reaches zero.  
+When that happens, I decide to remove it from the map, so that I'm not later
+traversing a map whose elements I skip.  I may very well write code
+as in 
+<b><a href=balls-in-boxes-2.cpp>balls-in-boxes-2.cpp</a></b>:
+
+<p><center><table border=3 cellpadding=3><td><pre>
+void BallsInBoxes::GenInstances(int index)
+{
+  int i;
+  map &lt;string, int&gt;::iterator bit;
+
+  if (index == boxes.size()) {
+    cout &lt;&lt; boxes[0];
+    for (i = 1; i &lt; boxes.size(); i++) cout &lt;&lt; " " &lt;&lt; boxes[i];
+    cout &lt;&lt; endl;
+    return;
+  }
+
+  for (bit = balls.begin(); bit != balls.end(); bit++) {
+    boxes[index] = bit-&gt;first;
+    bit-&gt;second--;
+    if (bit-&gt;second == 0) {
+      balls.erase(bit);
+      bit = balls.end();
+    }
+    GenInstances(index+1);  
+    if (bit == balls.end()) {
+      bit = balls.insert(make_pair(boxes[index], 1)).first;
+    } else bit-&gt;second++;
+  }
+}
+</pre></td></table></center><p>
+
+When a ball's <b>second</b> field goes to zero, I remove it from the map and then
+set <b>bit</b> to equal <b>balls.end()</b>.  After the recursion, if <b>bit</b> equals
+<b>balls.end()</b>, then I re-insert the ball into the map.  Yes, that <b>balls.insert()</b>
+call is ugly.  On a map, the <b>insert()</b> method returns a pair -- an iterator to the
+element, and <b>true</b> if the element was actually inserted, or <b>false</b> if it was there
+already.
+<p>
+Try this with six balls -- three colors, where <i>b<sub>i</sub></i> equals 2 for each of the
+three balls:
+
+<pre>
+UNIX> <font color=darkred><b>echo a a b b c c | balls-in-boxes-2 </b></font>
+a a b b c c
+a a b c b c
+a a b c c b
+a a c b b c
+a a c b c b
+a a c c b b
+....
+</pre>
+
+You'll see that it runs forever, and eventually you'll see lines like "a b a c a b".  Obviously,
+we have a bug, since there should be two a's and two c's.  I'm not going to trace this
+bug in detail, because it's too hard.  I'll simply tell you what's going on.   Look
+at this snippet of the code:
+
+<p><center><table border=3 cellpadding=3><td><pre>
+  for (bit = balls.begin(); bit != balls.end(); bit++) {
+    boxes[index] = bit-&gt;first;
+    bit-&gt;second--;
+    if (bit-&gt;second == 0) {
+      balls.erase(bit);
+      bit = balls.end();
+    }
+    GenInstances(index+1);  
+    if (bit == balls.end()) {
+      bit = balls.insert(make_pair(boxes[index], 1)).first;
+    } else bit-&gt;second++;
+  }
+</pre></td></table></center><p>
+
+The problem arises when you don't erase <b>bit</b> and then you make the
+recursive call.  Suppose that <b>bit</b> points to the entry for "a" in the map.
+Later, in the recursion, you're going to delete the entry for "a", because it's 
+<b>second</b> field will be zero.  When all the recursion returns, <b>bit</b> is
+pointing to an erased iterator.  I wish we got a seg fault when we incremented <b>bit->second</b>.
+However, what happens is that the C++ runtime system reuses memory, and <b>bit</b> is pointing
+to a valid iterator, which may no longer be for "a".  
+<p>
+This is a brutal bug, but one that can happen when you store iterators that may become
+deleted.  It is similar to storing a pointer which is subsequently <b>free()'d</b> or <b>deleted</b>.
+I've fixed this in 
+<b><a href=balls-in-boxes-3.cpp>balls-in-boxes-3.cpp</a></b>, although I'm not proud
+of it.  Here's the relevant code snippet.  After the recursive call, I make sure that
+<b>bit</b> points to the proper iterator:
+
+<p><center><table border=3 cellpadding=3><td><pre>
+  for (bit = balls.begin(); bit != balls.end(); bit++) {
+    boxes[index] = bit-&gt;first;
+    bit-&gt;second--;
+    if (bit-&gt;second == 0) {
+      balls.erase(bit);
+      bit = balls.end();
+    }
+    GenInstances(index+1);  
+    if (bit == balls.end()) {
+      bit = balls.insert(make_pair(boxes[index], 1)).first;
+    } else {
+      bit = balls.find(boxes[index]);
+      bit-&gt;second++;
+    }
+</pre></td></table></center><p>
+
+I think the code for 
+<b><a href=balls-in-boxes-1.cpp>balls-in-boxes-1.cpp</a></b>
+is far superior to the others.  On the flip side, I don't think it's the best
+way to solve this.  We should use a vector instead of a map; however, I don't
+think that it's worth the class or study time to go through that level of detail.
+
+<hr>
+<h3>Removing Recursion</h3>
+
+I had mentioned in class that you can always remove recursion and model it with
+a stack.  While the ensuing program may now not be recursive, it's usually a lot
+more convoluted.  I'll give an example with
+<b><a href=balls-in-boxes-4.cpp>balls-in-boxes-4.cpp</a></b>:
+
+<p><center><table border=3 cellpadding=3><td><pre>
+class BallsInBoxes {
+  public:
+    map &lt;string,int&gt; balls;
+    vector &lt;string&gt; colors;
+    vector &lt;int&gt; nballs;
+    vector &lt;string&gt; boxes;
+    void GenInstances();
+};
+
+void BallsInBoxes::GenInstances()
+{
+  stack &lt;int&gt; Stack;
+  int index, color, i;
+
+  Stack.push(-1);
+
+  while (!Stack.empty()) {
+    color = Stack.top();
+    Stack.pop();
+    index = Stack.size();
+
+    <font color=blue>// Base case -- if we're at the end of boxes, print it out and "return"</font>
+
+    if (index == boxes.size()) {
+      cout &lt;&lt; boxes[0];
+      for (i = 1; i &lt; boxes.size(); i++) cout &lt;&lt; " " &lt;&lt; boxes[i];
+      cout &lt;&lt; endl;
+    } else {
+
+      if (color != -1) {  <font color=blue>// We have just finished enumerating with "color"</font>
+        nballs[color]++;  
+      }
+
+      <font color=blue>// Find the next color to enumerate.  </font>
+      <font color=blue>// Note how this works when color started at -1.</font>
+
+      for (color++; color &lt; nballs.size() && nballs[color] == 0; color++) ;
+    
+      <font color=blue>// If we still have a color to enumerate, put it into boxes, push</font>
+      <font color=blue>// the color onto the stack, and push -1 on the stack to enumerate the next index.</font>
+
+      if (color &lt; nballs.size()) {
+        boxes[index] = colors[color];
+        nballs[color]--;
+        Stack.push(color);
+        Stack.push(-1);
+      }
+    }
+  }
+}
+
+int main()
+{
+  BallsInBoxes B;
+  map &lt;string, int&gt;::iterator bit;
+  string s;
+  int nb;
+
+  while (cin &gt;&gt; s) B.balls[s]++; 
+
+  nb = 0;
+  for (bit = B.balls.begin(); bit != B.balls.end(); bit++) {
+    B.colors.push_back(bit-&gt;first);
+    B.nballs.push_back(bit-&gt;second);
+    nb += bit-&gt;second;
+  }
+
+  B.boxes.resize(nb);
+  
+  B.GenInstances();
+}
+</pre></td></table></center><p>
+
+To make life easier, I've created the vectors <b>colors</b> and <b>nballs</b>. In 
+this way, we can manage a stack of indices into the <b>colors</b> vector, which
+is less confusing than maintaining a stack of iterators of <b>balls</b> (I have
+that code in 
+<b><a href=balls-in-boxes-5.cpp>balls-in-boxes-5.cpp</a></b>).
+<p>
+Concentrate on <b>GenInstances()</b>.  It maintains a stack of indices of <b>colors</b>.
+Instead of making recursive calls, you push -1 on the stack.  That's what we do
+initially.  The stack contains indices of if the colors that we're currently enumerating.
+Thus, the top of the stack is the color that we're enumerating in <b>boxes[Stack.size()-1]</b>.
+Our main processing loop therefore removes this element from the top of the stack and
+sets <b>index</b> to the new <b>Stack.size()</b>.  
+<p>
+If that element is -1, then we're starting a new enumeration.  If that element is
+something else, then we've just finished enumerating that element.  So we increment
+<b>nballs</b> to put that color back when we enumerate a new color.  In either case,
+we now need to find the next color to enumerate, which is done by the <b>for</b> loop:
+
+<p><center><table border=3 cellpadding=3><td><pre>
+for (color++; color &lt; nballs.size() && nballs[color] == 0; color++) ;
+</pre></td></table></center><p>
+
+If, after executing this <b>for</b> loop, <b>color</b> is equal to <b>nballs.size()</b>,
+then we're done enumerating this index.  Otherwise, we need to enumerate the next
+color, which we do with the following code:
+
+<p><center><table border=3 cellpadding=3><td><pre>
+boxes[index] = colors[color];
+nballs[color]--;
+Stack.push(color);
+Stack.push(-1);
+</pre></td></table></center><p>
+
+In this way, we mimic the recursive version of the program, only instead of
+actually performing recursion, we simply manage the stack.  As always, if you
+are confused by this, copy it, put in some print statements, and trace it.
+Frankly, I think that the recursive version of this is <i>much</i> easier to
+both read and write, but this is a good exercise in seeing how a stack can
+replace recursion.
+
+<p>
+A final piece of code is in 
+<b><a href=balls-in-boxes-5.cpp>balls-in-boxes-5.cpp</a></b>.  This code also
+manages a stack, but instead of managing integers, it manages iterator to <b>balls</b>.
+Where -1 was in the code previously, we use <b>balls.end()</b>.  Try to trace through
+it -- it is very similar to 
+<b><a href=balls-in-boxes-4.cpp>balls-in-boxes-4.cpp</a></b>, except you need
+to be unafraid of iterators!
+

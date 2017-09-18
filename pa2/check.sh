@@ -27,9 +27,20 @@ fi
 
 diff "__output1.l" "__output2.l" 2> /dev/null > /dev/null
 if [[ $? -ne 0 ]]; then
-	printf "Does not match!\n"
+	x='';
+	while [[ "$x" -ne 'y' && "$x" -ne 'N' ]]; do
+		printf "Does not match! Would you like to see a diff -y? [y/N]"
+		read -n x
+	done;
+
+	if [[ "$x" -eq 'y' ]]; then
+		#diff -y "__output1.l" "__output2.l" | less
+		vimdiff "__output1.l" "__output2.l"
+	fi
+	
+
 else
 	printf "Matches!\n"
 fi
 
-rm -rf __output1.l __output2.l
+rm -rf "__output1.l" "__output2.l"

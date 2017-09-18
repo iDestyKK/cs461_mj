@@ -134,6 +134,14 @@ int list_type;
 	BEGIN FORMATTING;
 }
 
+<LI>< {
+	BEGIN FORMATTING;
+}
+
+<LI>. {
+	printf("%s", yytext);
+}
+
 "<p>"[^<]* {
 	//yytext[yyleng] = 0;
 	printf("%s", yytext + 3);
@@ -157,52 +165,52 @@ int list_type;
 	}
 }
 
-<FORMATTING>"<big>"[^<]*"</big>" {
+<FORMATTING><?big>[^<]*"</big>" {
 	//Big Tag for making text... bigger (literally)
 	yytext[yyleng-6] = 0;
-	printf("{\\Large %s}", yytext + 5);
+	printf("{\\Large %s}", yytext + 4 + (yytext[0] == '<'));
 }
 
-<FORMATTING>"<small>"[^<]*"</small>" {
+<FORMATTING><?small>[^<]*"</small>" {
 	//Makes text smaller...
 	yytext[yyleng-8] = 0;
-	printf("{\\scriptsize %s}", yytext + 7);
+	printf("{\\scriptsize %s}", yytext + 6 + (yytext[0] == '<'));
 }
 
-<FORMATTING>"<b>"[^<]*"</b>" {
+<FORMATTING><?b>[^<]*"</b>" {
 	//Bold
 	yytext[yyleng-4] = 0;
-	printf("\\textbf{%s}", yytext + 3);
+	printf("\\textbf{%s}", yytext + 2 + (yytext[0] == '<'));
 }
 
-<FORMATTING>"<i>"[^<]*"</i>" {
+<FORMATTING><?i>[^<]*"</i>" {
 	//Italics
 	yytext[yyleng-4] = 0;
-	printf("\\textit{%s}", yytext + 3);
+	printf("\\textit{%s}", yytext + 2 + (yytext[0] == '<'));
 }
 
-<FORMATTING>"<em>"[^<]*"</em>" {
+<FORMATTING><?em>[^<]*"</em>" {
 	//Sorta Italics yeah sure
 	yytext[yyleng-5] = 0;
-	printf("\\emph{%s}", yytext + 4);
+	printf("\\emph{%s}", yytext + 3 + (yytext[0] == '<'));
 }
 
-<FORMATTING>"<strong>"[^<]*"</strong>" {
+<FORMATTING><?strong>[^<]*"</strong>" {
 	//Puts more emphasis on text by making it bold.
 	yytext[yyleng-9] = 0;
-	printf("\\textmd{%s}", yytext + 8);
+	printf("\\textmd{%s}", yytext + 7 + (yytext[0] == '<'));
 }
 
-<FORMATTING>"<sup>"[^<]*"</sup>" {
+<FORMATTING><?sup>[^<]*"</sup>" {
 	//Superscript
 	yytext[yyleng-6] = 0;
-	printf("\\textsuperscript{%s}", yytext + 5);
+	printf("\\textsuperscript{%s}", yytext + 4 + (yytext[0] == '<'));
 }
 
-<FORMATTING>"<sub>"[^<]*"</sub>" {
+<FORMATTING><?sub>[^<]*"</sub>" {
 	//Subscript
 	yytext[yyleng-6] = 0;
-	printf("\\textsubscript{%s}", yytext + 5);
+	printf("\\textsubscript{%s}", yytext + 4 + (yytext[0] == '<'));
 }
 
 "<!--" {
