@@ -26,7 +26,7 @@
 
 	\item Completely subjective though, not \emph{everyone} likes \textit{numbers}.
 
-	\item <em>\textit{Now}</em> <sup>let's \textsubscript{break} the</sup> <b><i>solution <pre>code</pre><i> again</b>.
+	\item \emph{Now} <sup>let's \textsubscript{break} the</sup> <b><i>solution <pre>code</pre><i> again</b>.
 
 \end{enumerate}
 \end{document}
