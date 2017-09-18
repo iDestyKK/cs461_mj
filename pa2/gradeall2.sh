@@ -1,3 +1,4 @@
+#!/bin/bash
 # PA2 Gradescript
 
 # Set up our colours.

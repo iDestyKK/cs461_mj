@@ -1,3 +1,4 @@
+#!/bin/bash
 # PA2 input
 
 # Set up our colours.
