@@ -56,7 +56,7 @@ for i in "gradescript/input/"*".html"; do
 		printf "[${red}FAILED${normal}]\n"
 		printf "[${red}FATAL${normal}] \"mj_html2latex\" failed to execute. Error log below:\n"
 		cat "err.log"
-		rm "err.log"
+		rm -f "err.log" "__output1.tex"
 		exit 4
 	fi
 	./html2latex < "$i" > "__output2.tex"
