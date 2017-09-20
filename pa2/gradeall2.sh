@@ -52,13 +52,14 @@ for i in "gradescript/input/"*".html"; do
 	printf "%-48s" "$str"
 
 	./mj_html2latex < "$i" > "__output1.tex" 2> "err.log"
-	if [[ -f "err.log" ]]; then
+	if [[ -s "err.log" ]]; then
 		printf "[${red}FAILED${normal}]\n"
 		printf "[${red}FATAL${normal}] \"mj_html2latex\" failed to execute. Error log below:\n"
 		cat "err.log"
 		rm -f "err.log" "__output1.tex"
 		exit 4
 	fi
+	rm -f "err.log"
 	./html2latex < "$i" > "__output2.tex"
 	diff "__output1.tex" "__output2.tex" 2> /dev/null > /dev/null
 	if [[ $? -ne 0 ]]; then

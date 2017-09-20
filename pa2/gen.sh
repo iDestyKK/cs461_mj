@@ -45,7 +45,8 @@ for i in "gradescript/input/"*".html"; do
 	printf "%-48s" "$str"
 
 	./mj_html2latex < "$i" > "gradescript/output/$fname" 2> "err.log"
-	if [[ ! -f "err.log" ]]; then
+	if [[ ! -s "err.log" ]]; then
+		rm "err.log"
 		printf "[  ${green}OK${normal}  ]\n"
 	else
 		printf "[${red}FAILED${normal}]\n"
