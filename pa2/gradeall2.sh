@@ -1,10 +1,37 @@
 #!/bin/bash
-# PA2 Gradescript
+#
+# COSC 461 - Programming Assignment 2: Gradescript (Manual)
+#
+# Description:
+#     Requires "./mj_html2latex", "./html2latex", and all input files that are
+#     in "gradescript/input/". The script will loop through all files and pipe
+#     them in to both the solution executable and your own executable. Then it
+#     will run a diff on both programs' outputs. If the output matches, then
+#     it will mark it as "PASSED". Otherwise, it will mark it as "FAILED".
+#
+#     If you want a version of this gradescript that doesn't rely on the
+#     solution executable, then run "gradeall.sh".
+#
+# Synopsis:
+#     ./gradeall2.sh
+#
+# Author:
+#     Clara Van Nguyen
+#
 
 # Set up our colours.
 red=$(tput setaf 1)
 green=$(tput setaf 2)
 normal=$(tput sgr 0)
+
+# Check if files exist
+if [[ ! -f "html2latex" ]]; then
+	printf "[${red}FATAL${normal}] Missing \"html2latex\".\n"
+	exit 2
+elif [[ ! -f "mj_html2latex" ]]; then
+	printf "[${red}FATAL${normal}] Missing \"mj_html2latex\".\n"
+	exit 3
+fi
 
 # Get number of gradescript cases.
 num=0
@@ -23,9 +50,9 @@ for i in "gradescript/input/"*".html"; do
 	str=$(printf "(%*d/%*d) Checking case %03d..." $s $c $s $num $c)
 	printf "%-48s" "$str"
 
-	./mj_html2latex < "$i" > "__output1.l"
-	./html2latex < "$i" > "__output2.l"
-	diff "__output1.l" "__output2.l" 2> /dev/null > /dev/null
+	./mj_html2latex < "$i" > "__output1.tex"
+	./html2latex < "$i" > "__output2.tex"
+	diff "__output1.tex" "__output2.tex" 2> /dev/null > /dev/null
 	if [[ $? -ne 0 ]]; then
 		printf "[${red}FAILED${normal}]\n"
 	else
@@ -34,6 +61,6 @@ for i in "gradescript/input/"*".html"; do
 	fi
 done
 
-rm "__output1.l" "__output2.l"
+rm "__output1.tex" "__output2.tex"
 printf "%s out of %s correct.\n" "$correct" "$num"
 exit $correct
