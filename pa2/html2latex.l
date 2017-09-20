@@ -95,9 +95,9 @@ int list_type;
 	printf("%s", yytext);
 }
 
-<UL>. {
+<UL>[^<]* {
 	//Literally print whatever is inside but is not inside the "<li>" tags.
-	printf("%s", yytext);
+	printf("Fuck %s", yytext);
 }
 
 <UL>"</ul>" {
@@ -131,11 +131,18 @@ int list_type;
 <LI>[^<]* {
 	//Unleash recursion and call formatting inside of the LI entry.
 	printf("%s", yytext);
+
 	BEGIN FORMATTING;
 }
 
 <LI>< {
+
 	BEGIN FORMATTING;
+}
+
+<LI>[ \n\r\t]+ {
+	//New Lines, Spaces, and Carriage Returns are handled by printing literally.
+	printf("%s", yytext);
 }
 
 <LI>. {
@@ -145,7 +152,12 @@ int list_type;
 "<p>"[^<]* {
 	//yytext[yyleng] = 0;
 	printf("%s", yytext + 3);
+
 	BEGIN FORMATTING;
+}
+
+<FORMATTING>"<p>"[^<]*"</p>" {
+	printf("%s", yytext);
 }
 
 <FORMATTING>"</p>" {
