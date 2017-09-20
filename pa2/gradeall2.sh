@@ -46,11 +46,19 @@ s=$(echo "$num" | grep -o "[0-9]" | grep -c "")
 correct=0
 c=0
 for i in "gradescript/input/"*".html"; do
+	fname=$(printf "%03d.tex" $c)
 	let "c++"
-	str=$(printf "(%*d/%*d) Checking case %03d..." $s $c $s $num $c)
+	str=$(printf "(%*d/%*d) Checking \"%s\"..." $s $c $s $num $fname)
 	printf "%-48s" "$str"
 
-	./mj_html2latex < "$i" > "__output1.tex"
+	./mj_html2latex < "$i" > "__output1.tex" 2> "err.log"
+	if [[ -f "err.log" ]]; then
+		printf "[${red}FAILED${normal}]\n"
+		printf "[${red}FATAL${normal}] \"mj_html2latex\" failed to execute. Error log below:\n"
+		cat "err.log"
+		rm "err.log"
+		exit 4
+	fi
 	./html2latex < "$i" > "__output2.tex"
 	diff "__output1.tex" "__output2.tex" 2> /dev/null > /dev/null
 	if [[ $? -ne 0 ]]; then

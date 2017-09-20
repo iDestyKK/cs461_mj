@@ -50,7 +50,7 @@ c=0
 for i in "gradescript/input/"*".html"; do
 	fname=$(printf "%03d.tex" $c)
 	let "c++"
-	str=$(printf "(%*d/%*d) Checking case %03d..." $s $c $s $num $c)
+	str=$(printf "(%*d/%*d) Checking \"%s\"..." $s $c $s $num $fname)
 	printf "%-48s" "$str"
 
 	./html2latex < "$i" > "__output.tex"
