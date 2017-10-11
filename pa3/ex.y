@@ -22,16 +22,23 @@ ERROR_N error_val;
 %token <num> NUM
 
 %type <num> expr
+%type <num> expr1
+%type <num> expr2
+%type <num> expr3
+%type <num> expr4
+%type <num> expr5
+%type <num> expr6
+%type <num> expr7
 
 %%
 commands:
-	|	commands command
+	|	command commands
 	;
 
 command	:	expr ';' {
                 switch (error_val) {
                     case ERROR_NONE:
-                        printf("%d\n", $1);
+                        printf("%d", $1);
                         break;
                     case ERROR_OVERFLOW:
                         printf("overflow\n");
@@ -44,48 +51,81 @@ command	:	expr ';' {
             }
 	;
 
-expr:       '(' expr ')' {
-                $$ = $2;
-            }
-        |   expr '(' expr ')' {
-                $$ = $1 + $3;
-            }
-        |   '~' NUM {
-            $$ = ~$2;
-        }
-        |   '-' NUM {
-            $$ = $2 * -1;
-        }
-        |   expr '*' expr {
-                $$ = $1 * $3;
-            }
-        |   expr '/' expr {
-                if ($3 == 0)
-                    error_val = ERROR_DIVBYZERO;
-                else
-                    $$ = $1 / $3;
-            }
-        |   expr '%' expr {
-                if ($3 == 0)
-                    error_val = ERROR_DIVBYZERO;
-                else
-                    $$ = $1 % $3;
-            }
-        |	expr '+' expr {
-                if (($1 > 0 && $1 > INT_MAX - $3) || ($3 < 0 && $1 < INT_MIN - $3))
-                    error_val = ERROR_OVERFLOW;
-                else
-                    $$ = $1 + $3;
-            }
-        |   expr '-' expr {
-                $$ = $1 - $3;
-            }
-	    |   NUM {
-                if (($1 > 0 && $1 > INT_MAX - $1) || ($1 < 0 && $1 < INT_MIN - $1))
-                    error_val = ERROR_OVERFLOW;
-                else
-                    $$ = $1;
-            }
+expr: expr1
+	| NUM
+	;
+	
+expr1:
+	NUM {
+		if (($1 > 0 && $1 > INT_MAX - $1) || ($1 < 0 && $1 < INT_MIN - $1))
+			error_val = ERROR_OVERFLOW;
+		else
+			$$ = $1;
+	}
+	| expr2
+	;
+
+expr2:
+	expr2 '>' '>' expr3 {
+		$$ = $1 >> $4;
+	}
+	|
+	expr2 '<' '<' expr3 {
+		$$ = $1 << $4;
+	}
+	| expr3
+	;
+
+expr3:
+	expr3 '+' expr4 {
+		$$ = $1 + $3;
+	}
+	|
+	expr3 '-' expr4 {
+		$$ = $1 - $3;
+	}
+	| expr4
+	;
+
+expr4:
+	expr4 '*' expr5 {
+		$$ = $1 * $3;
+	}
+	|
+	expr4 '/' expr5 {
+		if ($3 == 0)
+			error_val = ERROR_DIVBYZERO;
+		else
+			$$ = $1 / $3;
+	}
+	|
+	expr4 '%' expr5 {
+		if ($3 == 0)
+			error_val = ERROR_DIVBYZERO;
+		else
+			$$ = $1 % $3;
+	}
+	| expr5
+	;
+
+expr5:
+	'-' expr6 {
+		$$ = -$2;
+	}
+	| expr6
+	;
+
+expr6:
+	'~' expr7 {
+		$$ = ~$2;
+	}
+	| expr7
+	;
+
+expr7: '(' expr7 ')' {
+		$$ = $2;
+	}
+	| expr
 	;
 
 %%
