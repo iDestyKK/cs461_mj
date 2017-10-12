@@ -29,26 +29,30 @@ ERROR_N error_val;
 %type <num> expr5
 %type <num> expr6
 %type <num> expr7
+%type <num> expr8
+%type <num> expr9
+%type <num> expr10
 
 %%
 commands:
 	|	command commands
 	;
 
-command	:	expr ';' {
-                switch (error_val) {
-                    case ERROR_NONE:
-                        printf("%d", $1);
-                        break;
-                    case ERROR_OVERFLOW:
-                        printf("overflow\n");
-                        break;
-                    case ERROR_DIVBYZERO:
-                        printf("dividebyzero\n");
-                        break;
-                }
-                error_val = ERROR_NONE;
-            }
+command:
+	expr ';' {
+		switch (error_val) {
+			case ERROR_NONE:
+				printf("%d", $1);
+				break;
+			case ERROR_OVERFLOW:
+				printf("overflow\n");
+				break;
+			case ERROR_DIVBYZERO:
+				printf("dividebyzero\n");
+				break;
+		}
+		error_val = ERROR_NONE;
+	}
 	;
 
 expr: expr1
@@ -66,63 +70,84 @@ expr1:
 	;
 
 expr2:
-	expr2 '>' '>' expr3 {
-		$$ = $1 >> $4;
-	}
-	|
-	expr2 '<' '<' expr3 {
-		$$ = $1 << $4;
+	expr2 '|' expr3 {
+		$$ = $1 | $3;
 	}
 	| expr3
 	;
 
 expr3:
-	expr3 '+' expr4 {
-		$$ = $1 + $3;
-	}
-	|
-	expr3 '-' expr4 {
-		$$ = $1 - $3;
+	expr3 '^' expr4 {
+		$$ = $1 ^ $3;
 	}
 	| expr4
 	;
 
 expr4:
-	expr4 '*' expr5 {
+	expr4 '&' expr5 {
+		$$ = $1 & $3;
+	}
+	| expr5
+	;
+
+expr5:
+	expr5 '>' '>' expr6 {
+		$$ = $1 >> $4;
+	}
+	|
+	expr5 '<' '<' expr6 {
+		$$ = $1 << $4;
+	}
+	| expr6
+	;
+
+expr6:
+	expr6 '+' expr7 {
+		$$ = $1 + $3;
+	}
+	|
+	expr6 '-' expr7 {
+		$$ = $1 - $3;
+	}
+	| expr7
+	;
+
+expr7:
+	expr7 '*' expr8 {
 		$$ = $1 * $3;
 	}
 	|
-	expr4 '/' expr5 {
+	expr7 '/' expr8 {
 		if ($3 == 0)
 			error_val = ERROR_DIVBYZERO;
 		else
 			$$ = $1 / $3;
 	}
 	|
-	expr4 '%' expr5 {
+	expr7 '%' expr8 {
 		if ($3 == 0)
 			error_val = ERROR_DIVBYZERO;
 		else
 			$$ = $1 % $3;
 	}
-	| expr5
+	| expr8
 	;
 
-expr5:
-	'-' expr6 {
+expr8:
+	'-' expr9 {
 		$$ = -$2;
 	}
-	| expr6
+	| expr9
 	;
 
-expr6:
-	'~' expr7 {
+expr9:
+	'~' expr10 {
 		$$ = ~$2;
 	}
-	| expr7
+	| expr10
 	;
 
-expr7: '(' expr7 ')' {
+expr10: '(' expr10 ')' {
 		$$ = $2;
 	}
 	| expr
