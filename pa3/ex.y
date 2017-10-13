@@ -5,14 +5,10 @@
 %{
 #include <stdio.h>
 #include <limits.h>
-
-typedef enum error_n {
-    ERROR_NONE,
-    ERROR_OVERFLOW,
-    ERROR_DIVBYZERO
-} ERROR_N;
+#include "global.h"
 
 ERROR_N error_val;
+
 %}
 
 %union {
@@ -21,17 +17,17 @@ ERROR_N error_val;
 
 %token <num> NUM
 
-%type <num> expr
-%type <num> expr1
-%type <num> expr2
-%type <num> expr3
-%type <num> expr4
-%type <num> expr5
-%type <num> expr6
-%type <num> expr7
-%type <num> expr8
-%type <num> expr9
-%type <num> expr10
+%type <num> EXPR
+%type <num> EXPR_ASSIGN
+%type <num> EXPR_BITWISE_OR
+%type <num> EXPR_BITWISE_XOR
+%type <num> EXPR_BITWISE_AND
+%type <num> EXPR_SHIFT
+%type <num> EXPR_ADDSUB
+%type <num> EXPR_MUDIMO
+%type <num> EXPR_NEGATE
+%type <num> EXPR_BITWISE_NOT
+%type <num> EXPR_PARENTHESES
 
 %%
 commands:
@@ -39,118 +35,145 @@ commands:
 	;
 
 command:
-	expr ';' {
+	EXPR ';' {
 		switch (error_val) {
 			case ERROR_NONE:
 				printf("%d", $1);
 				break;
 			case ERROR_OVERFLOW:
-				printf("overflow\n");
+				printf("overflow");
 				break;
 			case ERROR_DIVBYZERO:
-				printf("dividebyzero\n");
+				printf("dividebyzero");
 				break;
 		}
 		error_val = ERROR_NONE;
 	}
 	;
 
-expr: expr1
+EXPR: EXPR_ASSIGN
 	| NUM
 	;
 	
-expr1:
+EXPR_ASSIGN:
 	NUM {
-		if (($1 > 0 && $1 > INT_MAX - $1) || ($1 < 0 && $1 < INT_MIN - $1))
-			error_val = ERROR_OVERFLOW;
+		if (($1 > 0 && $1 > INT_MAX - $1) || ($1 < 0 && $1 < INT_MIN - $1)) {
+			if (error_val == ERROR_NONE)
+				error_val = ERROR_OVERFLOW;
+		}
 		else
 			$$ = $1;
 	}
-	| expr2
+	| EXPR_BITWISE_OR
 	;
 
-expr2:
-	expr2 '|' expr3 {
+EXPR_BITWISE_OR:
+	EXPR_BITWISE_OR '|' EXPR_BITWISE_XOR {
 		$$ = $1 | $3;
 	}
-	| expr3
+	| EXPR_BITWISE_XOR
 	;
 
-expr3:
-	expr3 '^' expr4 {
+EXPR_BITWISE_XOR:
+	EXPR_BITWISE_XOR '^' EXPR_BITWISE_AND {
 		$$ = $1 ^ $3;
 	}
-	| expr4
+	| EXPR_BITWISE_AND
 	;
 
-expr4:
-	expr4 '&' expr5 {
+EXPR_BITWISE_AND:
+	EXPR_BITWISE_AND '&' EXPR_SHIFT {
 		$$ = $1 & $3;
 	}
-	| expr5
+	| EXPR_SHIFT
 	;
 
-expr5:
-	expr5 '>' '>' expr6 {
+EXPR_SHIFT:
+	EXPR_SHIFT '>' '>' EXPR_ADDSUB {
 		$$ = $1 >> $4;
 	}
 	|
-	expr5 '<' '<' expr6 {
-		$$ = $1 << $4;
+	EXPR_SHIFT '<' '<' EXPR_ADDSUB {
+		if ((int)((long long)$1 << $4) >> $4 != $1) {
+			if (error_val == ERROR_NONE)
+				error_val = ERROR_OVERFLOW;
+		}
+		else
+			$$ = $1 << $4;
 	}
-	| expr6
+	| EXPR_ADDSUB
 	;
 
-expr6:
-	expr6 '+' expr7 {
-		$$ = $1 + $3;
+EXPR_ADDSUB:
+	EXPR_ADDSUB '+' EXPR_MUDIMO {
+		if (($1 > 0 && $3 > INT_MAX - $1) || ($1 < 0 && $3 < INT_MIN - $1)) {
+			if (error_val == ERROR_NONE)
+				error_val = ERROR_OVERFLOW;
+		}
+		else
+			$$ = $1 + $3;
 	}
 	|
-	expr6 '-' expr7 {
-		$$ = $1 - $3;
+	EXPR_ADDSUB '-' EXPR_MUDIMO {
+		if (($1 > 0 && -$3 > INT_MAX - $1) || ($1 < 0 && -$3 < INT_MIN - $1)) {
+			if (error_val == ERROR_NONE)
+				error_val = ERROR_OVERFLOW;
+		}
+		else
+			$$ = $1 - $3;
 	}
-	| expr7
+	| EXPR_MUDIMO
 	;
 
-expr7:
-	expr7 '*' expr8 {
-		$$ = $1 * $3;
+EXPR_MUDIMO:
+	EXPR_MUDIMO '*' EXPR_NEGATE {
+		if ($1 != 0 && ($1 * $3) / $1 != $3) {
+			if (error_val == ERROR_NONE)
+				error_val = ERROR_OVERFLOW;
+		}
+		else
+			$$ = $1 * $3;
 	}
 	|
-	expr7 '/' expr8 {
-		if ($3 == 0)
-			error_val = ERROR_DIVBYZERO;
+	EXPR_MUDIMO '/' EXPR_NEGATE {
+		if ($3 == 0) {
+			if (error_val == ERROR_NONE)
+				error_val = ERROR_DIVBYZERO;
+		}
 		else
 			$$ = $1 / $3;
 	}
 	|
-	expr7 '%' expr8 {
-		if ($3 == 0)
-			error_val = ERROR_DIVBYZERO;
+	EXPR_MUDIMO '%' EXPR_NEGATE {
+		if ($3 == 0) {
+			if (error_val == ERROR_NONE)
+				error_val = ERROR_DIVBYZERO;
+		}
 		else
 			$$ = $1 % $3;
 	}
-	| expr8
+	| EXPR_NEGATE
 	;
 
-expr8:
-	'-' expr9 {
+EXPR_NEGATE:
+	'-' EXPR_BITWISE_NOT {
 		$$ = -$2;
 	}
-	| expr9
+	| EXPR_BITWISE_NOT
 	;
 
-expr9:
-	'~' expr10 {
+EXPR_BITWISE_NOT:
+	'~' EXPR_PARENTHESES {
 		$$ = ~$2;
 	}
-	| expr10
+	| EXPR_PARENTHESES
 	;
 
-expr10: '(' expr10 ')' {
+EXPR_PARENTHESES:
+	'(' EXPR_PARENTHESES ')' {
 		$$ = $2;
 	}
-	| expr
+	| EXPR
 	;
 
 %%
