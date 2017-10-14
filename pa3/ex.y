@@ -10,6 +10,10 @@
 
 ERROR_N error_val;
 int vars[26];
+char overflow_occurred;
+
+//Just set the stack to take so much that it won't overflow... I'm tired.
+#define YYMAXDEPTH 100000000
 
 %}
 
@@ -197,7 +201,11 @@ EXPR_PARENTHESES:
 
 main() {
 	memset(&vars[0], 0, sizeof(int) * 26);
-	if (yyparse())
+	overflow_occurred = 0;
+	int val;
+	val = yyparse();
+
+	if (val)
 		printf("\nInvalid expression.\n");
 	else
 		printf("\nCalculator off.\n");
