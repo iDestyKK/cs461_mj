@@ -10,27 +10,17 @@
 
 ERROR_N error_val;
 int vars[26];
-char overflow_occurred;
-
-//Just set the stack to take so much that it won't overflow unless you're
-//crazy... I'm tired.
-#define YYMAXDEPTH 100000000
 
 %}
 
 %union {
   int num;
-  char var;
-  char* cmd;
 }
 
 %token <num> NUM
-%token <var> VAR
-%token <cmd> CMD
 
 %type <num> EXPR
 %type <num> EXPR_ASSIGN
-%type <num> EXPR_SUPERASSIGN
 %type <num> EXPR_BITWISE_OR
 %type <num> EXPR_BITWISE_XOR
 %type <num> EXPR_BITWISE_AND
@@ -47,35 +37,32 @@ commands:
 	;
 
 command:
-	CMD ';' {
-		if (strcmp($1, "dump") == 0) {
-			unsigned int i = 0;
-			for (; i < 26; i++) {
-				printf(
-					"%c: %d%s",
-					'a' + i,
-					vars[i],
-					"\n"//(i != 25) ? "\n\0" : "\0"
-				);
-			}
+	'd' 'u' 'm' 'p' ';' {
+		unsigned int i = 0;
+		for (; i < 26; i++) {
+			printf(
+				"%c: %d%s",
+				'a' + i,
+				vars[i],
+				(i != 25) ? "\n\0" : "\0"
+			);
 		}
-		else
-		if (strcmp($1, "clear") == 0) {
-			memset(&vars[0], 0, sizeof(int) * 26);
-		}
-		free($1);
+	}
+	|
+	'c' 'l' 'e' 'a' 'r' ';' {
+		memset(&vars[0], 0, sizeof(int) * 26);
 	}
 	|
 	EXPR ';' {
 		switch (error_val) {
 			case ERROR_NONE:
-				printf("%d\n", $1);
+				printf("%d", $1);
 				break;
 			case ERROR_OVERFLOW:
-				printf("overflow\n");
+				printf("overflow");
 				break;
 			case ERROR_DIVBYZERO:
-				printf("dividebyzero\n");
+				printf("dividebyzero");
 				break;
 		}
 		error_val = ERROR_NONE;
@@ -83,98 +70,43 @@ command:
 	;
 
 EXPR: EXPR_ASSIGN
+	| NUM
 	;
 	
 EXPR_ASSIGN:
-	EXPR_SUPERASSIGN
-	|
-	VAR '=' EXPR_ASSIGN {
-		vars[$1] = $3;
-		$$ = $3;
+	NUM {
+		if (($1 > 0 && $1 > INT_MAX - $1) || ($1 < 0 && $1 < INT_MIN - $1)) {
+			if (error_val == ERROR_NONE)
+				error_val = ERROR_OVERFLOW;
+		}
+		else
+			$$ = $1;
 	}
-	;
-
-EXPR_SUPERASSIGN:
-	EXPR_BITWISE_OR
-	|
-	EXPR_SUPERASSIGN '+' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] + $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '-' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] - $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '*' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] * $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '/' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] / $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '%' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] % $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '<' '<' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] << $5;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '>' '>' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] >> $5;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '&' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] & $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '^' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] ^ $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '|' '=' EXPR_ASSIGN {
-		vars[$1] = vars[$1] | $4;
-		$$ = vars[$1];
-	}
+	| EXPR_BITWISE_OR
 	;
 
 EXPR_BITWISE_OR:
-	EXPR_BITWISE_XOR
-	|
 	EXPR_BITWISE_OR '|' EXPR_BITWISE_XOR {
 		$$ = $1 | $3;
 	}
+	| EXPR_BITWISE_XOR
 	;
 
 EXPR_BITWISE_XOR:
-	EXPR_BITWISE_AND
-	|
 	EXPR_BITWISE_XOR '^' EXPR_BITWISE_AND {
 		$$ = $1 ^ $3;
 	}
+	| EXPR_BITWISE_AND
 	;
 
 EXPR_BITWISE_AND:
-	EXPR_SHIFT
-	|
 	EXPR_BITWISE_AND '&' EXPR_SHIFT {
 		$$ = $1 & $3;
 	}
+	| EXPR_SHIFT
 	;
 
 EXPR_SHIFT:
-	EXPR_ADDSUB
-	|
 	EXPR_SHIFT '>' '>' EXPR_ADDSUB {
 		$$ = $1 >> $4;
 	}
@@ -187,11 +119,10 @@ EXPR_SHIFT:
 		else
 			$$ = $1 << $4;
 	}
+	| EXPR_ADDSUB
 	;
 
 EXPR_ADDSUB:
-	EXPR_MUDIMO
-	|
 	EXPR_ADDSUB '+' EXPR_MUDIMO {
 		if (($1 > 0 && $3 > INT_MAX - $1) || ($1 < 0 && $3 < INT_MIN - $1)) {
 			if (error_val == ERROR_NONE)
@@ -209,11 +140,10 @@ EXPR_ADDSUB:
 		else
 			$$ = $1 - $3;
 	}
+	| EXPR_MUDIMO
 	;
 
 EXPR_MUDIMO:
-	EXPR_NEGATE
-	|
 	EXPR_MUDIMO '*' EXPR_NEGATE {
 		if ($1 != 0 && ($1 * $3) / $1 != $3) {
 			if (error_val == ERROR_NONE)
@@ -240,43 +170,35 @@ EXPR_MUDIMO:
 		else
 			$$ = $1 % $3;
 	}
+	| EXPR_NEGATE
 	;
 
 EXPR_NEGATE:
-	EXPR_BITWISE_NOT
-	|
 	'-' EXPR_BITWISE_NOT {
 		$$ = -$2;
 	}
+	| EXPR_BITWISE_NOT
 	;
 
 EXPR_BITWISE_NOT:
-	EXPR_PARENTHESES
-	|
 	'~' EXPR_PARENTHESES {
 		$$ = ~$2;
 	}
+	| EXPR_PARENTHESES
 	;
 
 EXPR_PARENTHESES:
-	'(' EXPR ')' {
+	'(' EXPR_PARENTHESES ')' {
 		$$ = $2;
 	}
-	| VAR {
-		$$ = vars[$1];
-	}
-	| NUM
+	| EXPR
 	;
 
 %%
 
 main() {
 	memset(&vars[0], 0, sizeof(int) * 26);
-	overflow_occurred = 0;
-	int val;
-	val = yyparse();
-
-	if (val)
+	if (yyparse())
 		printf("\nInvalid expression.\n");
 	else
 		printf("\nCalculator off.\n");

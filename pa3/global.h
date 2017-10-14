@@ -5,3 +5,5 @@ typedef enum error_n {
 } ERROR_N;
 
 extern ERROR_N error_val;
+
+extern int vars[26];
