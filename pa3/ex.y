@@ -5,9 +5,11 @@
 %{
 #include <stdio.h>
 #include <limits.h>
+#include <string.h>
 #include "global.h"
 
 ERROR_N error_val;
+int vars[26];
 
 %}
 
@@ -35,6 +37,22 @@ commands:
 	;
 
 command:
+	'd' 'u' 'm' 'p' ';' {
+		unsigned int i = 0;
+		for (; i < 26; i++) {
+			printf(
+				"%c: %d%s",
+				'a' + i,
+				vars[i],
+				(i != 25) ? "\n\0" : "\0"
+			);
+		}
+	}
+	|
+	'c' 'l' 'e' 'a' 'r' ';' {
+		memset(&vars[0], 0, sizeof(int) * 26);
+	}
+	|
 	EXPR ';' {
 		switch (error_val) {
 			case ERROR_NONE:
@@ -52,43 +70,39 @@ command:
 	;
 
 EXPR: EXPR_ASSIGN
-	| NUM
 	;
 	
 EXPR_ASSIGN:
-	NUM {
-		if (($1 > 0 && $1 > INT_MAX - $1) || ($1 < 0 && $1 < INT_MIN - $1)) {
-			if (error_val == ERROR_NONE)
-				error_val = ERROR_OVERFLOW;
-		}
-		else
-			$$ = $1;
-	}
-	| EXPR_BITWISE_OR
+	EXPR_BITWISE_OR
 	;
 
 EXPR_BITWISE_OR:
+	EXPR_BITWISE_XOR
+	|
 	EXPR_BITWISE_OR '|' EXPR_BITWISE_XOR {
 		$$ = $1 | $3;
 	}
-	| EXPR_BITWISE_XOR
 	;
 
 EXPR_BITWISE_XOR:
+	EXPR_BITWISE_AND
+	|
 	EXPR_BITWISE_XOR '^' EXPR_BITWISE_AND {
 		$$ = $1 ^ $3;
 	}
-	| EXPR_BITWISE_AND
 	;
 
 EXPR_BITWISE_AND:
+	EXPR_SHIFT
+	|
 	EXPR_BITWISE_AND '&' EXPR_SHIFT {
 		$$ = $1 & $3;
 	}
-	| EXPR_SHIFT
 	;
 
 EXPR_SHIFT:
+	EXPR_ADDSUB
+	|
 	EXPR_SHIFT '>' '>' EXPR_ADDSUB {
 		$$ = $1 >> $4;
 	}
@@ -101,10 +115,11 @@ EXPR_SHIFT:
 		else
 			$$ = $1 << $4;
 	}
-	| EXPR_ADDSUB
 	;
 
 EXPR_ADDSUB:
+	EXPR_MUDIMO
+	|
 	EXPR_ADDSUB '+' EXPR_MUDIMO {
 		if (($1 > 0 && $3 > INT_MAX - $1) || ($1 < 0 && $3 < INT_MIN - $1)) {
 			if (error_val == ERROR_NONE)
@@ -122,10 +137,11 @@ EXPR_ADDSUB:
 		else
 			$$ = $1 - $3;
 	}
-	| EXPR_MUDIMO
 	;
 
 EXPR_MUDIMO:
+	EXPR_NEGATE
+	|
 	EXPR_MUDIMO '*' EXPR_NEGATE {
 		if ($1 != 0 && ($1 * $3) / $1 != $3) {
 			if (error_val == ERROR_NONE)
@@ -152,38 +168,39 @@ EXPR_MUDIMO:
 		else
 			$$ = $1 % $3;
 	}
-	| EXPR_NEGATE
 	;
 
 EXPR_NEGATE:
+	EXPR_BITWISE_NOT
+	|
 	'-' EXPR_BITWISE_NOT {
 		$$ = -$2;
 	}
-	| EXPR_BITWISE_NOT
 	;
 
 EXPR_BITWISE_NOT:
+	EXPR_PARENTHESES
+	|
 	'~' EXPR_PARENTHESES {
 		$$ = ~$2;
 	}
-	| EXPR_PARENTHESES
 	;
 
 EXPR_PARENTHESES:
-	'(' EXPR_PARENTHESES ')' {
+	'(' EXPR ')' {
 		$$ = $2;
 	}
-	| EXPR
+	| NUM
 	;
 
 %%
 
-main()
-{
-   if (yyparse())
-      printf("\nInvalid expression.\n");
-   else
-      printf("\nCalculator off.\n");
+main() {
+	memset(&vars[0], 0, sizeof(int) * 26);
+	if (yyparse())
+		printf("\nInvalid expression.\n");
+	else
+		printf("\nCalculator off.\n");
 }
 
 yyerror(s)
