@@ -78,7 +78,7 @@ function generate_equation() {
 		}
 
 		while (str_ret.includes("@")) {
-			str_ret = str_ret.replace(/@/, -100 + Math.floor(Math.random() * 200));
+			str_ret = str_ret.replace(/@/, -10 + Math.floor(Math.random() * 20));
 		}
 	}
 

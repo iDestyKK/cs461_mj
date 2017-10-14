@@ -19,6 +19,17 @@ ERROR_N error_val = ERROR_NONE;
 	//sscanf(yytext, "%d", &yylval.num);
 	return NUM;
 }
+\+\=   { return ASMT_PLUS; }
+\-\=   { return ASMT_SUBT; }
+\*\=   { return ASMT_MULT; }
+\/\=   { return ASMT_DIVI; }
+\%\=   { return ASMT_MODU; }
+\<\<\= { return ASMT_SFTL; }
+\>\>\= { return ASMT_SFTR; }
+\&\=   { return ASMT_ANDO; }
+\^\=   { return ASMT_XORO; }
+\|\=   { return ASMT_OROP; }
+
 (dump|clear) {
 	yylval.cmd = strdup(yytext);
 	return CMD;

@@ -12,6 +12,9 @@ ERROR_N error_val;
 int vars[26];
 char overflow_occurred;
 
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
+
 //Just set the stack to take so much that it won't overflow unless you're
 //crazy... I'm tired.
 #define YYMAXDEPTH 100000000
@@ -27,6 +30,7 @@ char overflow_occurred;
 %token <num> NUM
 %token <var> VAR
 %token <cmd> CMD
+%token ASMT_PLUS ASMT_SUBT ASMT_MULT ASMT_DIVI ASMT_MODU ASMT_SFTL ASMT_SFTR ASMT_ANDO ASMT_XORO ASMT_OROP
 
 %type <num> EXPR
 %type <num> EXPR_ASSIGN
@@ -86,66 +90,150 @@ EXPR: EXPR_ASSIGN
 	;
 	
 EXPR_ASSIGN:
-	EXPR_SUPERASSIGN
-	|
 	VAR '=' EXPR_ASSIGN {
-		vars[$1] = $3;
-		$$ = $3;
+		if (error_val == ERROR_NONE) {
+			vars[$1] = $3;
+			$$ = $3;
+		}
 	}
+	|
+	EXPR_SUPERASSIGN
 	;
 
 EXPR_SUPERASSIGN:
+	VAR ASMT_PLUS EXPR_ASSIGN {
+		if (error_val == ERROR_NONE) {
+			vars[$1] = vars[$1] + $3;
+			$$ = vars[$1];
+		}
+	}
+	|
+	VAR ASMT_SUBT EXPR_ASSIGN {
+		if (error_val == ERROR_NONE) {
+			vars[$1] = vars[$1] - $3;
+			$$ = vars[$1];
+		}
+	}
+	|
+	VAR ASMT_MULT EXPR_ASSIGN {
+		if (error_val == ERROR_NONE) {
+			if (vars[$1] != 0 && (vars[$1] * $3) / vars[$1] != $3) {
+				if (error_val == ERROR_NONE)
+					error_val = ERROR_OVERFLOW;
+			}
+			else {
+				vars[$1] = vars[$1] * $3;
+				$$ = vars[$1];
+			}
+		}
+	}
+	|
+	VAR ASMT_DIVI EXPR_ASSIGN {
+		if (error_val == ERROR_NONE) {
+			if ($3 == 0) {
+				if (error_val == ERROR_NONE)
+					error_val = ERROR_DIVBYZERO;
+			}
+			else {
+				vars[$1] = vars[$1] / $3;
+				$$ = vars[$1];
+			}
+		}
+	}
+	|
+	VAR ASMT_MODU EXPR_ASSIGN {
+		if (error_val == ERROR_NONE) {
+			if ($3 == 0) {
+				if (error_val == ERROR_NONE)
+					error_val = ERROR_DIVBYZERO;
+			}
+			else {
+				vars[$1] = vars[$1] % $3;
+				$$ = vars[$1];
+			}
+		}
+	}
+	|
+	VAR ASMT_SFTL EXPR_ASSIGN {
+		if (error_val == ERROR_NONE) {
+			if ($3 < 0) {
+				//Matching the undefined behaviour of the solution executable
+				char msb = (vars[$1] >> 31) & 1;
+				long long val = vars[$1];
+				unsigned int lv = (unsigned int)((val << $3) >> 32) & 0xFFFFFFFF;
+				int rv = (int)(val << $3) & 0xFFFFFFFF;
+				if (lv > 0)
+					rv |= (1 << 31); //Set the MSB if any of last 32 bits are anything but 0.
+				if (error_val == ERROR_NONE && msb != ((rv >> 31) & 1)) {
+					error_val = ERROR_OVERFLOW;
+				}
+				else {
+					vars[$1] = rv;
+					$$ = vars[$1];
+				}
+			}
+			else {
+				if ((int)((long long)vars[$1] << $3) >> $3 != vars[$1]) {
+					if (error_val == ERROR_NONE)
+						error_val = ERROR_OVERFLOW;
+				}
+				else {
+					vars[$1] = vars[$1] << $3;
+					$$ = vars[$1];
+				}
+			}
+		}
+	}
+	|
+	VAR ASMT_SFTR EXPR_ASSIGN {
+		if (error_val == ERROR_NONE) {
+			//vars[$1] = vars[$1] >> ($3 % 32);
+			//$$ = vars[$1];
+			if ($3 < 0) {
+				unsigned int i = 0;
+				int v = vars[$1];
+				char msb = (vars[$1] >> 31) & 1;
+				for (; i < 64 - ((-$3) % 64); i++) {
+					v>>=1;
+					v |= (((int)msb) << 31);
+				}
+				vars[$1] = v;
+			}
+			else {
+				unsigned int i = 0, v = vars[$1];
+				char msb = (vars[$1] >> 31) & 1;
+				for (; i < MIN($3, 32); i++) {
+					v>>=1;
+					v |= (((int)msb) << 31);
+				}
+				vars[$1] = v;
+			}
+			$$ = vars[$1];
+		}
+	}
+	|
+	VAR ASMT_ANDO EXPR_ASSIGN {
+		if (error_val == ERROR_NONE) {
+			vars[$1] = vars[$1] & $3;
+			$$ = vars[$1];
+		}
+	}
+	|
+	VAR ASMT_XORO EXPR_ASSIGN {
+		if (error_val == ERROR_NONE) {
+			vars[$1] = vars[$1] ^ $3;
+			$$ = vars[$1];
+		}
+	}
+	|
+	VAR ASMT_OROP EXPR_ASSIGN {
+		if (error_val == ERROR_NONE) {
+			vars[$1] = vars[$1] | $3;
+			$$ = vars[$1];
+		}
+	}
+	|
 	EXPR_BITWISE_OR
-	|
-	EXPR_SUPERASSIGN '+' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] + $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '-' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] - $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '*' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] * $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '/' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] / $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '%' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] % $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '<' '<' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] << $5;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '>' '>' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] >> $5;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '&' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] & $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '^' '=' EXPR_BITWISE_OR {
-		vars[$1] = vars[$1] ^ $4;
-		$$ = vars[$1];
-	}
-	|
-	EXPR_SUPERASSIGN '|' '=' EXPR_ASSIGN {
-		vars[$1] = vars[$1] | $4;
-		$$ = vars[$1];
-	}
 	;
 
 EXPR_BITWISE_OR:
@@ -176,16 +264,52 @@ EXPR_SHIFT:
 	EXPR_ADDSUB
 	|
 	EXPR_SHIFT '>' '>' EXPR_ADDSUB {
-		$$ = $1 >> $4;
+		//$$ = ($1 >> $4) | (((($1 >> 31) & 1) == 1) * (0xFFFFFFFF << ($4 % 32)));
+		//$$ = $1 >> $4;
+		//$$ = $1 >> MIN($4, 32) | (((($1 >> 31) & 1) == 1) * (0xFFFFFFFF << MIN($4, 32)));
+		if ($4 < 0) {
+			unsigned int i = 0, v = $1;
+			char msb = ($1 >> 31) & 1;
+			for (; i < 64 - ((-$4) % 64); i++) {
+				v>>=1;
+				v |= (((int)msb) << 31);
+			}
+			$$ = v;
+		}
+		else {
+			unsigned int i = 0, v = $1;
+			char msb = ($1 >> 31) & 1;
+			for (; i < MIN($4, 32); i++) {
+				v>>=1;
+				v |= (((int)msb) << 31);
+			}
+			$$ = v;
+		}
 	}
 	|
 	EXPR_SHIFT '<' '<' EXPR_ADDSUB {
-		if ((int)((long long)$1 << $4) >> $4 != $1) {
-			if (error_val == ERROR_NONE)
+		if ($4 < 0) {
+			//Matching the undefined behaviour of the solution executable
+			char msb = ($1 >> 31) & 1;
+			long long val = $1;
+			unsigned int lv = (unsigned int)((val << $4) >> 32) & 0xFFFFFFFF;
+			int rv = (int)(val << $4) & 0xFFFFFFFF;
+			if (lv > 0)
+				rv |= (1 << 31); //Set the MSB if any of last 32 bits are anything but 0.
+			if (error_val == ERROR_NONE && msb != ((rv >> 31) & 1)) {
 				error_val = ERROR_OVERFLOW;
+			}
+			else
+				$$ = rv;
 		}
-		else
-			$$ = $1 << $4;
+		else {
+			if ((int)((long long)$1 << $4) >> $4 != $1) {
+				if (error_val == ERROR_NONE)
+					error_val = ERROR_OVERFLOW;
+			}
+			else
+				$$ = $1 << $4;
+		}
 	}
 	;
 
