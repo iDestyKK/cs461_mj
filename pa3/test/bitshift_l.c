@@ -5,7 +5,7 @@ main() {
 	unsigned int i = 0, j;
 	char buf[65];
 	buf[64] = '\0';
-	long long val = 37489;
+	long long val = -133;
 	unsigned int lv;
 	int rv;
 

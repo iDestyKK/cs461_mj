@@ -4,7 +4,9 @@
 var template = {
 	"BASE": [
 		"{1}",
-		"{VAR}{ASSIGNMENT}{BASE}",
+		"{VAR}{ASSIGNMENT}{2}",
+		"dump",
+		"clear"
 	],
 	"1": [
 		"{VAR}",
@@ -25,6 +27,10 @@ var template = {
 		"({1}){OP}({1})",
 		"({1}){OP}!@",
 		"!@{OP}({1})",
+	],
+	"2": [
+		"{1}",
+		"{VAR}{ASSIGNMENT}{2}"
 	],
 	"OP": [
 		"+", "-", "*", "/", "%", "|", "&", "\^",

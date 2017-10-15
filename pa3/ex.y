@@ -156,31 +156,25 @@ EXPR_SUPERASSIGN:
 	|
 	VAR ASMT_SFTL EXPR_ASSIGN {
 		if (error_val == ERROR_NONE) {
-			if ($3 < 0) {
-				//Matching the undefined behaviour of the solution executable
-				char msb = (vars[$1] >> 31) & 1;
-				long long val = vars[$1];
-				unsigned int lv = (unsigned int)((val << $3) >> 32) & 0xFFFFFFFF;
-				int rv = (int)(val << $3) & 0xFFFFFFFF;
-				if (lv > 0)
-					rv |= (1 << 31); //Set the MSB if any of last 32 bits are anything but 0.
-				if (error_val == ERROR_NONE && msb != ((rv >> 31) & 1)) {
+			//See "bitshift_l3.c"
+			char msb = (vars[$1] >> 31) & 1,
+				 overflow = 0;
+			long long val = vars[$1];
+			unsigned int lv = (unsigned int)((val << $3) >> 32) & 0xFFFFFFFF;
+			int rv = (int)(val << $3) & 0xFFFFFFFF;
+			if (lv > 0)
+				rv |= (1 << 31);
+			overflow = (msb != (((val << $3) >> 31) & 1) || (lv != 0 && val > 0) || (lv != -1 && val < 0));
+			if (val << $3 == 0)
+				overflow = 0;
+			
+			if (overflow) {
+				if (error_val == ERROR_NONE)
 					error_val = ERROR_OVERFLOW;
-				}
-				else {
-					vars[$1] = rv;
-					$$ = vars[$1];
-				}
 			}
 			else {
-				if ((int)((long long)vars[$1] << $3) >> $3 != vars[$1]) {
-					if (error_val == ERROR_NONE)
-						error_val = ERROR_OVERFLOW;
-				}
-				else {
-					vars[$1] = vars[$1] << $3;
-					$$ = vars[$1];
-				}
+				$$ = vars[$1] << $3;
+				vars[$1] <<= $3;
 			}
 		}
 	}
@@ -189,26 +183,12 @@ EXPR_SUPERASSIGN:
 		if (error_val == ERROR_NONE) {
 			//vars[$1] = vars[$1] >> ($3 % 32);
 			//$$ = vars[$1];
-			if ($3 < 0) {
-				unsigned int i = 0;
-				int v = vars[$1];
-				char msb = (vars[$1] >> 31) & 1;
-				for (; i < 64 - ((-$3) % 64); i++) {
-					v>>=1;
-					v |= (((int)msb) << 31);
-				}
-				vars[$1] = v;
-			}
-			else {
-				unsigned int i = 0, v = vars[$1];
-				char msb = (vars[$1] >> 31) & 1;
-				for (; i < MIN($3, 32); i++) {
-					v>>=1;
-					v |= (((int)msb) << 31);
-				}
-				vars[$1] = v;
-			}
-			$$ = vars[$1];
+			unsigned int i = 0;
+			long long v = vars[$1];
+			char msb = (vars[$1] >> 31) & 1;
+			v>>=$3;
+			$$ = v;
+			vars[$1] = v;
 		}
 	}
 	|
@@ -267,49 +247,32 @@ EXPR_SHIFT:
 		//$$ = ($1 >> $4) | (((($1 >> 31) & 1) == 1) * (0xFFFFFFFF << ($4 % 32)));
 		//$$ = $1 >> $4;
 		//$$ = $1 >> MIN($4, 32) | (((($1 >> 31) & 1) == 1) * (0xFFFFFFFF << MIN($4, 32)));
-		if ($4 < 0) {
-			unsigned int i = 0, v = $1;
-			char msb = ($1 >> 31) & 1;
-			for (; i < 64 - ((-$4) % 64); i++) {
-				v>>=1;
-				v |= (((int)msb) << 31);
-			}
-			$$ = v;
-		}
-		else {
-			unsigned int i = 0, v = $1;
-			char msb = ($1 >> 31) & 1;
-			for (; i < MIN($4, 32); i++) {
-				v>>=1;
-				v |= (((int)msb) << 31);
-			}
-			$$ = v;
-		}
+		unsigned int i = 0;
+		long long v = $1;
+		char msb = ($1 >> 31) & 1;
+		v>>=$4;
+		$$ = v;
 	}
 	|
 	EXPR_SHIFT '<' '<' EXPR_ADDSUB {
-		if ($4 < 0) {
-			//Matching the undefined behaviour of the solution executable
-			char msb = ($1 >> 31) & 1;
-			long long val = $1;
-			unsigned int lv = (unsigned int)((val << $4) >> 32) & 0xFFFFFFFF;
-			int rv = (int)(val << $4) & 0xFFFFFFFF;
-			if (lv > 0)
-				rv |= (1 << 31); //Set the MSB if any of last 32 bits are anything but 0.
-			if (error_val == ERROR_NONE && msb != ((rv >> 31) & 1)) {
+		//See "bitshift_l3.c"
+		char msb = ($1 >> 31) & 1,
+			 overflow = 0;
+		long long val = $1;
+		unsigned int lv = (unsigned int)((val << $4) >> 32) & 0xFFFFFFFF;
+		int rv = (int)(val << $4) & 0xFFFFFFFF;
+		if (lv > 0)
+			rv |= (1 << 31);
+		overflow = (msb != (((val << $4) >> 31) & 1) || (lv != 0 && val > 0) || (lv != -1 && val < 0));
+		if (val << $4 == 0)
+			overflow = 0;
+		
+		if (overflow) {
+			if (error_val == ERROR_NONE)
 				error_val = ERROR_OVERFLOW;
-			}
-			else
-				$$ = rv;
 		}
-		else {
-			if ((int)((long long)$1 << $4) >> $4 != $1) {
-				if (error_val == ERROR_NONE)
-					error_val = ERROR_OVERFLOW;
-			}
-			else
-				$$ = $1 << $4;
-		}
+		else
+			$$ = $1 << $4;
 	}
 	;
 
