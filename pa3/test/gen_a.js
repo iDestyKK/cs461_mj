@@ -3,30 +3,36 @@
 
 var template = {
 	"BASE": [
-		"{1}",
-		"{VAR}{ASSIGNMENT}{2}",
+		"{1}", "{VAR}{ASSIGNMENT}{2}",
+		"{1}", "{VAR}{ASSIGNMENT}{2}",
+		"{1}", "{VAR}{ASSIGNMENT}{2}",
+		"{1}", "{VAR}{ASSIGNMENT}{2}",
+		"{1}", "{VAR}{ASSIGNMENT}{2}",
+		"{1}", "{VAR}{ASSIGNMENT}{2}",
+		"{1}", "{VAR}{ASSIGNMENT}{2}",
+		"{1}", "{VAR}{ASSIGNMENT}{2}",
 		"dump",
 		"clear"
 	],
 	"1": [
 		"{VAR}",
-		"!@",
-		"!@{OP}!@",
+		"@",
+		"@{OP}!@",
+		"{1}{OP}{1}",
+		"{1}{OP}!@",
+		"@{OP}{1}",
+		"(@{OP}@)",
+		"({1}){OP}({1})",
+		"({1}){OP}@",
+		"@{OP}({1})",
+		"@{OP}!@",
 		"{1}{OP}{1}",
 		"{1}{OP}!@",
 		"!@{OP}{1}",
-		"(!@{OP}!@)",
+		"(@{OP}!@)",
 		"({1}){OP}({1})",
 		"({1}){OP}!@",
-		"!@{OP}({1})",
-		"!@{OP}!@",
-		"{1}{OP}{1}",
-		"{1}{OP}!@",
-		"!@{OP}{1}",
-		"(!@{OP}!@)",
-		"({1}){OP}({1})",
-		"({1}){OP}!@",
-		"!@{OP}({1})",
+		"@{OP}({1})",
 	],
 	"2": [
 		"{1}",
@@ -77,6 +83,8 @@ function generate_equation() {
 	
 	while (str_ret.length < intensity * 10) {
 		str_ret = expand("{BASE}");
+		if ((str_ret == "dump" || str_ret == "clear") && ((Math.random() * 100) > 98))
+			break;
 			
 		while (str_ret.includes("{") || str_ret.includes("}")) {
 			str_ret = str_ret.replace(/{(.*?)}/, expand);
@@ -106,7 +114,7 @@ function generate_equation() {
 }
 
 if (process.argv.length != 4) {
-	console.log("Usage: node gen.js num intensity");
+	console.log("Usage: node gen_a.js num intensity");
 	process.exit(1);
 }
 

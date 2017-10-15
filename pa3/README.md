@@ -36,7 +36,7 @@ It will pipe a file from `gradescript/input/*.txt` into both the solution and yo
 ### check.sh
 **Requirements:** `cexpr, a txt file in "gradescript/input" and a txt file of the same name in "gradescript/output"`
 
-This is the simplest of all of the shell scripts, assuming you have the gradescript outputs cached via `gen.sh`.
+Assuming you have the gradescript outputs cached via `gen.sh`, this is the fastest of all shell scripts.
 It accepts an txt file in the `gradescript/input` directory as a parametre, and will pipe it into your code, then diff it with the cached output to check if it matches match.
 It will then print out `Matches!` or `Does not match!` depending on if your code works or not.
 

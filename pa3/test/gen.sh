@@ -78,7 +78,7 @@ for i in {100..122}; do
 	let "c++"
 	str=$(printf "(%*d/%*d) Generating Input %s..." 3 $c 3 125 "$name")	
 	printf "%-48s" "$str"
-	node gen_a.js 1000 100 > "../gradescript/input/${name}.txt"
+	node gen_a.js 2500 100 > "../gradescript/input/${name}.txt"
 	printf "[  ${green}OK${normal}  ]\n"
 done
 
@@ -87,7 +87,7 @@ name=$(printf "%03d" 123);
 let "c++"
 str=$(printf "(%*d/%*d) Generating Input %s..." 3 $c 3 125 "$name")	
 printf "%-48s" "$str"
-node gen_a.js 5000 2 > "../gradescript/input/${name}.txt"
+node gen_a.js 10000 100 > "../gradescript/input/${name}.txt"
 printf "[  ${green}OK${normal}  ]\n"
 
 # 124 is the final brutal test. Good Luck.
@@ -95,5 +95,5 @@ name=$(printf "%03d" 124);
 let "c++"
 str=$(printf "(%*d/%*d) Generating Input %s..." 3 $c 3 125 "$name")	
 printf "%-48s" "$str"
-node gen_a.js 10000 10 > "../gradescript/input/${name}.txt"
+node gen_a.js 25000 125 > "../gradescript/input/${name}.txt"
 printf "[  ${green}OK${normal}  ]\n"
