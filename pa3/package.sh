@@ -31,7 +31,7 @@ printf "[  ${green}OK${normal}  ]\n"
 
 # Tar that shit up
 printf "%-48s" "(3/5) Creating Master TAR."
-tar -czf "pkg/master.tar.gz" "Makefile" "check.sh" "check2.sh" "gen.sh" "gradeall.sh" "gradeall2.sh" "package.sh" "ex.l" "ex.y" "global.h" "ref_cexpr" "cexpr.pdf" "test" "sample" "old"
+tar -czf "pkg/master.tar.gz" "Makefile" "check.sh" "check2.sh" "gen.sh" "gradeall.sh" "gradeall2.sh" "package.sh" "ex.l" "ex.y" "global.h" "ref_cexpr" "cexpr.pdf" "test" "sample" "old" "gradescript"
 printf "[  ${green}OK${normal}  ]\n"
 
 # Tar gradescripts individually too
