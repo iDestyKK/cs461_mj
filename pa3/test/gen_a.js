@@ -5,12 +5,6 @@ var template = {
 	"BASE": [
 		"{1}", "{VAR}{ASSIGNMENT}{2}",
 		"{1}", "{VAR}{ASSIGNMENT}{2}",
-		"{1}", "{VAR}{ASSIGNMENT}{2}",
-		"{1}", "{VAR}{ASSIGNMENT}{2}",
-		"{1}", "{VAR}{ASSIGNMENT}{2}",
-		"{1}", "{VAR}{ASSIGNMENT}{2}",
-		"{1}", "{VAR}{ASSIGNMENT}{2}",
-		"{1}", "{VAR}{ASSIGNMENT}{2}",
 		"dump",
 		"clear"
 	],
@@ -83,7 +77,7 @@ function generate_equation() {
 	
 	while (str_ret.length < intensity * 10) {
 		str_ret = expand("{BASE}");
-		if ((str_ret == "dump" || str_ret == "clear") && ((Math.random() * 100) > 98))
+		if ((str_ret == "dump" || str_ret == "clear") && ((Math.random() * (100 * intensity)) > (100 * intensity) - 2))
 			break;
 			
 		while (str_ret.includes("{") || str_ret.includes("}")) {
