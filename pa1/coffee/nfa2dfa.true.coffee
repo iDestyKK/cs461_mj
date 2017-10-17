@@ -9,12 +9,11 @@ class nfa
 		num_getter  = /(\d+)[,}]/g
 		state_beg   = /^(\d+)/
 		bracket_get = /{([\d,]*?)}/g
-		@i_state = +(info_getter.exec(lines[0])[1])
-		@n_state  = +(info_getter.exec(lines[2])[1])
-		@f_states  = bracket_get.exec(lines[1])[1].split(",")
-		@alphabet = lines[3].replace(/\ \ +/g, " ").replace(/State/, "").trim().split(" ")
-		cnt = 0
-		while cnt < @n_state
+		@i_state    = +(info_getter.exec(lines[0])[1])
+		@n_state    = +(info_getter.exec(lines[2])[1])
+		@f_states   = bracket_get.exec(lines[1])[1].split(",")
+		@alphabet   = lines[3].replace(/\ \ +/g, " ").replace(/State/, "").trim().split(" ")
+		for cnt in [0...@n_state]
 			jj = state_beg.exec(lines[4 + cnt])
 			states = []
 			bracket_get.lastIndex = 0
@@ -22,20 +21,17 @@ class nfa
 				states.push(mtch[1].split(","))
 			@nodes.push(new nfa.node(jj[1], states, jj[1] in @f_states, this))
 			@nmap[jj[1]] = @nodes[-1..][0]
-			cnt++
 class nfa.node
 	constructor: (@name = "", @states = [], @fstate = false, @parent = undefined) ->
 	e_closure: (list = []) =>
 		cnt = 0
 		list.push(@name) if @name not in list
 		(list.push(i); cnt++) for i in @states[-1..][0] when i not in list and i
-		if cnt != 0
-			@parent.nmap[id].e_closure(list) for id in list
+		(@parent.nmap[id].e_closure(list) for id in list) if cnt != 0
 		return list
 class dfa
 	constructor: (@nodes = [], @nfa_base = null, @nmap = {}, @nmap2 = {}) ->
-		if @nfa_base?
-			@inherit @nfa_base
+		@inherit @nfa_base if @nfa_base?
 	inherit: (NFA) =>
 		list = []
 		obj_l = {}

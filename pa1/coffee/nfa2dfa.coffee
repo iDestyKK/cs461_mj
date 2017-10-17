@@ -40,8 +40,7 @@ class nfa
 		@alphabet = lines[3].replace(/\ \ +/g, " ").replace(/State/, "").trim().split(" ")
 
 		# Now to actually read the nodes
-		cnt = 0
-		while cnt < @n_state
+		for cnt in [0...@n_state]
 			jj = state_beg.exec(lines[4 + cnt])
 			states = []
 			bracket_get.lastIndex = 0
@@ -49,7 +48,6 @@ class nfa
 				states.push(mtch[1].split(","))
 			@nodes.push(new nfa.node(jj[1], states, jj[1] in @f_states, this))
 			@nmap[jj[1]] = @nodes[-1..][0]
-			cnt++
 
 class nfa.node
 	constructor: (@name = "", @states = [], @fstate = false, @parent = undefined) ->
@@ -57,14 +55,12 @@ class nfa.node
 		cnt = 0
 		list.push(@name) if @name not in list
 		(list.push(i); cnt++) for i in @states[-1..][0] when i not in list and i
-		if cnt != 0
-			@parent.nmap[id].e_closure(list) for id in list
+		(@parent.nmap[id].e_closure(list) for id in list) if cnt != 0
 		return list
 
 class dfa
 	constructor: (@nodes = [], @nfa_base = null, @nmap = {}, @nmap2 = {}) ->
-		if @nfa_base?
-			@inherit @nfa_base
+		@inherit @nfa_base if @nfa_base?
 	
 	inherit: (NFA) =>
 		# Generate the first node
