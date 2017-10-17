@@ -6,7 +6,7 @@
 #     humanly readable text file.
 #
 # Compilation:
-#     ...This is a coffee script file, are you kidding me? Okay, seriously the
+#     ...This is a coffeescript file, are you kidding me? Okay, seriously the
 #     code is all "transpiled" in to Javascript, and is then executed in a
 #     Javascript runtime environment. Therefore, no compilation is needed. :)
 #
