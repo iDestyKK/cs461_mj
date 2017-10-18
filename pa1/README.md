@@ -6,7 +6,11 @@ Converts an NFA (in a specially formatted text file) into a DFA. The application
 ## Synopsis
 ```
 ./nfa2dfa < nfa_file > dfa_file
+coffee nfa2dfa.coffee < nfa_file > dfa_file
 ```
+
+## Languages
+This assignment was written in 3 languages. The C++ and Coffeescript versions are complete, while the C version is incomplete. The reason for writing so many variants is because this assignment is easy enough to test code complexity in a language, but yet still be easy to write in pretty much any language thrown at it. Feel free to use whichever version you like.
 
 ## Compiling
 Use the makefile that comes with the project. Both the "c" and "cpp" variants come with their own Makefile for you to use. You must call "make clean" if the executable exists before calling "make" again.
