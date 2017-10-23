@@ -1,6 +1,3 @@
-flines = []
-natural_comp = (a, b) ->
-	return if (a.length == b.length) then (-1 * (a < b)) + (1 * (a > b)) else (-1 * (a.length < b.length)) + (a.length > b.length)
 class nfa
 	constructor: (@nodes = [], @nmap = {}, @alphabet = {}, @n_state = 0, @f_states = [], @i_state = -1) ->
 	interpret: (lines) ->
@@ -55,29 +52,25 @@ class dfa
 				@nodes[i - 1].states.push(name)
 class dfa.node
 	constructor: (@name = "", @nodes = {}, @p_name = "", @f_state = false, @states = []) ->
-spaces = (len, olen) ->
-	return new Array(len - olen).join(' ')
-stdin = process.openStdin()
-stdin.setEncoding 'utf8'
-stdin.on 'data', (input) ->
-	flines.push.apply(flines, input.trim().split('\n'))
-stdin.on 'end', () ->
-	console.log("reading NFA ... done.\n\ncreating corresponding DFA ...")
-	NFA = new nfa
-	NFA.interpret(flines)
-	DFA = new dfa([], NFA)
-	console.log("new DFA state:  #{n.p_name}#{spaces(5, n.p_name.length)} -->  {#{n.name}}") for n in DFA.nodes
-	console.log("done.\n\nfinal DFA:\nInitial State:  1")
-	console.log("Final States:   {#{(i.p_name for i in DFA.nodes when i.f_state).join(',')}}")
-	console.log("Total States:   #{DFA.nodes.length}")
-	for j in [-1...DFA.nodes.length]
-		line = ""
-		for i in [0...NFA.alphabet.length]
-			if j is -1
-				line += if i == 0 then "State   " else NFA.alphabet[i - 1] + (spaces(17, NFA.alphabet[i - 1].length))
-			else
-				st = DFA.nodes[j].states[i - 1]
-				n = if st of DFA.nmap then DFA.nmap[st].p_name else ''
-				n = DFA.nodes[j].p_name if i is 0
-				line += if i is 0 then n + spaces(9, n.length) else "{#{n}} #{spaces(16, n.length + 2)}"
-		console.log(line)
+spaces = (len, olen) -> return new Array(len - olen).join(' ')
+natural_comp = (a, b) -> return if (a.length == b.length) then (-1 * (a < b)) + (1 * (a > b)) else (-1 * (a.length < b.length)) + (a.length > b.length)
+flines = require('fs').readFileSync('/dev/stdin').toString().split('\n')
+console.log("reading NFA ... done.\n\ncreating corresponding DFA ...")
+NFA = new nfa
+NFA.interpret(flines)
+DFA = new dfa([], NFA)
+console.log("new DFA state:  #{n.p_name}#{spaces(5, n.p_name.length)} -->  {#{n.name}}") for n in DFA.nodes
+console.log("done.\n\nfinal DFA:\nInitial State:  1")
+console.log("Final States:   {#{(i.p_name for i in DFA.nodes when i.f_state).join(',')}}")
+console.log("Total States:   #{DFA.nodes.length}")
+for j in [-1...DFA.nodes.length]
+	line = ""
+	for i in [0...NFA.alphabet.length]
+		if j is -1
+			line += if i == 0 then "State   " else NFA.alphabet[i - 1] + (spaces(17, NFA.alphabet[i - 1].length))
+		else
+			st = DFA.nodes[j].states[i - 1]
+			n = if st of DFA.nmap then DFA.nmap[st].p_name else ''
+			n = DFA.nodes[j].p_name if i is 0
+			line += if i is 0 then n + spaces(9, n.length) else "{#{n}} #{spaces(16, n.length + 2)}"
+	console.log(line)

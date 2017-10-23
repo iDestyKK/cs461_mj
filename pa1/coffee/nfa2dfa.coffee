@@ -17,7 +17,8 @@
 #     Clara Van Nguyen
 #
 
-flines = []
+# Node.js stuff
+fs = require('fs')
 
 natural_comp = (a, b) ->
 	return if (a.length == b.length) then (-1 * (a < b)) + (1 * (a > b)) else (-1 * (a.length < b.length)) + (a.length > b.length)
@@ -93,16 +94,16 @@ class dfa.node
 spaces = (len, olen) ->
 	return new Array(len - olen).join(' ')
 
-stdin = process.openStdin()
-stdin.setEncoding 'utf8'
+#stdin = process.openStdin()
+#stdin.setEncoding 'utf8'
 
-stdin.on 'data', (input) ->
+#stdin.on 'data', (input) ->
 	# Read in everything
-	flines.push.apply(flines, input.trim().split('\n'))
+#	flines.push.apply(flines, input.trim().split('\n'))
 
-stdin.on 'end', () ->
+#stdin.on 'end', () ->
 	# Done reading data. Call Main
-	main()
+#	main()
 
 main = () ->
 	console.log("reading NFA ... done.\n\ncreating corresponding DFA ...")
@@ -126,3 +127,7 @@ main = () ->
 				n = DFA.nodes[j].p_name if i is 0
 				line += if i is 0 then n + spaces(9, n.length) else "{#{n}} #{spaces(16, n.length + 2)}"
 		console.log(line)
+
+# Because Node.js... ;)
+flines = fs.readFileSync('/dev/stdin').toString().split('\n')
+main()
