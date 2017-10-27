@@ -19,6 +19,3 @@ y.tab.h cgram.c: cgram.y
 
 clean:
 	rm -f csem y.tab.h y.output cgram.c sym.o scan.o sem.o semutil.o cgram.o
-
-cleano:
-	rm -f *.o

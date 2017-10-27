@@ -74,23 +74,8 @@ struct sem_rec *ccor(struct sem_rec *e1, int m, struct sem_rec *e2)
  */
 struct sem_rec *con(char *x)
 {
-  struct id_entry *p;
-
-  if((p = lookup(x, 0)) == NULL) {
-    p = install(x, 0);
-    p->i_type = T_INT;
-    p->i_scope = GLOBAL;
-    p->i_defined = 1;
-  }
-
-  /* print the quad t%d = const */
-  printf("t%d = %s\n", nexttemp(), x);
-  
-  /* construct a new node corresponding to this constant generation 
-     into a temporary. This will allow this temporary to be referenced
-     in an expression later*/
-  return(node(currtemp(), p->i_type, (struct sem_rec *) NULL,
-	      (struct sem_rec *) NULL));
+   fprintf(stderr, "sem: con not implemented\n");
+   return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -215,30 +200,8 @@ void ftail()
  */
 struct sem_rec *id(char *x)
 {
-   struct id_entry *p;
-
-   if ((p = lookup(x, 0)) == NULL) {
-      yyerror("undeclared identifier");
-      p = install(x, -1);
-      p->i_type = T_INT;
-      p->i_scope = LOCAL;
-      p->i_defined = 1;
-   }
-   if (p->i_scope == GLOBAL)
-      printf("t%d := global %s\n", nexttemp(), x);
-   else if (p->i_scope == LOCAL)
-      printf("t%d := local %d\n", nexttemp(), p->i_offset);
-   else if (p->i_scope == PARAM) {
-      printf("t%d := param %d\n", nexttemp(), p->i_offset);
-      if (p->i_type & T_ARRAY) {
-         (void) nexttemp();
-         printf("t%d := @i t%d\n", currtemp(), currtemp()-1);
-      }
-   }
-
-   /* add the T_ADDR to know that it is still an address */
-   return (node(currtemp(), p->i_type|T_ADDR, (struct sem_rec *) NULL,
-                (struct sem_rec *) NULL));
+   fprintf(stderr, "sem: id not implemented\n");
+   return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -246,18 +209,8 @@ struct sem_rec *id(char *x)
  */
 struct sem_rec *indx(struct sem_rec *x, struct sem_rec *i)
 {
-  /* generate a quad t%d = x [] i */
-  printf("t%d := ", nexttemp());
-  printf("t%d ", x->s_place);
-  if(x->s_mode & T_INT)
-    printf("[]i ");
-  else
-    printf("[]f ");
-  printf("t%d\n", i->s_place);
-
-  /* create a new node for the index operation. No links to backpatch */
-  return (node(currtemp(), (x->s_mode & ~(T_ARRAY)), 
-	       (struct sem_rec *)NULL, (struct sem_rec *)NULL));
+   fprintf(stderr, "sem: indx not implemented\n");
+   return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -318,21 +271,8 @@ struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-  // check if x or y is a double -- if so:
-  printf("t%d := t%d %sf t%d\n", nexttemp(), x->s_splace, op, y->s_place);
-  // get the type somehow -- record it as t
-  struct sem_rec *t1 = node (currtemp(), t, (struct sem_rec *NULL),
-                            (struct  sem_rec *) NULL);
-
-  printf("bt t%d B%d\n", t1->s_place, ++numblabels);
-  printf("br B%d\n", ++numblabels);
-
-  return (node(0, 0,
-            node(numblabels - 1, 0, (struct sem_rec *) NULL, NULL),
-            node(numblabels,     0, (struct sem_rec *) NULL, NULL)));
-
-   //fprintf(stderr, "sem: rel not implemented\n");
-   //return ((struct sem_rec *) NULL);
+   fprintf(stderr, "sem: rel not implemented\n");
+   return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -340,42 +280,8 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-  /* assign the value of expression y to the lval x */
-  struct sem_rec *p, *cast_y;
-
-  if(*op!='\0' || x==NULL || y==NULL){
-    fprintf(stderr, "sem: set not implemented\n");
-    return((struct sem_rec *) NULL);
-  }
-
-  /* if for type consistency of x and y */
-  cast_y = y;
-  if((x->s_mode & T_DOUBLE) && !(y->s_mode & T_DOUBLE)){
-    
-    /*cast y to a double*/
-    printf("t%d = cvf t%d\n", nexttemp(), y->s_place);
-    cast_y = node(currtemp(), T_DOUBLE, (struct sem_rec *) NULL,
-		  (struct sem_rec *) NULL);
-  }
-  else if((x->s_mode & T_INT) && !(y->s_mode & T_INT)){
-
-    /*convert y to integer*/
-    printf("t%d = cvi t%d\n", nexttemp(), y->s_place);
-    cast_y = node(currtemp(), T_INT, (struct sem_rec *) NULL,
-		  (struct sem_rec *) NULL);
-  }
-
-  /*output quad for assignment*/
-  if(x->s_mode & T_DOUBLE)
-    printf("t%d := t%d =f t%d\n", nexttemp(), 
-	   x->s_place, cast_y->s_place);
-  else
-    printf("t%d := t%d =i t%d\n", nexttemp(), 
-	   x->s_place, cast_y->s_place);
-
-  /*create a new node to allow just created temporary to be referenced later */
-  return(node(currtemp(), (x->s_mode&~(T_ARRAY)),
-	      (struct sem_rec *)NULL, (struct sem_rec *)NULL));
+   fprintf(stderr, "sem: set not implemented\n");
+   return ((struct sem_rec *) NULL);
 }
 
 /*
