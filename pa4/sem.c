@@ -3,14 +3,21 @@
 # include "semutil.h"
 # include "sem.h"
 # include "sym.h"
+# define MAXARGS 50
+# define MAXLOCS 50
 
+extern int formalnum;
+extern int localnum;
+extern char formaltypes[MAXARGS];
+extern char localtypes[MAXLOCS];
+extern int localwidths[MAXLOCS];
 
 /*
  * backpatch - backpatch list of quadruples starting at p with k
  */
 void backpatch(struct sem_rec *p, int k)
 {
-   fprintf(stderr, "sem: backpatch not implemented\n");
+	fprintf(stderr, "sem: backpatch not implemented\n");
 }
 
 /*
@@ -18,10 +25,10 @@ void backpatch(struct sem_rec *p, int k)
  */
 void bgnstmt()
 {
-  extern int lineno;
+	extern int lineno;
 
-  printf("bgnstmt %d\n", lineno);
-  //   fprintf(stderr, "sem: bgnstmt not implemented\n");
+	printf("bgnstmt %d\n", lineno);
+	//   fprintf(stderr, "sem: bgnstmt not implemented\n");
 }
 
 /*
@@ -29,8 +36,8 @@ void bgnstmt()
  */
 struct sem_rec *call(char *f, struct sem_rec *args)
 {
-   fprintf(stderr, "sem: call not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: call not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -38,8 +45,8 @@ struct sem_rec *call(char *f, struct sem_rec *args)
  */
 struct sem_rec *ccand(struct sem_rec *e1, int m, struct sem_rec *e2)
 {
-   fprintf(stderr, "sem: ccand not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: ccand not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -47,8 +54,8 @@ struct sem_rec *ccand(struct sem_rec *e1, int m, struct sem_rec *e2)
  */
 struct sem_rec *ccexpr(struct sem_rec *e)
 {
-   fprintf(stderr, "sem: ccexpr not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: ccexpr not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -56,8 +63,8 @@ struct sem_rec *ccexpr(struct sem_rec *e)
  */
 struct sem_rec *ccnot(struct sem_rec *e)
 {
-   fprintf(stderr, "sem: ccnot not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: ccnot not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -65,8 +72,8 @@ struct sem_rec *ccnot(struct sem_rec *e)
  */
 struct sem_rec *ccor(struct sem_rec *e1, int m, struct sem_rec *e2)
 {
-   fprintf(stderr, "sem: ccor not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: ccor not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -74,8 +81,8 @@ struct sem_rec *ccor(struct sem_rec *e1, int m, struct sem_rec *e2)
  */
 struct sem_rec *con(char *x)
 {
-   fprintf(stderr, "sem: con not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: con not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -83,7 +90,7 @@ struct sem_rec *con(char *x)
  */
 void dobreak()
 {
-   fprintf(stderr, "sem: dobreak not implemented\n");
+	fprintf(stderr, "sem: dobreak not implemented\n");
 }
 
 /*
@@ -91,7 +98,7 @@ void dobreak()
  */
 void docontinue()
 {
-   fprintf(stderr, "sem: docontinue not implemented\n");
+	fprintf(stderr, "sem: docontinue not implemented\n");
 }
 
 /*
@@ -99,16 +106,16 @@ void docontinue()
  */
 void dodo(int m1, int m2, struct sem_rec *e, int m3)
 {
-   fprintf(stderr, "sem: dodo not implemented\n");
+	fprintf(stderr, "sem: dodo not implemented\n");
 }
 
 /*
  * dofor - for statement
  */
 void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
-           int m3, struct sem_rec *n2, int m4)
+		int m3, struct sem_rec *n2, int m4)
 {
-   fprintf(stderr, "sem: dofor not implemented\n");
+	fprintf(stderr, "sem: dofor not implemented\n");
 }
 
 /*
@@ -116,7 +123,7 @@ void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
  */
 void dogoto(char *id)
 {
-   fprintf(stderr, "sem: dogoto not implemented\n");
+	fprintf(stderr, "sem: dogoto not implemented\n");
 }
 
 /*
@@ -124,16 +131,16 @@ void dogoto(char *id)
  */
 void doif(struct sem_rec *e, int m1, int m2)
 {
-   fprintf(stderr, "sem: doif not implemented\n");
+	fprintf(stderr, "sem: doif not implemented\n");
 }
 
 /*
  * doifelse - if then else statement
  */
 void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
-                         int m2, int m3)
+		int m2, int m3)
 {
-   fprintf(stderr, "sem: doifelse not implemented\n");
+	fprintf(stderr, "sem: doifelse not implemented\n");
 }
 
 /*
@@ -141,16 +148,16 @@ void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
  */
 void doret(struct sem_rec *e)
 {
-   fprintf(stderr, "sem: doret not implemented\n");
+	fprintf(stderr, "sem: doret not implemented\n");
 }
 
 /*
  * dowhile - while statement
  */
 void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
-             int m3)
+		int m3)
 {
-   fprintf(stderr, "sem: dowhile not implemented\n");
+	fprintf(stderr, "sem: dowhile not implemented\n");
 }
 
 /*
@@ -158,7 +165,7 @@ void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
  */
 void endloopscope(int m)
 {
-   fprintf(stderr, "sem: endloopscope not implemented\n");
+	fprintf(stderr, "sem: endloopscope not implemented\n");
 }
 
 /*
@@ -166,8 +173,8 @@ void endloopscope(int m)
  */
 struct sem_rec *exprs(struct sem_rec *l, struct sem_rec *e)
 {
-   fprintf(stderr, "sem: exprs not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: exprs not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -175,7 +182,27 @@ struct sem_rec *exprs(struct sem_rec *l, struct sem_rec *e)
  */
 void fhead(struct id_entry *p)
 {
-   fprintf(stderr, "sem: fhead not implemented\n");
+	//fprintf(stderr, "sem: fhead not implemented\n");
+	printf("func %s\n", p->i_name);
+	unsigned int i;
+	for (i = 0; i < formalnum; i++) {
+		if (formaltypes[i] == 'f') {
+			printf("formal 8\n");
+		} else if (formaltypes[i] == 'i') {
+			printf("formal 4\n");
+		} else {
+			yyerror("formal type somehow stored incorrectly");
+		}
+	}
+	for (i = 0; i < localnum; i++) {
+		if (localtypes[i] == 'f') {
+			printf("localloc %d\n", 8 * localwidths[i]);
+		} else if (localtypes[i] == 'i') {
+			printf("localloc %d\n", 4 * localwidths[i]);
+		} else {
+			yyerror("formal type somehow stored incorrectly");
+		}
+	}
 }
 
 /*
@@ -183,8 +210,26 @@ void fhead(struct id_entry *p)
  */
 struct id_entry *fname(int t, char *id)
 {
-   fprintf(stderr, "sem: fname not implemented\n");
-   return ((struct id_entry *) NULL);
+	struct id_entry *p;
+
+	if ((p = lookup(id, 0)) == NULL) {
+		p = install(id, 0);
+	} else if (p->i_defined) {
+		yyerror("procedure previously declared");
+	} else if (p->i_type != t) {
+		yyerror("function declaration types do not match");
+	}
+
+	p->i_type = t;
+	p->i_scope = GLOBAL;
+	p->i_defined = 1;
+	enterblock();
+	formalnum = 0;
+	localnum = 0;
+
+	return p;
+	//fprintf(stderr, "sem: fname not implemented\n");
+	//return ((struct id_entry *) NULL);
 }
 
 /*
@@ -192,7 +237,7 @@ struct id_entry *fname(int t, char *id)
  */
 void ftail()
 {
-   fprintf(stderr, "sem: ftail not implemented\n");
+	fprintf(stderr, "sem: ftail not implemented\n");
 }
 
 /*
@@ -200,8 +245,8 @@ void ftail()
  */
 struct sem_rec *id(char *x)
 {
-   fprintf(stderr, "sem: id not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: id not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -209,8 +254,8 @@ struct sem_rec *id(char *x)
  */
 struct sem_rec *indx(struct sem_rec *x, struct sem_rec *i)
 {
-   fprintf(stderr, "sem: indx not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: indx not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -218,7 +263,7 @@ struct sem_rec *indx(struct sem_rec *x, struct sem_rec *i)
  */
 void labeldcl(char *id)
 {
-   fprintf(stderr, "sem: labeldcl not implemented\n");
+	fprintf(stderr, "sem: labeldcl not implemented\n");
 }
 
 /*
@@ -226,8 +271,8 @@ void labeldcl(char *id)
  */
 int m()
 {
-   fprintf(stderr, "sem: m not implemented\n");
-   return (0);
+	fprintf(stderr, "sem: m not implemented\n");
+	return (0);
 }
 
 /*
@@ -235,8 +280,8 @@ int m()
  */
 struct sem_rec *n()
 {
-   fprintf(stderr, "sem: n not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: n not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -244,8 +289,8 @@ struct sem_rec *n()
  */
 struct sem_rec *op1(char *op, struct sem_rec *y)
 {
-   fprintf(stderr, "sem: op1 not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: op1 not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -253,8 +298,8 @@ struct sem_rec *op1(char *op, struct sem_rec *y)
  */
 struct sem_rec *op2(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-   fprintf(stderr, "sem: op2 not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: op2 not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -262,8 +307,8 @@ struct sem_rec *op2(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-   fprintf(stderr, "sem: opb not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: opb not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -271,8 +316,8 @@ struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-   fprintf(stderr, "sem: rel not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: rel not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -280,8 +325,8 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-   fprintf(stderr, "sem: set not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: set not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
 
 /*
@@ -289,7 +334,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 void startloopscope()
 {
-   fprintf(stderr, "sem: startloopscope not implemented\n");
+	fprintf(stderr, "sem: startloopscope not implemented\n");
 }
 
 /*
@@ -297,6 +342,6 @@ void startloopscope()
  */
 struct sem_rec *string(char *s)
 {
-   fprintf(stderr, "sem: string not implemented\n");
-   return ((struct sem_rec *) NULL);
+	fprintf(stderr, "sem: string not implemented\n");
+	return ((struct sem_rec *) NULL);
 }
