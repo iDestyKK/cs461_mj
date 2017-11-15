@@ -6,6 +6,7 @@
 # define MAXARGS 50
 # define MAXLOCS 50
 
+extern int ntmp;
 extern int formalnum;
 extern int localnum;
 extern char formaltypes[MAXARGS];
@@ -237,7 +238,9 @@ struct id_entry *fname(int t, char *id)
  */
 void ftail()
 {
-	fprintf(stderr, "sem: ftail not implemented\n");
+	exit_block();
+	printf("fend\n");
+	//fprintf(stderr, "sem: ftail not implemented\n");
 }
 
 /*
@@ -245,8 +248,54 @@ void ftail()
  */
 struct sem_rec *id(char *x)
 {
-	fprintf(stderr, "sem: id not implemented\n");
-	return ((struct sem_rec *) NULL);
+	//fprintf(stderr, "sem: id not implemented\n");
+	//return ((struct sem_rec *) NULL);
+	struct id_entry* p = lookup(x, 0);
+	extern int lineno;
+	
+	if (p == NULL) {
+		printf(" undeclared identifier.  Line %d\n", lineno);
+		return (struct sem_rec*) NULL;
+	}
+
+	//DEBUG
+	/*
+	printf(
+		"INFO: %s - %d %d %d %d %d %d\n",
+		x,
+		p->i_type,
+		p->i_blevel,
+		p->i_defined,
+		p->i_width,
+		p->i_scope,
+		p->i_offset
+	);
+	*/
+	
+	nexttemp();
+	struct sem_rec* snum = node(currtemp(), p->i_type, NULL, NULL);
+
+	//Print out information
+	printf(
+		"t%d := %s %d\n",
+
+		//Temporary Number
+		snum->s_place,
+
+		//Truly disgusting ternary statements to determine what to print...
+		//...inside printf
+		(p->i_scope == LOCAL) ?
+			"local":
+		(p->i_scope == PARAM) ?
+			"param":
+			"global", //Must be "GLOBAL" at this point...
+
+		//ID/Offset
+		p->i_offset
+	);
+
+
+	return snum;
 }
 
 /*
@@ -289,8 +338,40 @@ struct sem_rec *n()
  */
 struct sem_rec *op1(char *op, struct sem_rec *y)
 {
-	fprintf(stderr, "sem: op1 not implemented\n");
-	return ((struct sem_rec *) NULL);
+	//fprintf(stderr, "sem: op1 not implemented (%s)\n", op);
+	//return ((struct sem_rec *) NULL);
+	if (y == NULL)
+		return ((struct sem_rec *) NULL);
+
+	//DEBUG
+	/*printf(
+		"INFO: %s - %d %d\n",
+		op,
+		y->s_place,
+		y->s_mode
+	);*/
+
+	//But wait, now let's also make another temp number and have it store the type
+	nexttemp();
+
+	//Print...
+	printf(
+		"t%d := %s%c t%d\n",
+
+		//Temporary Number
+		currtemp(),
+
+		//Operator String
+		op,
+
+		//Again. I like my ternaries
+		(y->s_mode == T_INT)    ? 'i' :
+		(y->s_mode == T_STR)    ? 'i' :
+		(y->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+		//sem_rec number
+		y->s_place
+	);
 }
 
 /*
