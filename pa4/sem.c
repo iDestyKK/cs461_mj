@@ -14,6 +14,23 @@ extern char localtypes[MAXLOCS];
 extern int localwidths[MAXLOCS];
 
 /*
+ * DEBUG LABELS
+ *
+ * Set certain macros to be defined for various debugging modes. This is mainly
+ * to help with printing out data that may be useful when finding errors in the
+ * intermediate code generation.
+ *
+ * LABELS:
+ *     FUNC_LABEL - Print out the function name along with each operation.
+ *                  Useful because sometimes I don't know where the hell a line
+ *                  of code breaks. This just says what function the program is
+ *                  at when printing.
+ */
+
+#define FUNC_LABEL
+
+
+/*
  * backpatch - backpatch list of quadruples starting at p with k
  */
 void backpatch(struct sem_rec *p, int k)
@@ -28,7 +45,14 @@ void bgnstmt()
 {
 	extern int lineno;
 
-	printf("bgnstmt %d\n", lineno);
+	printf(
+		#ifdef FUNC_LABEL
+			"[BGNSTMT] bgnstmt %d\n",
+		#else
+			"bgnstmt %d\n",
+		#endif
+		lineno
+	);
 	//   fprintf(stderr, "sem: bgnstmt not implemented\n");
 }
 
@@ -87,7 +111,15 @@ struct sem_rec *con(char *x)
 	
 	//TODO: Finish
 	nexttemp();
-	printf("[CON   ] t%d := %s\n", currtemp(), x);
+	printf(
+		#ifdef FUNC_LABEL
+			"[CON    ] t%d := %s\n",
+		#else
+			"t%d := %s\n",
+		#endif
+		currtemp(),
+		x
+	);
 	struct sem_rec* snum = node(currtemp(), T_INT, NULL, NULL);
 
 	return snum;
@@ -296,9 +328,15 @@ struct sem_rec *id(char *x)
 
 	//Print out information
 	printf(
-		(p->i_scope == GLOBAL) ?
-			"[ID    ] t%d := %s %s\n":
-			"[ID    ] t%d := %s %d\n",
+		#ifdef FUNC_LABEL
+			(p->i_scope == GLOBAL) ?
+				"[ID     ] t%d := %s %s\n":
+				"[ID     ] t%d := %s %d\n",
+		#else
+			(p->i_scope == GLOBAL) ?
+				"t%d := %s %s\n":
+				"t%d := %s %d\n",
+		#endif
 
 		//Temporary Number
 		snum->s_place,
@@ -380,7 +418,11 @@ struct sem_rec *op1(char *op, struct sem_rec *y)
 
 	//Print...
 	printf(
-		"[OP1   ] t%d := %s%c t%d\n",
+		#ifdef FUNC_LABEL
+			"[OP1    ] t%d := %s%c t%d\n",
+		#else
+			"t%d := %s%c t%d\n",
+		#endif
 
 		//Temporary Number
 		currtemp(),
@@ -436,9 +478,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 	//fprintf(stderr, "sem: set not implemented\n");
 	//return ((struct sem_rec *) NULL);
 	
-	//TODO: Implement some way to handle x = y = z
-	//set(op, x, y);
-
+	//DEBUG: Print Out Info
 	/*printf(
 		"INFO: %s - %d %d\n",
 		op,
@@ -454,7 +494,11 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 	if (x->s_mode != y->s_mode) {
 		nexttemp();
 		printf(
-			"[SET   ] t%d := cv%c %d\n",
+			#ifdef FUNC_LABEL
+				"[SET    ] t%d := cv%c %d\n",
+			#else
+				"t%d := cv%c %d\n",
+			#endif
 
 			//Temporary ID
 			currtemp(),
@@ -470,7 +514,11 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 	}
 	nexttemp();
 	printf(
-		"[SET   ] t%d := t%d =%c t%d\n",
+		#ifdef FUNC_LABEL
+			"[SET    ] t%d := t%d =%c t%d\n",
+		#else
+			"t%d := t%d =%c t%d\n",
+		#endif
 
 		//Temporary ID
 		currtemp(), 
@@ -503,6 +551,15 @@ struct sem_rec *string(char *s)
 	//fprintf(stderr, "sem: string not implemented\n");
 	//TODO: Finish
 	nexttemp();
-	printf("[STRING] t%d := %s\n", currtemp(), s);
+	printf(
+		#ifdef FUNC_LABEL
+			"[STRING ] t%d := %s\n",
+		#else
+			"t%d := %s\n",
+		#endif
+
+		currtemp(),
+		s
+	);
 	return ((struct sem_rec *) NULL);
 }
