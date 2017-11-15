@@ -82,8 +82,15 @@ struct sem_rec *ccor(struct sem_rec *e1, int m, struct sem_rec *e2)
  */
 struct sem_rec *con(char *x)
 {
-	fprintf(stderr, "sem: con not implemented\n");
-	return ((struct sem_rec *) NULL);
+	//fprintf(stderr, "sem: con not implemented\n");
+	//return ((struct sem_rec *) NULL);
+	
+	//TODO: Finish
+	nexttemp();
+	printf("[CON   ] t%d := %s\n", currtemp(), x);
+	struct sem_rec* snum = node(currtemp(), T_INT, NULL, NULL);
+
+	return snum;
 }
 
 /*
@@ -174,6 +181,17 @@ void endloopscope(int m)
  */
 struct sem_rec *exprs(struct sem_rec *l, struct sem_rec *e)
 {
+	if (l != NULL)
+	printf(
+		"INFO: %d %d\n",
+		l->s_place,
+		l->s_mode
+	);
+	printf(
+		"INFO: %d %d\n",
+		e->s_place,
+		e->s_mode
+	);
 	fprintf(stderr, "sem: exprs not implemented\n");
 	return ((struct sem_rec *) NULL);
 }
@@ -255,7 +273,8 @@ struct sem_rec *id(char *x)
 	
 	if (p == NULL) {
 		printf(" undeclared identifier.  Line %d\n", lineno);
-		return (struct sem_rec*) NULL;
+		p = install(x, 0);
+		//return (struct sem_rec*) NULL;
 	}
 
 	//DEBUG
@@ -277,7 +296,9 @@ struct sem_rec *id(char *x)
 
 	//Print out information
 	printf(
-		"t%d := %s %d\n",
+		(p->i_scope == GLOBAL) ?
+			"[ID    ] t%d := %s %s\n":
+			"[ID    ] t%d := %s %d\n",
 
 		//Temporary Number
 		snum->s_place,
@@ -290,8 +311,10 @@ struct sem_rec *id(char *x)
 			"param":
 			"global", //Must be "GLOBAL" at this point...
 
-		//ID/Offset
-		p->i_offset
+		//ID/Offset, or the global name IF it's a global
+		(p->i_scope == GLOBAL) ?
+			x :
+			p->i_offset
 	);
 
 
@@ -356,7 +379,7 @@ struct sem_rec *op1(char *op, struct sem_rec *y)
 
 	//Print...
 	printf(
-		"t%d := %s%c t%d\n",
+		"[OP1   ] t%d := %s%c t%d\n",
 
 		//Temporary Number
 		currtemp(),
@@ -372,6 +395,9 @@ struct sem_rec *op1(char *op, struct sem_rec *y)
 		//sem_rec number
 		y->s_place
 	);
+	struct sem_rec* snum = node(currtemp(), y->s_mode, NULL, NULL);
+
+	return snum;
 }
 
 /*
@@ -406,7 +432,53 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-	fprintf(stderr, "sem: set not implemented\n");
+	//fprintf(stderr, "sem: set not implemented\n");
+	//return ((struct sem_rec *) NULL);
+	
+	//TODO: Implement some way to handle x = y = z
+	//set(op, x, y);
+
+	nexttemp();
+	printf(
+		"INFO: %s - %d %d\n",
+		op,
+		x->s_place,
+		x->s_mode
+	);
+	printf(
+		"INFO: %s - %d %d\n",
+		op,
+		y->s_place,
+		y->s_mode
+	);
+	printf(
+		"[SET   ] t%d := cv%c %d\n",
+
+		//Temporary ID
+		currtemp(),
+
+		//The type to convert to
+		(x->s_mode == T_INT)    ? 'i' :
+		(x->s_mode == T_STR)    ? 'i' :
+		(x->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+		y->s_place
+	);
+	nexttemp();
+	printf(
+		"[SET   ] t%d := t%d =%c t%d\n",
+
+		//Temporary ID
+		currtemp(), 
+		x->s_place,
+
+		//The type to convert to
+		(x->s_mode == T_INT)    ? 'i' :
+		(x->s_mode == T_STR)    ? 'i' :
+		(x->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+		currtemp() - 1
+	);
 	return ((struct sem_rec *) NULL);
 }
 
@@ -423,6 +495,9 @@ void startloopscope()
  */
 struct sem_rec *string(char *s)
 {
-	fprintf(stderr, "sem: string not implemented\n");
+	//fprintf(stderr, "sem: string not implemented\n");
+	//TODO: Finish
+	nexttemp();
+	printf("[STRING] t%d := %s\n", currtemp(), s);
 	return ((struct sem_rec *) NULL);
 }
