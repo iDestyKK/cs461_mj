@@ -318,6 +318,7 @@ struct sem_rec *id(char *x)
 	);
 
 
+
 	return snum;
 }
 
@@ -438,8 +439,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 	//TODO: Implement some way to handle x = y = z
 	//set(op, x, y);
 
-	nexttemp();
-	printf(
+	/*printf(
 		"INFO: %s - %d %d\n",
 		op,
 		x->s_place,
@@ -450,20 +450,24 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 		op,
 		y->s_place,
 		y->s_mode
-	);
-	printf(
-		"[SET   ] t%d := cv%c %d\n",
+	);*/
+	if (x->s_mode != y->s_mode) {
+		nexttemp();
+		printf(
+			"[SET   ] t%d := cv%c %d\n",
 
-		//Temporary ID
-		currtemp(),
+			//Temporary ID
+			currtemp(),
 
-		//The type to convert to
-		(x->s_mode == T_INT)    ? 'i' :
-		(x->s_mode == T_STR)    ? 'i' :
-		(x->s_mode == T_DOUBLE) ? 'f' : 'i',
+			//The type to convert to
+			(x->s_mode == T_INT)    ? 'i' :
+			(x->s_mode == T_STR)    ? 'i' :
+			(x->s_mode == T_DOUBLE) ? 'f' : 'i',
 
-		y->s_place
-	);
+			//y->s_place
+			currtemp() - 1
+		);
+	}
 	nexttemp();
 	printf(
 		"[SET   ] t%d := t%d =%c t%d\n",
@@ -479,7 +483,8 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 
 		currtemp() - 1
 	);
-	return ((struct sem_rec *) NULL);
+	//return ((struct sem_rec *) NULL);
+	return x;
 }
 
 /*
