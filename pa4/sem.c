@@ -6,6 +6,8 @@
 # define MAXARGS 50
 # define MAXLOCS 50
 
+extern int lineno;
+extern int nlbl;
 extern int ntmp;
 extern int formalnum;
 extern int localnum;
@@ -25,9 +27,13 @@ extern int localwidths[MAXLOCS];
  *                  Useful because sometimes I don't know where the hell a line
  *                  of code breaks. This just says what function the program is
  *                  at when printing.
+ *
+ *     FUNC_NOTIM - Forces the functions to not be implemented and return the
+ *                  "sem: X not implemented" message to be printed to stderr.
  */
 
 #define FUNC_LABEL
+//#define FUNC_NOTIM
 
 
 /*
@@ -43,17 +49,30 @@ void backpatch(struct sem_rec *p, int k)
  */
 void bgnstmt()
 {
-	extern int lineno;
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: bgnstmt not implemented\n");
+		return;
+	#endif
 
-	printf(
-		#ifdef FUNC_LABEL
-			"[BGNSTMT] bgnstmt %d\n",
-		#else
-			"bgnstmt %d\n",
-		#endif
-		lineno
-	);
-	//   fprintf(stderr, "sem: bgnstmt not implemented\n");
+	int c;
+	static int laststmt = 0;
+
+	skip();
+	c = getchar();
+	putbak(c);
+
+	if (c != '}' && lineno != laststmt) {
+		printf(
+			#ifdef FUNC_LABEL
+				"[BGNSTMT] bgnstmt %d\n",
+			#else
+				"bgnstmt %d\n",
+			#endif
+
+			lineno
+		);
+		laststmt = lineno;
+	}
 }
 
 /*
@@ -106,8 +125,10 @@ struct sem_rec *ccor(struct sem_rec *e1, int m, struct sem_rec *e2)
  */
 struct sem_rec *con(char *x)
 {
-	//fprintf(stderr, "sem: con not implemented\n");
-	//return ((struct sem_rec *) NULL);
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: con not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
 	
 	//TODO: Finish
 	nexttemp();
@@ -171,7 +192,17 @@ void dogoto(char *id)
  */
 void doif(struct sem_rec *e, int m1, int m2)
 {
-	fprintf(stderr, "sem: doif not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: doif not implemented %d %d\n", m1, m2);
+	#endif
+
+	printf("[DOIF   ] B%d=L%d\n", m1, m1);
+	printf("[DOIF   ] B%d=L%d\n", m2, m2);
+	/*printf(
+		"INFO: %d %d\n",
+		e->s_place,
+		e->s_mode
+	);*/
 }
 
 /*
@@ -180,7 +211,18 @@ void doif(struct sem_rec *e, int m1, int m2)
 void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
 		int m2, int m3)
 {
-	fprintf(stderr, "sem: doifelse not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: doifelse not implemented %d %d %d\n", m1, m2, m3);
+	#endif
+
+	printf("[DOIFELS] B%d=L%d\n", m1, m1);
+	printf("[DOIFELS] B%d=L%d\n", m2, m2);
+	printf("[DOIFELS] B%d=L%d\n", m3, m3);
+	/*printf(
+		"INFO: %d %d\n",
+		e->s_place,
+		e->s_mode
+	);*/
 }
 
 /*
@@ -290,6 +332,9 @@ void ftail()
 {
 	exit_block();
 	printf("fend\n");
+	FILE* fp = fopen("test.bin", "w");
+	dump(1, fp);
+	fclose(fp);
 	//fprintf(stderr, "sem: ftail not implemented\n");
 }
 
@@ -298,8 +343,11 @@ void ftail()
  */
 struct sem_rec *id(char *x)
 {
-	//fprintf(stderr, "sem: id not implemented\n");
-	//return ((struct sem_rec *) NULL);
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: id not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+
 	struct id_entry* p = lookup(x, 0);
 	extern int lineno;
 	
@@ -382,8 +430,15 @@ void labeldcl(char *id)
  */
 int m()
 {
-	fprintf(stderr, "sem: m not implemented\n");
-	return (0);
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: m not implemented\n");
+		return (0);
+	#endif
+	
+	nlbl++;
+	printf("[M      ] label L%d\n", nlbl);
+
+	return nlbl;
 }
 
 /*
@@ -391,7 +446,12 @@ int m()
  */
 struct sem_rec *n()
 {
-	fprintf(stderr, "sem: n not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: n not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+
+	printf("[N      ] br B%d\n", nlbl + 2);
 	return ((struct sem_rec *) NULL);
 }
 
@@ -400,8 +460,11 @@ struct sem_rec *n()
  */
 struct sem_rec *op1(char *op, struct sem_rec *y)
 {
-	//fprintf(stderr, "sem: op1 not implemented (%s)\n", op);
-	//return ((struct sem_rec *) NULL);
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: op1 not implemented (%s)\n", op);
+		return ((struct sem_rec *) NULL);
+	#endif
+
 	if (y == NULL)
 		return ((struct sem_rec *) NULL);
 
@@ -466,8 +529,71 @@ struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-	fprintf(stderr, "sem: rel not implemented\n");
-	return ((struct sem_rec *) NULL);
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: rel not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+	
+	/*printf(
+		"INFO: %s - %d %d\n",
+		op,
+		x->s_place,
+		x->s_mode
+	);
+	printf(
+		"INFO: %s - %d %d\n",
+		op,
+		y->s_place,
+		y->s_mode
+	);*/
+
+	if (x->s_mode != y->s_mode) {
+		nexttemp();
+		printf(
+			#ifdef FUNC_LABEL
+				"[REL    ] t%d := cv%c t%d\n",
+			#else
+				"t%d := cv%c t%d\n",
+			#endif
+
+			//Temporary ID
+			currtemp(),
+
+			//The type to convert to
+			(x->s_mode == T_INT)    ? 'i' :
+			(x->s_mode == T_STR)    ? 'i' :
+			(x->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+			//y->s_place
+			currtemp() - 1
+		);
+	}
+	nexttemp();
+	printf(
+		#ifdef FUNC_LABEL
+			"[REL    ] t%d := t%d %s%c t%d\n",
+		#else
+			"t%d := t%d %s%c t%d\n",
+		#endif
+
+		//Temporary ID
+		currtemp(), 
+		x->s_place,
+
+		//Operator
+		op,
+
+		//The type to convert to
+		(x->s_mode == T_INT)    ? 'i' :
+		(x->s_mode == T_STR)    ? 'i' :
+		(x->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+		currtemp() - 1
+	);
+	printf("[REL    ] bt t%d B%d\n", currtemp(), nlbl + 1);
+	printf("[REL    ] br B%d\n", nlbl + 2);
+	//return ((struct sem_rec *) NULL);
+	return x;
 }
 
 /*
@@ -475,8 +601,10 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-	//fprintf(stderr, "sem: set not implemented\n");
-	//return ((struct sem_rec *) NULL);
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: set not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
 	
 	//DEBUG: Print Out Info
 	/*printf(
@@ -495,9 +623,9 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 		nexttemp();
 		printf(
 			#ifdef FUNC_LABEL
-				"[SET    ] t%d := cv%c %d\n",
+				"[SET    ] t%d := cv%c t%d\n",
 			#else
-				"t%d := cv%c %d\n",
+				"t%d := cv%c t%d\n",
 			#endif
 
 			//Temporary ID
@@ -548,7 +676,11 @@ void startloopscope()
  */
 struct sem_rec *string(char *s)
 {
-	//fprintf(stderr, "sem: string not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: string not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+
 	//TODO: Finish
 	nexttemp();
 	printf(
