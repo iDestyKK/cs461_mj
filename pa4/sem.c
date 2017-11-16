@@ -32,7 +32,7 @@ extern int localwidths[MAXLOCS];
  *                  "sem: X not implemented" message to be printed to stderr.
  */
 
-#define FUNC_LABEL
+//#define FUNC_LABEL
 //#define FUNC_NOTIM
 
 
@@ -196,8 +196,13 @@ void doif(struct sem_rec *e, int m1, int m2)
 		fprintf(stderr, "sem: doif not implemented %d %d\n", m1, m2);
 	#endif
 
-	printf("[DOIF   ] B%d=L%d\n", m1, m1);
-	printf("[DOIF   ] B%d=L%d\n", m2, m2);
+	#ifdef FUNC_LABEL
+		printf("[DOIF   ] B%d=L%d\n", m1, m1);
+		printf("[DOIF   ] B%d=L%d\n", m2, m2);
+	#else
+		printf("B%d=L%d\n", m1, m1);
+		printf("B%d=L%d\n", m2, m2);
+	#endif
 	/*printf(
 		"INFO: %d %d\n",
 		e->s_place,
@@ -215,9 +220,15 @@ void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
 		fprintf(stderr, "sem: doifelse not implemented %d %d %d\n", m1, m2, m3);
 	#endif
 
-	printf("[DOIFELS] B%d=L%d\n", m1, m1);
-	printf("[DOIFELS] B%d=L%d\n", m2, m2);
-	printf("[DOIFELS] B%d=L%d\n", m3, m3);
+	#ifdef FUNC_LABEL
+		printf("[DOIFELS] B%d=L%d\n", m1, m1);
+		printf("[DOIFELS] B%d=L%d\n", m2, m2);
+		printf("[DOIFELS] B%d=L%d\n", m3, m3);
+	#else
+		printf("B%d=L%d\n", m1, m1);
+		printf("B%d=L%d\n", m2, m2);
+		printf("B%d=L%d\n", m3, m3);
+	#endif
 	/*printf(
 		"INFO: %d %d\n",
 		e->s_place,
@@ -436,7 +447,13 @@ int m()
 	#endif
 	
 	nlbl++;
-	printf("[M      ] label L%d\n", nlbl);
+	printf(
+		#ifdef FUNC_LABEL
+			"[M      ] "
+		#endif
+		"label L%d\n",
+		nlbl
+	);
 
 	return nlbl;
 }
@@ -451,7 +468,13 @@ struct sem_rec *n()
 		return ((struct sem_rec *) NULL);
 	#endif
 
-	printf("[N      ] br B%d\n", nlbl + 2);
+	printf(
+		#ifdef FUNC_LABEL
+			"[N      ] "
+		#endif
+		"br B%d\n",
+		nlbl + 2
+	);
 	return ((struct sem_rec *) NULL);
 }
 
@@ -590,8 +613,13 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 
 		currtemp() - 1
 	);
-	printf("[REL    ] bt t%d B%d\n", currtemp(), nlbl + 1);
-	printf("[REL    ] br B%d\n", nlbl + 2);
+	#ifdef FUNC_LABEL
+		printf("[REL    ] bt t%d B%d\n", currtemp(), nlbl + 1);
+		printf("[REL    ] br B%d\n", nlbl + 2);
+	#else
+		printf("bt t%d B%d\n", currtemp(), nlbl + 1);
+		printf("br B%d\n", nlbl + 2);
+	#endif
 	//return ((struct sem_rec *) NULL);
 	return x;
 }
