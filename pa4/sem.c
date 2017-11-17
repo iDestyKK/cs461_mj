@@ -1,4 +1,5 @@
 # include <stdio.h>
+# include <stdlib.h>
 # include "cc.h"
 # include "semutil.h"
 # include "sem.h"
@@ -96,8 +97,72 @@ void bgnstmt()
  */
 struct sem_rec *call(char *f, struct sem_rec *args)
 {
-	fprintf(stderr, "sem: call not implemented\n");
-	return ((struct sem_rec *) NULL);
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: call not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+	
+	//Linked List traversal... except we are at the end. Go to the front.
+	//
+	//Also, because we have links only going one way, we need to store pointer
+	//information too.
+	unsigned int     argc      = 0,
+	                 i         = 0;
+	struct sem_rec  *orig      = args;
+	struct sem_rec **sem_array = NULL;
+
+	//Get number of arguments.
+	for (; args != NULL; args = args->back.s_link, argc++);
+
+	//Okay... now let's put it in an array
+	sem_array = (struct sem_rec**) malloc(sizeof(struct sem_rec*) * argc);
+	args = orig;
+	
+	for (i = argc; i > 0; i--)
+		sem_array[i - 1] = args, args = args->back.s_link;
+	
+	//Finally, print out the array of arguments.
+	for (i = 0; i < argc; i++)
+		printf(
+			#ifdef FUNC_LABEL
+				"[CALL   ] "
+			#endif
+
+			//Format String
+			"arg%c t%d\n",
+			
+			//Type (Anything that isn't a double is "i" apparently...)
+			(sem_array[i]->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+			sem_array[i]->s_place
+		);
+
+	//Now then... print out the function name.
+	nexttemp();
+	printf(
+		#ifdef FUNC_LABEL
+			"[CALL   ] "
+		#endif
+		"t%d := global %s\n",
+
+		currtemp(),
+		f
+	);
+
+	//Also, print out the "fi" statement which links the function and argc.
+	nexttemp();
+	printf(
+		#ifdef FUNC_LABEL
+			"[CALL   ] "
+		#endif
+		"t%d := fi t%d %d\n",
+
+		currtemp(),
+		currtemp() - 1, //Guaranteed to be the previous one
+		argc
+	);
+
+	return node(currtemp(), T_PROC, NULL, NULL);
 }
 
 /*
@@ -276,8 +341,13 @@ void endloopscope(int m)
  */
 struct sem_rec *exprs(struct sem_rec *l, struct sem_rec *e)
 {
-	if (l != NULL)
-	printf(
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: exprs not implemented\n");
+		return ((struct sem_rec *) null);
+	#endif
+
+	//Build a list... pseudoly by linking l with e.
+	/*printf(
 		"INFO: %d %d\n",
 		l->s_place,
 		l->s_mode
@@ -286,9 +356,11 @@ struct sem_rec *exprs(struct sem_rec *l, struct sem_rec *e)
 		"INFO: %d %d\n",
 		e->s_place,
 		e->s_mode
-	);
-	fprintf(stderr, "sem: exprs not implemented\n");
-	return ((struct sem_rec *) NULL);
+	);*/
+
+	//The language calls "exprs" args-1 number of times. Hence chaining like this.
+	e->back.s_link = l;
+	return e;
 }
 
 /*
