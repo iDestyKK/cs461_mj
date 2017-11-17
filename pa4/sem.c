@@ -256,7 +256,15 @@ void dodo(int m1, int m2, struct sem_rec *e, int m3)
 void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
 		int m3, struct sem_rec *n2, int m4)
 {
-	fprintf(stderr, "sem: dofor not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: dofor not implemented\n");
+		return;
+	#endif
+
+	backpatch(e2->back.s_true, m3);
+	backpatch(e2->s_false    , m4);
+	backpatch(n1             , m1);
+	backpatch(n2             , m2);
 }
 
 /*
@@ -285,7 +293,7 @@ void doif(struct sem_rec *e, int m1, int m2)
 
 	//Straight from the slides...
 	backpatch(e->back.s_true, m1);
-	backpatch(e->s_false, m2);
+	backpatch(e->s_false    , m2);
 }
 
 /*
@@ -301,8 +309,8 @@ void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
 
 	//Again... straight from the slides.
 	backpatch(e->back.s_true, m1);
-	backpatch(e->s_false, m2);
-	backpatch(n, m3);
+	backpatch(e->s_false    , m2);
+	backpatch(n             , m3);
 
 	/*printf(
 		"INFO: %d %d\n",
@@ -325,7 +333,14 @@ void doret(struct sem_rec *e)
 void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
 		int m3)
 {
-	fprintf(stderr, "sem: dowhile not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: dowhile not implemented\n");
+		return;
+	#endif
+
+	backpatch(e->back.s_true, m2);
+	backpatch(e->s_false    , m3);
+	backpatch(n             , m1);
 }
 
 /*
@@ -856,7 +871,12 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 void startloopscope()
 {
-	fprintf(stderr, "sem: startloopscope not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: startloopscope not implemented\n");
+		return;
+	#endif
+	
+	enterblock();
 }
 
 /*
