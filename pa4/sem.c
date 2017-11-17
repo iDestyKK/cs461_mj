@@ -14,8 +14,8 @@ extern char formaltypes[MAXARGS];
 extern char localtypes[MAXLOCS];
 extern int localwidths[MAXLOCS];
 
-int nlbl  = 0;
-int ngoto = 0;
+int nlbl  = 0; //Global for number of labels
+int ngoto = 0; //Glboal for number of gotos
 
 /*
  * DEBUG LABELS
@@ -28,13 +28,13 @@ int ngoto = 0;
  *     FUNC_LABEL - Print out the function name along with each operation.
  *                  Useful because sometimes I don't know where the hell a line
  *                  of code breaks. This just says what function the program is
- *                  at when printing.
+ *                  at when printing (well, the first 7 characters of it).
  *
  *     FUNC_NOTIM - Forces the functions to not be implemented and return the
  *                  "sem: X not implemented" message to be printed to stderr.
  */
 
-//#define FUNC_LABEL
+#define FUNC_LABEL
 //#define FUNC_NOTIM
 
 
@@ -756,7 +756,6 @@ struct sem_rec *string(char *s)
 		return ((struct sem_rec *) NULL);
 	#endif
 
-	//TODO: Finish
 	nexttemp();
 	printf(
 		#ifdef FUNC_LABEL
@@ -768,5 +767,5 @@ struct sem_rec *string(char *s)
 		currtemp(),
 		s
 	);
-	return ((struct sem_rec *) NULL);
+	return node(currtemp(), T_STR, NULL, NULL);
 }
