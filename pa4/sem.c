@@ -7,13 +7,15 @@
 # define MAXLOCS 50
 
 extern int lineno;
-extern int nlbl;
 extern int ntmp;
 extern int formalnum;
 extern int localnum;
 extern char formaltypes[MAXARGS];
 extern char localtypes[MAXLOCS];
 extern int localwidths[MAXLOCS];
+
+int nlbl  = 0;
+int ngoto = 0;
 
 /*
  * DEBUG LABELS
@@ -41,7 +43,20 @@ extern int localwidths[MAXLOCS];
  */
 void backpatch(struct sem_rec *p, int k)
 {
-	fprintf(stderr, "sem: backpatch not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: backpatch not implemented\n");
+		return;
+	#endif
+
+	printf(
+		#ifdef FUNC_LABEL
+			"[BACKPAT] "
+		#endif
+		"B%d=L%d\n",
+
+		//Parametre information
+		p->s_place,k
+	);
 }
 
 /*
@@ -54,6 +69,7 @@ void bgnstmt()
 		return;
 	#endif
 
+	//Thank you Dr. Jantz
 	int c;
 	static int laststmt = 0;
 
@@ -130,7 +146,7 @@ struct sem_rec *con(char *x)
 		return ((struct sem_rec *) NULL);
 	#endif
 	
-	//TODO: Finish
+	//TODO: Finish?
 	nexttemp();
 	printf(
 		#ifdef FUNC_LABEL
@@ -141,8 +157,8 @@ struct sem_rec *con(char *x)
 		currtemp(),
 		x
 	);
-	struct sem_rec* snum = node(currtemp(), T_INT, NULL, NULL);
 
+	struct sem_rec* snum = node(currtemp(), T_INT, NULL, NULL);
 	return snum;
 }
 
@@ -194,20 +210,18 @@ void doif(struct sem_rec *e, int m1, int m2)
 {
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: doif not implemented %d %d\n", m1, m2);
+		return;
 	#endif
-
-	#ifdef FUNC_LABEL
-		printf("[DOIF   ] B%d=L%d\n", m1, m1);
-		printf("[DOIF   ] B%d=L%d\n", m2, m2);
-	#else
-		printf("B%d=L%d\n", m1, m1);
-		printf("B%d=L%d\n", m2, m2);
-	#endif
+	
 	/*printf(
-		"INFO: %d %d\n",
+		"[DOIF   ] INFO: %d %d\n",
 		e->s_place,
 		e->s_mode
 	);*/
+
+	//Straight from the slides...
+	backpatch(e->back.s_true, m1);
+	backpatch(e->s_false, m2);
 }
 
 /*
@@ -218,17 +232,14 @@ void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
 {
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: doifelse not implemented %d %d %d\n", m1, m2, m3);
+		return;
 	#endif
 
-	#ifdef FUNC_LABEL
-		printf("[DOIFELS] B%d=L%d\n", m1, m1);
-		printf("[DOIFELS] B%d=L%d\n", m2, m2);
-		printf("[DOIFELS] B%d=L%d\n", m3, m3);
-	#else
-		printf("B%d=L%d\n", m1, m1);
-		printf("B%d=L%d\n", m2, m2);
-		printf("B%d=L%d\n", m3, m3);
-	#endif
+	//Again... straight from the slides.
+	backpatch(e->back.s_true, m1);
+	backpatch(e->s_false, m2);
+	backpatch(n, m3);
+
 	/*printf(
 		"INFO: %d %d\n",
 		e->s_place,
@@ -286,7 +297,11 @@ struct sem_rec *exprs(struct sem_rec *l, struct sem_rec *e)
  */
 void fhead(struct id_entry *p)
 {
-	//fprintf(stderr, "sem: fhead not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: fhead not implemented\n");
+		return;
+	#endif
+
 	printf("func %s\n", p->i_name);
 	unsigned int i;
 	for (i = 0; i < formalnum; i++) {
@@ -314,6 +329,11 @@ void fhead(struct id_entry *p)
  */
 struct id_entry *fname(int t, char *id)
 {
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: fname not implemented\n");
+		return ((struct id_entry *) NULL);
+	#endif
+
 	struct id_entry *p;
 
 	if ((p = lookup(id, 0)) == NULL) {
@@ -332,8 +352,6 @@ struct id_entry *fname(int t, char *id)
 	localnum = 0;
 
 	return p;
-	//fprintf(stderr, "sem: fname not implemented\n");
-	//return ((struct id_entry *) NULL);
 }
 
 /*
@@ -341,12 +359,13 @@ struct id_entry *fname(int t, char *id)
  */
 void ftail()
 {
-	exit_block();
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: ftail not implemented\n");
+		return;
+	#endif
+	leaveblock();
 	printf("fend\n");
-	FILE* fp = fopen("test.bin", "w");
-	dump(1, fp);
-	fclose(fp);
-	//fprintf(stderr, "sem: ftail not implemented\n");
+
 }
 
 /*
@@ -414,8 +433,6 @@ struct sem_rec *id(char *x)
 			p->i_offset
 	);
 
-
-
 	return snum;
 }
 
@@ -468,14 +485,20 @@ struct sem_rec *n()
 		return ((struct sem_rec *) NULL);
 	#endif
 
+	ngoto++;
+
 	printf(
 		#ifdef FUNC_LABEL
 			"[N      ] "
 		#endif
 		"br B%d\n",
-		nlbl + 2
+
+		ngoto
 	);
-	return ((struct sem_rec *) NULL);
+
+	struct sem_rec* rec = node(ngoto, T_LBL, NULL, NULL);
+	
+	return rec;
 }
 
 /*
@@ -613,15 +636,39 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 
 		currtemp() - 1
 	);
+	//printf("%d\n", nlbl);
+	
+	//Generate a sem_rec for the operation
+	struct sem_rec* s = node(currtemp(), x->s_mode, NULL, NULL);
+	
+	
+	//BT Statement (Branch on True)
+	ngoto++;
 	#ifdef FUNC_LABEL
-		printf("[REL    ] bt t%d B%d\n", currtemp(), nlbl + 1);
-		printf("[REL    ] br B%d\n", nlbl + 2);
+		printf("[REL    ] bt t%d B%d\n", currtemp(), ngoto);
 	#else
-		printf("bt t%d B%d\n", currtemp(), nlbl + 1);
-		printf("br B%d\n", nlbl + 2);
+		printf("bt t%d B%d\n", currtemp(), ngoto);
 	#endif
+	
+	//If the condition is true, we have to go somewhere. In this case, let's make
+	//sure it knows to go to the "ngoto" node.
+	s->back.s_true = node(ngoto, T_LBL, NULL, NULL);
+
+	//BR (Unconditional Branch)
+	ngoto++;
+	#ifdef FUNC_LABEL
+		printf("[REL    ] br B%d\n", ngoto);
+	#else
+		printf("br B%d\n", ngoto);
+	#endif
+
+	//If the condition is false... we have to go to... well... whatever wasn't the
+	//last one. Therefore, let's make another sem_rec and point it to another
+	//place.
+	s->s_false = node(ngoto, T_LBL, NULL, NULL);
+
 	//return ((struct sem_rec *) NULL);
-	return x;
+	return s;
 }
 
 /*
