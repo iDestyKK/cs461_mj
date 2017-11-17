@@ -158,8 +158,7 @@ struct sem_rec *con(char *x)
 		x
 	);
 
-	struct sem_rec* snum = node(currtemp(), T_INT, NULL, NULL);
-	return snum;
+	return node(currtemp(), T_INT, NULL, NULL);
 }
 
 /*
@@ -496,9 +495,7 @@ struct sem_rec *n()
 		ngoto
 	);
 
-	struct sem_rec* rec = node(ngoto, T_LBL, NULL, NULL);
-	
-	return rec;
+	return node(ngoto, T_LBL, NULL, NULL);
 }
 
 /*
@@ -547,9 +544,8 @@ struct sem_rec *op1(char *op, struct sem_rec *y)
 		//sem_rec number
 		y->s_place
 	);
-	struct sem_rec* snum = node(currtemp(), y->s_mode, NULL, NULL);
 
-	return snum;
+	return node(currtemp(), y->s_mode, NULL, NULL);
 }
 
 /*
@@ -767,5 +763,6 @@ struct sem_rec *string(char *s)
 		currtemp(),
 		s
 	);
+
 	return node(currtemp(), T_STR, NULL, NULL);
 }
