@@ -512,8 +512,53 @@ struct sem_rec *id(char *x)
  */
 struct sem_rec *indx(struct sem_rec *x, struct sem_rec *i)
 {
-	fprintf(stderr, "sem: indx not implemented\n");
-	return ((struct sem_rec *) NULL);
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: indx not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+	
+	//Because it's pissing me off enough, let's get rid of the T_ARRAY bit...
+	unsigned char x_type = x->s_mode & 0xEF,
+	              i_type = i->s_mode & 0xEF;
+
+	if (i_type == T_DOUBLE) {
+		//First have to convert if the array index isn't an integer (C Standard).
+		nexttemp();
+		printf(
+			#ifdef FUNC_LABEL
+				"[REL    ] "
+			#endif
+			"t%d := cvi t%d\n",
+
+			//Temporary ID
+			currtemp(),
+
+			i->s_place
+		);
+	}
+	
+	//tX := tX []X tX
+	nexttemp();
+	printf(
+		#ifdef FUNC_LABEL
+			"[INDX   ] "
+		#endif
+		"t%d := t%d []%c t%d\n",
+		
+		//Current Temporary
+		currtemp(),
+
+		//Variable name
+		x->s_place,
+
+		//The type...
+		(x_type == T_DOUBLE) ? 'f' : 'i',
+
+		//Value inside the []'s
+		(i_type == T_DOUBLE) ? currtemp() - 1 : i->s_place
+	);
+
+	return node(currtemp(), x_type, NULL, NULL);
 }
 
 /*
