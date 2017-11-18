@@ -248,8 +248,20 @@ struct sem_rec *ccexpr(struct sem_rec *e)
  */
 struct sem_rec *ccnot(struct sem_rec *e)
 {
-	fprintf(stderr, "sem: ccnot not implemented\n");
-	return ((struct sem_rec *) NULL);
+	LOG_FUNC("ccnot");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: ccnot not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+
+	//Basing off of the behaviour from the solution executable tbh...
+	//Flip the true and false lists of "e".
+	return node(
+		e->s_place,
+		e->s_mode,
+		e->s_false,
+		e->back.s_true
+	);
 }
 
 /*
