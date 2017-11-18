@@ -33,10 +33,22 @@ int ngoto = 0; //Glboal for number of gotos
  *
  *     FUNC_NOTIM - Forces the functions to not be implemented and return the
  *                  "sem: X not implemented" message to be printed to stderr.
+ *
+ *     FUNC_SEPAR - Forces the functions to spit out their function names
+ *                  "before" actually printing out what the function does.
  */
 
-#define FUNC_LABEL
+//#define FUNC_LABEL
 //#define FUNC_NOTIM
+//#define FUNC_SEPAR
+
+//Define "LOG_FUNC" if "FUNC_SEP" is true.
+#if defined(FUNC_SEPAR)
+	#define LOG_FUNC(str)\
+		printf("\n%s:\n", str);
+#else
+	#define LOG_FUNC(str) {}
+#endif
 
 
 /*
@@ -44,6 +56,7 @@ int ngoto = 0; //Glboal for number of gotos
  */
 void backpatch(struct sem_rec *p, int k)
 {
+	LOG_FUNC("backpatch");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: backpatch not implemented\n");
 		return;
@@ -65,6 +78,7 @@ void backpatch(struct sem_rec *p, int k)
  */
 void bgnstmt()
 {
+	LOG_FUNC("bgnstmt");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: bgnstmt not implemented\n");
 		return;
@@ -97,6 +111,7 @@ void bgnstmt()
  */
 struct sem_rec *call(char *f, struct sem_rec *args)
 {
+	LOG_FUNC("call")
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: call not implemented\n");
 		return ((struct sem_rec *) NULL);
@@ -206,6 +221,7 @@ struct sem_rec *ccor(struct sem_rec *e1, int m, struct sem_rec *e2)
  */
 struct sem_rec *con(char *x)
 {
+	LOG_FUNC("con");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: con not implemented\n");
 		return ((struct sem_rec *) NULL);
@@ -256,6 +272,7 @@ void dodo(int m1, int m2, struct sem_rec *e, int m3)
 void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
 		int m3, struct sem_rec *n2, int m4)
 {
+	LOG_FUNC("dofor");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: dofor not implemented\n");
 		return;
@@ -280,6 +297,7 @@ void dogoto(char *id)
  */
 void doif(struct sem_rec *e, int m1, int m2)
 {
+	LOG_FUNC("doif");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: doif not implemented %d %d\n", m1, m2);
 		return;
@@ -302,6 +320,7 @@ void doif(struct sem_rec *e, int m1, int m2)
 void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
 		int m2, int m3)
 {
+	LOG_FUNC("doifelse");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: doifelse not implemented %d %d %d\n", m1, m2, m3);
 		return;
@@ -333,6 +352,7 @@ void doret(struct sem_rec *e)
 void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
 		int m3)
 {
+	LOG_FUNC("dowhile");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: dowhile not implemented\n");
 		return;
@@ -356,6 +376,7 @@ void endloopscope(int m)
  */
 struct sem_rec *exprs(struct sem_rec *l, struct sem_rec *e)
 {
+	LOG_FUNC("exprs");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: exprs not implemented\n");
 		return ((struct sem_rec *) null);
@@ -383,6 +404,7 @@ struct sem_rec *exprs(struct sem_rec *l, struct sem_rec *e)
  */
 void fhead(struct id_entry *p)
 {
+	LOG_FUNC("fhead");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: fhead not implemented\n");
 		return;
@@ -415,6 +437,7 @@ void fhead(struct id_entry *p)
  */
 struct id_entry *fname(int t, char *id)
 {
+	LOG_FUNC("fname");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: fname not implemented\n");
 		return ((struct id_entry *) NULL);
@@ -445,6 +468,7 @@ struct id_entry *fname(int t, char *id)
  */
 void ftail()
 {
+	LOG_FUNC("ftail");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: ftail not implemented\n");
 		return;
@@ -459,6 +483,7 @@ void ftail()
  */
 struct sem_rec *id(char *x)
 {
+	LOG_FUNC("id");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: id not implemented\n");
 		return ((struct sem_rec *) NULL);
@@ -527,6 +552,7 @@ struct sem_rec *id(char *x)
  */
 struct sem_rec *indx(struct sem_rec *x, struct sem_rec *i)
 {
+	LOG_FUNC("indx");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: indx not implemented\n");
 		return ((struct sem_rec *) NULL);
@@ -589,6 +615,7 @@ void labeldcl(char *id)
  */
 int m()
 {
+	LOG_FUNC("m");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: m not implemented\n");
 		return (0);
@@ -611,6 +638,7 @@ int m()
  */
 struct sem_rec *n()
 {
+	LOG_FUNC("n");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: n not implemented\n");
 		return ((struct sem_rec *) NULL);
@@ -635,6 +663,7 @@ struct sem_rec *n()
  */
 struct sem_rec *op1(char *op, struct sem_rec *y)
 {
+	LOG_FUNC("op1");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: op1 not implemented (%s)\n", op);
 		return ((struct sem_rec *) NULL);
@@ -685,8 +714,84 @@ struct sem_rec *op1(char *op, struct sem_rec *y)
  */
 struct sem_rec *op2(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-	fprintf(stderr, "sem: op2 not implemented\n");
-	return ((struct sem_rec *) NULL);
+	LOG_FUNC("op2");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: op2 not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+	
+	//printf("%d %d\n", x->s_place, x->s_mode);
+	//printf("%d %d\n", y->s_place, y->s_mode);
+
+	unsigned int target_t[2] = {
+		x->s_place,
+		y->s_place
+	};
+	
+	//Cast if needed
+	if (x->s_mode != y->s_mode) {
+		nexttemp();
+		//What if x = T_INT and y = T_DOUBLE?
+		if (x->s_mode < y->s_mode) {
+			//Upcast X
+			printf(
+				#ifdef FUNC_LABEL
+					"[OP2    ] "
+				#endif
+				"t%d := cv%c t%d\n",
+
+				//Temporary ID
+				currtemp(),
+
+				//Type to convert to
+				(y->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+				x->s_place
+			);
+			target_t[0] = currtemp();
+		}
+
+		//x = T_DOUBLE and y = T_INT?
+		if (x->s_mode > y->s_mode) {
+			//Upcast Y
+			printf(
+				#ifdef FUNC_LABEL
+					"[OP2    ] "
+				#endif
+				"t%d := cv%c t%d\n",
+
+				//Temporary ID
+				currtemp(),
+
+				//Type to convert to
+				(x->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+				y->s_place
+			);
+			target_t[1] = currtemp();
+		}
+	}
+
+	nexttemp();
+	printf(
+		#ifdef FUNC_LABEL
+			"[OP2    ] "
+		#endif
+		"t%d := t%d %s%c t%d\n",
+
+		currtemp(),
+
+		target_t[0],
+
+		//Operator
+		op,
+
+		//Operation
+		(x->s_mode == T_DOUBLE || y->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+		target_t[1]
+	);
+	return node(currtemp(), (x->s_mode == T_DOUBLE || y->s_mode == T_DOUBLE) ? T_DOUBLE : T_INT, NULL, NULL);
 }
 
 /*
@@ -703,6 +808,7 @@ struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 {
+	LOG_FUNC("rel");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: rel not implemented\n");
 		return ((struct sem_rec *) NULL);
@@ -804,6 +910,7 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 {
+	LOG_FUNC("set");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: set not implemented\n");
 		return ((struct sem_rec *) NULL);
@@ -822,27 +929,84 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 		y->s_place,
 		y->s_mode
 	);*/
-	if (x->s_mode != y->s_mode) {
+	//Because it's pissing me off enough, let's get rid of the T_ARRAY bit...
+	unsigned char x_type = x->s_mode & 0xEF,
+	              y_type = y->s_mode & 0xEF;
+
+	unsigned int target_t = x->s_place;
+
+	if (y_type != x_type) {
 		nexttemp();
 		printf(
 			#ifdef FUNC_LABEL
-				"[SET    ] t%d := cv%c t%d\n",
-			#else
-				"t%d := cv%c t%d\n",
+				"[SET    ] "
 			#endif
+			"t%d := cv%c t%d\n",
 
 			//Temporary ID
 			currtemp(),
 
 			//The type to convert to
-			(x->s_mode == T_INT)    ? 'i' :
-			(x->s_mode == T_STR)    ? 'i' :
-			(x->s_mode == T_DOUBLE) ? 'f' : 'i',
+			(x_type == T_INT)    ? 'i' :
+			(x_type == T_STR)    ? 'i' :
+			(x_type == T_DOUBLE) ? 'f' : 'i',
 
 			//y->s_place
 			currtemp() - 1
 		);
+		target_t = currtemp();
 	}
+
+	//There's an unfortunate trick we have to consider with our sem_rec's to force
+	//the data types to work out in the end. If there is a type in the "op", we
+	//must do the conversion first... so...
+	if (strcmp(op, "") != 0) {
+		//Assignment
+		nexttemp();
+		printf(
+			#ifdef FUNC_LABEL
+				"[SET    ] "
+			#endif
+			"t%d := @%c t%d\n",
+
+			//Temporary ID
+			currtemp(),
+
+			//The type to convert to
+			(x_type == T_INT)    ? 'i' :
+			(x_type == T_STR)    ? 'i' :
+			(x_type == T_DOUBLE) ? 'f' : 'i',
+
+			//From register
+			x->s_place
+		);
+
+		//Operator
+		nexttemp();
+		printf(
+			#ifdef FUNC_LABEL
+				"[SET    ] "
+			#endif
+			"t%d := t%d %s%c t%d\n",
+
+			//Temporary ID
+			currtemp(),
+			currtemp() - 1,
+			
+			//Operator
+			op,
+
+			//The type to convert to
+			(x_type == T_INT)    ? 'i' :
+			(x_type == T_STR)    ? 'i' :
+			(x_type == T_DOUBLE) ? 'f' : 'i',
+
+			//From register
+			target_t
+		);
+	}
+	
+	//Finally, do assignment stuff
 	nexttemp();
 	printf(
 		#ifdef FUNC_LABEL
@@ -871,6 +1035,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 void startloopscope()
 {
+	LOG_FUNC("startloopscope");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: startloopscope not implemented\n");
 		return;
@@ -884,6 +1049,7 @@ void startloopscope()
  */
 struct sem_rec *string(char *s)
 {
+	LOG_FUNC("string");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: string not implemented\n");
 		return ((struct sem_rec *) NULL);
