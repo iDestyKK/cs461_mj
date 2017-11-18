@@ -46,7 +46,7 @@ int ret_type = 0; //Global for return type of a function
 //Define "LOG_FUNC" if "FUNC_SEP" is true.
 #if defined(FUNC_SEPAR)
 	#define LOG_FUNC(str)\
-		printf("\n%s:\n", str);
+		printf("%s:\n", str);
 #else
 	#define LOG_FUNC(str) {}
 #endif
@@ -63,15 +63,27 @@ void backpatch(struct sem_rec *p, int k)
 		return;
 	#endif
 
-	printf(
-		#ifdef FUNC_LABEL
-			"[BACKPAT] "
-		#endif
-		"B%d=L%d\n",
+	//Print branch and nodes. If there is a link, traverse through the link until
+	//it is NULL.
+	while (1) {
+		printf(
+			#ifdef FUNC_LABEL
+				"[BACKPAT] "
+			#endif
+			"B%d=L%d\n",
 
-		//Parametre information
-		p->s_place,k
-	);
+			//Parametre information
+			p->s_place,k
+		);
+
+		//Go to the next one if it exists.
+		//printf("[CHECK  ] %d %d %d\n", p->s_false != NULL, p->back.s_true != NULL, p->back.s_link != NULL);
+		if (p->back.s_link != NULL)
+			p = p->back.s_link;
+		else
+			break;
+	}
+
 }
 
 /*
@@ -201,8 +213,18 @@ struct sem_rec *call(char *f, struct sem_rec *args)
  */
 struct sem_rec *ccand(struct sem_rec *e1, int m, struct sem_rec *e2)
 {
-	fprintf(stderr, "sem: ccand not implemented\n");
-	return ((struct sem_rec *) NULL);
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: ccand not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+
+	backpatch(e1->back.s_true, m);
+
+	struct sem_rec* ret = node(currtemp(), T_INT, NULL, NULL);
+	ret->back.s_true = e2->back.s_true;
+	ret->s_false = merge(e1->s_false, e2->s_false);
+
+	return ret;
 }
 
 /*
@@ -228,8 +250,22 @@ struct sem_rec *ccnot(struct sem_rec *e)
  */
 struct sem_rec *ccor(struct sem_rec *e1, int m, struct sem_rec *e2)
 {
-	fprintf(stderr, "sem: ccor not implemented\n");
-	return ((struct sem_rec *) NULL);
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: ccor not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+	
+	/*printf("[CCOR   ] %d\n", m);
+	printf("[CCOR   ] %d %d\n", e1->s_place, e1->s_mode);
+	printf("[CCOR   ] %d %d\n", e2->s_place, e2->s_mode);*/
+
+	backpatch(e1->s_false, m);
+
+	struct sem_rec* ret = node(currtemp(), T_INT, NULL, NULL);
+	ret->back.s_true = merge(e1->back.s_true, e2->back.s_true);
+	ret->s_false = e2->s_false;
+
+	return ret;
 }
 
 /*
