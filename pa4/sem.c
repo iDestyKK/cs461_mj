@@ -15,8 +15,9 @@ extern char formaltypes[MAXARGS];
 extern char localtypes[MAXLOCS];
 extern int localwidths[MAXLOCS];
 
-int nlbl  = 0; //Global for number of labels
-int ngoto = 0; //Glboal for number of gotos
+int nlbl     = 0; //Global for number of labels
+int ngoto    = 0; //Global for number of gotos
+int ret_type = 0; //Global for return type of a function
 
 /*
  * DEBUG LABELS
@@ -164,20 +165,35 @@ struct sem_rec *call(char *f, struct sem_rec *args)
 		f
 	);
 
+	//Look up the function in the table to get the type
+	struct id_entry* func = lookup(f, 0);
+
+	//If it doesn't exist... initialise it (for some stupid reason)
+	if (func == NULL) {
+		func = install(f, 0);
+		func->i_type    = T_INT; //In C, all functions default to int
+		func->i_scope   = GLOBAL;
+		func->i_defined = 1;
+	}
+
 	//Also, print out the "fi" statement which links the function and argc.
 	nexttemp();
 	printf(
 		#ifdef FUNC_LABEL
 			"[CALL   ] "
 		#endif
-		"t%d := fi t%d %d\n",
+		"t%d := f%c t%d %d\n",
 
 		currtemp(),
+		
+		//Type the function returns
+		(func->i_type == T_DOUBLE) ? 'f' : 'i',
+
 		currtemp() - 1, //Guaranteed to be the previous one
 		argc
 	);
 
-	return node(currtemp(), T_PROC, NULL, NULL);
+	return node(currtemp(), func->i_type, NULL, NULL);
 }
 
 /*
@@ -343,7 +359,46 @@ void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
  */
 void doret(struct sem_rec *e)
 {
-	fprintf(stderr, "sem: doret not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: doret not implemented\n");
+		return;
+	#endif
+	
+	//If the register at "e" is not the same as the function type... then we need
+	//to do something about it... That's where the "ret_type" comes in. :)
+	unsigned int target = e->s_place;
+
+	if (ret_type != e->s_mode) {
+		//Convert to that type
+		nexttemp();
+		printf(
+			#ifdef FUNC_LABEL
+				"[DIRET  ] "
+			#endif
+			"t%d := cv%c t%d\n",
+
+			//Temporary ID
+			currtemp(),
+
+			(ret_type == T_DOUBLE) ? 'f' : 'i',
+
+			e->s_place
+		);
+		target = currtemp();
+	}
+	
+	printf(
+		#ifdef FUNC_LABEL
+			"[DORET  ] "
+		#endif
+		"ret%c t%d\n",
+
+		//Type
+		(ret_type == T_DOUBLE) ? 'f' : 'i',
+
+		//The actual value
+		target
+	);
 }
 
 /*
@@ -460,6 +515,9 @@ struct id_entry *fname(int t, char *id)
 	formalnum = 0;
 	localnum = 0;
 
+	//Set the return type
+	ret_type = p->i_type;
+
 	return p;
 }
 
@@ -513,7 +571,7 @@ struct sem_rec *id(char *x)
 	*/
 	
 	nexttemp();
-	struct sem_rec* snum = node(currtemp(), p->i_type, NULL, NULL);
+	struct sem_rec* snum = node(currtemp(), p->i_type | T_ADDR, NULL, NULL);
 
 	//Print out information
 	printf(
@@ -559,8 +617,8 @@ struct sem_rec *indx(struct sem_rec *x, struct sem_rec *i)
 	#endif
 	
 	//Because it's pissing me off enough, let's get rid of the T_ARRAY bit...
-	unsigned char x_type = x->s_mode & 0xEF,
-	              i_type = i->s_mode & 0xEF;
+	unsigned char x_type = x->s_mode & 0x4F,
+	              i_type = i->s_mode & 0x4F;
 
 	if (i_type == T_DOUBLE) {
 		//First have to convert if the array index isn't an integer (C Standard).
@@ -682,14 +740,17 @@ struct sem_rec *op1(char *op, struct sem_rec *y)
 
 	//But wait, now let's also make another temp number and have it store the type
 	nexttemp();
+	
+	//Get rid of that ADDR... if it exists
+	int y_mode = y->s_mode & ~T_ADDR;
 
 	//Print...
 	printf(
 		#ifdef FUNC_LABEL
-			"[OP1    ] t%d := %s%c t%d\n",
-		#else
-			"t%d := %s%c t%d\n",
+			"[OP1    ] "
 		#endif
+		"t%d := %s%c t%d\n",
+
 
 		//Temporary Number
 		currtemp(),
@@ -698,15 +759,15 @@ struct sem_rec *op1(char *op, struct sem_rec *y)
 		op,
 
 		//Again. I like my ternaries
-		(y->s_mode == T_INT)    ? 'i' :
-		(y->s_mode == T_STR)    ? 'i' :
-		(y->s_mode == T_DOUBLE) ? 'f' : 'i',
+		(y_mode == T_INT)    ? 'i' :
+		(y_mode == T_STR)    ? 'i' :
+		(y_mode == T_DOUBLE) ? 'f' : 'i',
 
 		//sem_rec number
 		y->s_place
 	);
 
-	return node(currtemp(), y->s_mode, NULL, NULL);
+	return node(currtemp(), y_mode, NULL, NULL);
 }
 
 /*
@@ -930,8 +991,8 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 		y->s_mode
 	);*/
 	//Because it's pissing me off enough, let's get rid of the T_ARRAY bit...
-	unsigned char x_type = x->s_mode & 0xEF,
-	              y_type = y->s_mode & 0xEF;
+	unsigned char x_type = x->s_mode & 0x4F,
+	              y_type = y->s_mode & 0x4F;
 
 	unsigned int target_t = x->s_place;
 
@@ -1020,9 +1081,9 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 		x->s_place,
 
 		//The type to convert to
-		(x->s_mode == T_INT)    ? 'i' :
-		(x->s_mode == T_STR)    ? 'i' :
-		(x->s_mode == T_DOUBLE) ? 'f' : 'i',
+		(x_type == T_INT)    ? 'i' :
+		(x_type == T_STR)    ? 'i' :
+		(x_type == T_DOUBLE) ? 'f' : 'i',
 
 		currtemp() - 1
 	);
