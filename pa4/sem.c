@@ -1118,7 +1118,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 			(x_type == T_DOUBLE) ? 'f' : 'i',
 
 			//From register
-			target_t
+			target_t + 1
 		);
 	}
 	
