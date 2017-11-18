@@ -334,7 +334,13 @@ void docontinue()
  */
 void dodo(int m1, int m2, struct sem_rec *e, int m3)
 {
-	fprintf(stderr, "sem: dodo not implemented\n");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: dodo not implemented\n");
+		return;
+	#endif
+
+	backpatch(e->back.s_true, m1);
+	backpatch(e->s_false, m3);
 }
 
 /*
@@ -1118,7 +1124,8 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 			(x_type == T_DOUBLE) ? 'f' : 'i',
 
 			//From register
-			target_t + 1
+			//target_t + 1
+			y->s_place + (x_type != y_type)
 		);
 	}
 	
