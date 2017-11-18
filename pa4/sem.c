@@ -232,8 +232,15 @@ struct sem_rec *ccand(struct sem_rec *e1, int m, struct sem_rec *e2)
  */
 struct sem_rec *ccexpr(struct sem_rec *e)
 {
-	fprintf(stderr, "sem: ccexpr not implemented\n");
-	return ((struct sem_rec *) NULL);
+	LOG_FUNC("ccexpr");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: ccexpr not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+	
+	//Basing off of the behaviour from the solution executable tbh...
+	//We are just simply comparing 0 to whatever the result of the expr is...
+	return rel("!=", e, con("0"));
 }
 
 /*
