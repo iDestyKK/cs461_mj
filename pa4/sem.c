@@ -387,7 +387,7 @@ void dodo(int m1, int m2, struct sem_rec *e, int m3)
 	backpatch(e->s_false, m3);
 
 	struct sem_rec* ptr = (*prevtop)->s_false;
-	if (ptr->s_false != NULL && ptr->s_false->s_place < nlbl) {
+	if (ptr->s_false != NULL && ptr->s_false->s_place <= nlbl) {
 		while (1) {
 			printf("B%d=L%d\n", ptr->s_false->s_place, m3);
 			ptr->s_false->s_place = 0;
@@ -416,6 +416,19 @@ void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
 	backpatch(e2->s_false    , m4);
 	backpatch(n1             , m1);
 	backpatch(n2             , m2);
+
+	struct sem_rec* ptr = (*prevtop)->s_false;
+	if (ptr->s_false != NULL && ptr->s_false->s_place <= nlbl) {
+		while (1) {
+			printf("B%d=L%d\n", ptr->s_false->s_place, m4);
+			ptr->s_false->s_place = 0;
+			ptr = ptr->s_false;
+			if (ptr->s_false == NULL)
+				break;
+		}
+	}
+
+	leaveblock();
 }
 
 /*
