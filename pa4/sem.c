@@ -49,7 +49,7 @@ int ret_type = 0; //Global for return type of a function
 //Define "LOG_FUNC" if "FUNC_SEPAR" is true.
 #if defined(FUNC_SEPAR)
 	#define LOG_FUNC(str)\
-		printf("%s:\n", str);
+		printf("%s (%d):\n", str, level);
 #else
 	#define LOG_FUNC(str) {}
 #endif
@@ -385,6 +385,19 @@ void dodo(int m1, int m2, struct sem_rec *e, int m3)
 
 	backpatch(e->back.s_true, m1);
 	backpatch(e->s_false, m3);
+
+	struct sem_rec* ptr = (*prevtop)->s_false;
+	if (ptr->s_false != NULL && ptr->s_false->s_place < nlbl) {
+		while (1) {
+			printf("B%d=L%d\n", ptr->s_false->s_place, m3);
+			ptr->s_false->s_place = 0;
+			ptr = ptr->s_false;
+			if (ptr->s_false == NULL)
+				break;
+		}
+	}
+
+	leaveblock();
 }
 
 /*
@@ -586,13 +599,17 @@ void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
 	backpatch(n             , m1);
 
 	struct sem_rec* ptr = (*prevtop)->s_false;
-	while (1) {
-		printf("B%d=L%d\n", ptr->s_false->s_place, m3);
-		ptr->s_false->s_place = 0;
-		ptr = ptr->s_false;
-		if (ptr->s_false == NULL)
-			break;
+	if (ptr->s_false != NULL) {
+		while (1) {
+			printf("B%d=L%d\n", ptr->s_false->s_place, m3);
+			ptr->s_false->s_place = 0;
+			ptr = ptr->s_false;
+			if (ptr->s_false == NULL)
+				break;
+		}
 	}
+
+	leaveblock();
 }
 
 /*
