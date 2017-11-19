@@ -15,6 +15,8 @@ extern int level;
 extern char formaltypes[MAXARGS];
 extern char localtypes[MAXLOCS];
 extern int localwidths[MAXLOCS];
+extern struct sem_rec **top;
+extern struct sem_rec **prevtop;
 
 int nlbl     = 0; //Global for number of labels
 int ngoto    = 0; //Global for number of gotos
@@ -44,7 +46,7 @@ int ret_type = 0; //Global for return type of a function
 //#define FUNC_NOTIM
 //#define FUNC_SEPAR
 
-//Define "LOG_FUNC" if "FUNC_SEP" is true.
+//Define "LOG_FUNC" if "FUNC_SEPAR" is true.
 #if defined(FUNC_SEPAR)
 	#define LOG_FUNC(str)\
 		printf("%s:\n", str);
@@ -217,6 +219,7 @@ struct sem_rec *call(char *f, struct sem_rec *args)
  */
 struct sem_rec *ccand(struct sem_rec *e1, int m, struct sem_rec *e2)
 {
+	LOG_FUNC("ccand");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: ccand not implemented\n");
 		return ((struct sem_rec *) NULL);
@@ -273,6 +276,7 @@ struct sem_rec *ccnot(struct sem_rec *e)
  */
 struct sem_rec *ccor(struct sem_rec *e1, int m, struct sem_rec *e2)
 {
+	LOG_FUNC("ccor");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: ccor not implemented\n");
 		return ((struct sem_rec *) NULL);
@@ -322,7 +326,36 @@ struct sem_rec *con(char *x)
  */
 void dobreak()
 {
-	fprintf(stderr, "sem: dobreak not implemented\n");
+	LOG_FUNC("dobreak");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: dobreak not implemented\n");
+		return NULL;
+	#endif
+
+	/*printf(
+		"[CHECK  ] 0x%08x",
+		(*prevtop),
+		//(struct sem_rec*)((char*)((*prevtop)->s_false) + 0x120)
+		(*prevtop)->s_false->s_false
+	);*/
+
+	struct sem_rec* ptr = (*prevtop)->s_false;
+	while (1) {
+		if (ptr->s_false == NULL)
+			break;
+		ptr = ptr->s_false;
+		//printf(" 0x%08x", ptr);
+	}
+
+	ptr->s_false = n();
+	//printf(" 0x%08x", ptr->s_false);
+	//printf("\n");
+	/*printf(
+		"[CHECK  ] 0x%08x 0x%08x\n",
+		(*prevtop),
+		//(struct sem_rec*)((char*)((*prevtop)->s_false) + 0x120)
+		(*prevtop)->s_false->s_false
+	);*/
 }
 
 /*
@@ -330,7 +363,13 @@ void dobreak()
  */
 void docontinue()
 {
-	fprintf(stderr, "sem: docontinue not implemented\n");
+	LOG_FUNC("docontinue");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: docontinue not implemented\n");
+		return NULL;
+	#endif
+
+	n();
 }
 
 /*
@@ -338,6 +377,7 @@ void docontinue()
  */
 void dodo(int m1, int m2, struct sem_rec *e, int m3)
 {
+	LOG_FUNC("dodo");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: dodo not implemented\n");
 		return;
@@ -470,6 +510,7 @@ void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
  */
 void doret(struct sem_rec *e)
 {
+	LOG_FUNC("doret");
 	#ifdef FUNC_NOTIM
 		fprintf(stderr, "sem: doret not implemented\n");
 		return;
@@ -538,9 +579,20 @@ void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
 		return;
 	#endif
 
+
+
 	backpatch(e->back.s_true, m2);
 	backpatch(e->s_false    , m3);
 	backpatch(n             , m1);
+
+	struct sem_rec* ptr = (*prevtop)->s_false;
+	while (1) {
+		printf("B%d=L%d\n", ptr->s_false->s_place, m3);
+		ptr->s_false->s_place = 0;
+		ptr = ptr->s_false;
+		if (ptr->s_false == NULL)
+			break;
+	}
 }
 
 /*
@@ -548,7 +600,12 @@ void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
  */
 void endloopscope(int m)
 {
-	fprintf(stderr, "sem: endloopscope not implemented\n");
+	LOG_FUNC("endloopscope");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: endloopscope not implemented\n");
+		return;
+	#endif
+	leaveblock();
 }
 
 /*
@@ -880,6 +937,7 @@ int m()
 		"label L%d\n",
 		nlbl
 	);
+	struct sem_rec* rec = node(9999, T_LBL, NULL, NULL);
 
 	return nlbl;
 }
