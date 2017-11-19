@@ -11,6 +11,7 @@ extern int lineno;
 extern int ntmp;
 extern int formalnum;
 extern int localnum;
+extern int level;
 extern char formaltypes[MAXARGS];
 extern char localtypes[MAXLOCS];
 extern int localwidths[MAXLOCS];
@@ -366,7 +367,53 @@ void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
  */
 void dogoto(char *id)
 {
-	fprintf(stderr, "sem: dogoto not implemented\n");
+	LOG_FUNC("dogoto");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: dogoto not implemented\n");
+		return;
+	#endif
+	
+	struct id_entry* lbl = lookup(id, 0),
+	               * ptr, *new_lbl;
+	if (lbl == NULL) {
+		lbl = install(id, 0);
+	}
+	if (lbl != NULL && lbl->i_width == 0) {
+		//This goto hasn't been defined yet.
+		ngoto++;
+		
+		//Traverse
+		while (lbl->i_link != NULL) {
+			//Traverse the list.
+			lbl = lbl->i_link;
+		}
+		
+		if (lbl->i_offset != 0) {
+			lbl = install(id, 0);
+		}
+
+		lbl->i_offset = ngoto;
+		printf(
+			#ifdef FUNC_LABEL
+				"[DOGOTO ] "
+			#endif
+			"br B%d\n",
+
+			lbl->i_offset,
+			lbl->i_defined
+		);
+	}
+	else {
+		printf(
+			#ifdef FUNC_LABEL
+				"[DOGOTO ] "
+			#endif
+			"br L%d\n",
+
+			lbl->i_width,
+			lbl->i_defined
+		);
+	}
 }
 
 /*
@@ -592,8 +639,9 @@ void ftail()
 		fprintf(stderr, "sem: ftail not implemented\n");
 		return;
 	#endif
-	leaveblock();
+
 	printf("fend\n");
+	leaveblock();
 
 }
 
@@ -726,7 +774,70 @@ struct sem_rec *indx(struct sem_rec *x, struct sem_rec *i)
  */
 void labeldcl(char *id)
 {
-	fprintf(stderr, "sem: labeldcl not implemented\n");
+	LOG_FUNC("labeldcl");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: labeldcl not implemented (%s)\n", id);
+		return;
+	#endif
+
+	//Create a label (literally).
+	struct id_entry *lbl = dclr(id, T_LBL, nlbl + 1);
+	struct sem_rec *rec = node(nlbl + 1, T_LBL, NULL, NULL);
+
+	nlbl++;
+	lbl->i_width = nlbl;
+	printf(
+		#ifdef FUNC_LABEL
+			"[LABELDC] "
+		#endif
+		"label L%d\n",
+		nlbl
+	);
+
+	//Backtrace if needed by abusing linked list.
+	//struct id_entry *id = lookup()
+	if (lbl->i_link != NULL) {
+		lbl = lbl->i_link;
+
+		//Time to fake a backtrace... really badly.
+		if (lbl->i_link != NULL) {
+			struct id_entry  *list_end   = lbl->i_link,
+							 *list_start = lbl->i_link;
+			struct id_entry **list_array;
+			size_t count = 0, j = 0;
+			//Get the count of instances
+			while (1) {
+				count++;
+				if (list_start->i_link == NULL)
+					break;
+				list_start = list_start->i_link;
+
+			}
+			
+			//Initialise array
+			list_array = (struct id_entry **) malloc(sizeof(struct id_entry*) * count);
+			list_start = lbl->i_link;
+			while (1) {
+				list_array[count - (j++) - 1] = list_start;
+				if (list_start->i_link == NULL)
+					break;
+				list_start = list_start->i_link;
+			}
+			
+			//Now for the fun part. Print that shit out once and for all.
+			size_t i;
+			for (i = 0; i < count; i++)
+				printf(
+					#ifdef FUNC_LABEL
+						"[LABELDC] "
+					#endif
+					"B%d=L%d\n",
+					list_array[i]->i_offset,
+					nlbl
+				);
+		}
+	}
+	//printf("BT 0x%08x\n", lbl->i_link->i_link);
 }
 
 /*
