@@ -183,7 +183,8 @@ struct sem_rec *call(char *f, struct sem_rec *args)
 
 	//If it doesn't exist... initialise it (for some stupid reason)
 	if (func == NULL) {
-		func = install(f, 0);
+		struct id_entry temp;
+		func = &temp;
 		func->i_type    = T_INT; //In C, all functions default to int
 		func->i_scope   = GLOBAL;
 		func->i_defined = 1;
@@ -205,6 +206,8 @@ struct sem_rec *call(char *f, struct sem_rec *args)
 		currtemp() - 1, //Guaranteed to be the previous one
 		argc
 	);
+
+	free(sem_array);
 
 	return node(currtemp(), func->i_type, NULL, NULL);
 }
@@ -472,41 +475,55 @@ void doret(struct sem_rec *e)
 		return;
 	#endif
 	
-	//If the register at "e" is not the same as the function type... then we need
-	//to do something about it... That's where the "ret_type" comes in. :)
-	unsigned int target = e->s_place;
+	if (e != NULL) {
+		//If the register at "e" is not the same as the function type... then we need
+		//to do something about it... That's where the "ret_type" comes in. :)
+		unsigned int target = e->s_place;
 
-	if (ret_type != e->s_mode) {
-		//Convert to that type
-		nexttemp();
+		if (ret_type != e->s_mode) {
+			//Convert to that type
+			nexttemp();
+			printf(
+				#ifdef FUNC_LABEL
+					"[DIRET  ] "
+				#endif
+				"t%d := cv%c t%d\n",
+
+				//Temporary ID
+				currtemp(),
+
+				(ret_type == T_DOUBLE) ? 'f' : 'i',
+
+				e->s_place
+			);
+			target = currtemp();
+		}
+		
+
 		printf(
 			#ifdef FUNC_LABEL
-				"[DIRET  ] "
+				"[DORET  ] "
 			#endif
-			"t%d := cv%c t%d\n",
+			"ret%c t%d\n",
 
-			//Temporary ID
-			currtemp(),
-
+			//Type
 			(ret_type == T_DOUBLE) ? 'f' : 'i',
 
-			e->s_place
+			//The actual value
+			target
 		);
-		target = currtemp();
 	}
-	
-	printf(
-		#ifdef FUNC_LABEL
-			"[DORET  ] "
-		#endif
-		"ret%c t%d\n",
+	else {
+		printf(
+			#ifdef FUNC_LABEL
+				"[DORET  ] "
+			#endif
+			"ret%c\n",
 
-		//Type
-		(ret_type == T_DOUBLE) ? 'f' : 'i',
-
-		//The actual value
-		target
-	);
+			//Type
+			(ret_type == T_DOUBLE) ? 'f' : 'i'
+		);
+	}
 }
 
 /*
@@ -799,7 +816,7 @@ void labeldcl(char *id)
 	if (lbl->i_link != NULL) {
 		lbl = lbl->i_link;
 
-		//Time to fake a backtrace... really badly.
+		//Time to fake a backpatch... really badly.
 		if (lbl->i_link != NULL) {
 			struct id_entry  *list_end   = lbl->i_link,
 							 *list_start = lbl->i_link;
@@ -826,15 +843,19 @@ void labeldcl(char *id)
 			
 			//Now for the fun part. Print that shit out once and for all.
 			size_t i;
-			for (i = 0; i < count; i++)
-				printf(
-					#ifdef FUNC_LABEL
-						"[LABELDC] "
-					#endif
-					"B%d=L%d\n",
-					list_array[i]->i_offset,
-					nlbl
-				);
+			for (i = 0; i < count; i++) {
+				if (list_array[i]->i_offset != 0) {
+					printf(
+						#ifdef FUNC_LABEL
+							"[LABELDC] "
+						#endif
+						"B%d=L%d\n",
+						list_array[i]->i_offset,
+						nlbl
+					);
+				}
+			}
+			free(list_array);
 		}
 	}
 	//printf("BT 0x%08x\n", lbl->i_link->i_link);
