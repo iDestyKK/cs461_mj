@@ -112,16 +112,18 @@ void backpatch(struct sem_rec *p, int k)
 	//Print branch and nodes. If there is a link, traverse through the link until
 	//it is NULL.
 	while (1) {
-		printf(
-			#ifdef FUNC_LABEL
-				"[BACKPAT] "
-			#endif
-			"B%d=L%d\n",
+		if (!branch_is_set(p->s_place)) {
+			printf(
+				#ifdef FUNC_LABEL
+					"[BACKPAT] "
+				#endif
+				"B%d=L%d\n",
 
-			//Parametre information
-			p->s_place,k
-		);
-		branch_set(p->s_place, k);
+				//Parametre information
+				p->s_place,k
+			);
+			branch_set(p->s_place, k);
+		}
 
 		//Go to the next one if it exists.
 		//printf("[CHECK  ] %d %d %d\n", p->s_false != NULL, p->back.s_true != NULL, p->back.s_link != NULL);
@@ -501,9 +503,11 @@ void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
 	if (ptr->s_false != NULL && ptr->s_false->s_place <= ngoto) {
 		while (1) {
 			if (ptr->s_false->s_mode == (T_LBL | 0x80)) {
-				if (ptr->s_false->s_place != e2->back.s_true->s_place)
+				//if (ptr->s_false->s_place != e2->back.s_true->s_place) {
+				if (!branch_is_set(ptr->s_false->s_place)) {
 					printf("B%d=L%d\n", ptr->s_false->s_place, m2);
 					branch_set(ptr->s_false->s_place, m2);
+				}
 
 				//Indicate that it has already been initialised... by cheating.
 				ptr->s_false->s_mode |= 0x100;
@@ -525,9 +529,11 @@ void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
 		while (1) {
 			//if (ptr->s_false->s_mode == T_LBL) {
 			if (ptr->s_false->s_mode == T_LBL) {
-				if (ptr->s_false->s_place != e2->back.s_true->s_place)
+				//if (ptr->s_false->s_place != e2->back.s_true->s_place) {
+				if (!branch_is_set(ptr->s_false->s_place)) {
 					printf("B%d=L%d\n", ptr->s_false->s_place, m4);
 					branch_set(ptr->s_false->s_place, m4);
+				}
 
 				//Indicate that it has already been initialised... by cheating.
 				ptr->s_false->s_mode |= 0x100;
