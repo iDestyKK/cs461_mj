@@ -1290,8 +1290,82 @@ struct sem_rec *op2(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-	fprintf(stderr, "sem: opb not implemented\n");
-	return ((struct sem_rec *) NULL);
+	LOG_FUNC("opb");
+	#ifdef FUNC_NOTIM
+		fprintf(stderr, "sem: opb not implemented\n");
+		return ((struct sem_rec *) NULL);
+	#endif
+	
+	//Essentially op2 flipped, since it's right-associative.
+	unsigned int target_t[2] = {
+		x->s_place,
+		y->s_place
+	};
+
+	//Cast if needed
+	if (x->s_mode != y->s_mode) {
+		nexttemp();
+		//What if x = T_INT and y = T_DOUBLE?
+		if (x->s_mode < y->s_mode) {
+			//Upcast X
+			printf(
+				#ifdef FUNC_LABEL
+					"[OPB    ] "
+				#endif
+				"t%d := cv%c t%d\n",
+
+				//Temporary ID
+				currtemp(),
+
+				//Type to convert to
+				(x->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+				y->s_place
+			);
+			target_t[1] = currtemp();
+		}
+
+		//x = T_DOUBLE and y = T_INT?
+		if (x->s_mode > y->s_mode) {
+			//Upcast Y
+			printf(
+				#ifdef FUNC_LABEL
+					"[OPB    ] "
+				#endif
+				"t%d := cv%c t%d\n",
+
+				//Temporary ID
+				currtemp(),
+
+				//Type to convert to
+				(y->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+				x->s_place
+			);
+			target_t[0] = currtemp();
+		}
+	}
+
+	nexttemp();
+	printf(
+		#ifdef FUNC_LABEL
+			"[OPB    ] "
+		#endif
+		"t%d := t%d %s%c t%d\n",
+
+		currtemp(),
+
+		target_t[0],
+
+		//Operator
+		op,
+
+		//Operation
+		(y->s_mode == T_DOUBLE) ? 'f' : 'i',
+
+		target_t[1]
+	);
+	return node(currtemp(), (y->s_mode == T_DOUBLE) ? T_DOUBLE : T_INT, NULL, NULL);
 }
 
 /*
