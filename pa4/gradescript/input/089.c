@@ -1,5 +1,5 @@
 /*
- * Goto Test (Brutal)
+ * Ultimate Goto Test (Brutal)
  *
  * Hint:
  *     This one should auto-pass if you got 080-088.c to pass. However, it may
