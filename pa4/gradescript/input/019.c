@@ -1,5 +1,5 @@
 /*
- * Nested Function Calling Test 5
+ * Nested Function Calling Test 2
  */
 
 double gl; /* Grenade Launcher */
