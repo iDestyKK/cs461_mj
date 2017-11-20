@@ -1,4 +1,7 @@
-/* If Statements Section */
+/* 
+ * If Statements Test 1
+ */
+
 int i[8];
 
 main() {

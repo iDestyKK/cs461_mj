@@ -2,19 +2,19 @@ func main
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 5
+bgnstmt 7
 t1 := local 0
 t2 := 2
 t3 := t1 =i t2
-bgnstmt 6
+bgnstmt 8
 t4 := local 1
 t5 := 3
 t6 := t4 =i t5
-bgnstmt 7
+bgnstmt 9
 t7 := local 2
 t8 := 2
 t9 := t7 =i t8
-bgnstmt 9
+bgnstmt 11
 t10 := local 0
 t11 := @i t10
 t12 := local 1
@@ -32,7 +32,7 @@ bt t19 B3
 br B4
 B2=L1
 label L2
-bgnstmt 10
+bgnstmt 12
 t20 := "a and b match (%d)!\n"
 t21 := local 0
 t22 := @i t21

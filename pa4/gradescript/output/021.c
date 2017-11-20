@@ -1,29 +1,29 @@
 alloc i 32
 func main
 localloc 4
-bgnstmt 6
+bgnstmt 9
 t1 := local 0
 t2 := 2
 t3 := t1 =i t2
-bgnstmt 9
+bgnstmt 12
 t4 := 0
 t5 := global i
 t6 := t5 []i t4
 t7 := 2
 t8 := t6 =i t7
-bgnstmt 10
+bgnstmt 13
 t9 := 1
 t10 := global i
 t11 := t10 []i t9
 t12 := 3
 t13 := t11 =i t12
-bgnstmt 11
+bgnstmt 14
 t14 := 2
 t15 := global i
 t16 := t15 []i t14
 t17 := 4
 t18 := t16 =i t17
-bgnstmt 14
+bgnstmt 17
 t19 := 0
 t20 := global i
 t21 := t20 []i t19
@@ -34,14 +34,14 @@ t25 := t22 ==i t24
 bt t25 B1
 br B2
 label L1
-bgnstmt 15
+bgnstmt 18
 t26 := 1
 t27 := global i
 t28 := t27 []i t26
 t29 := 1
 t30 := -i t29
 t31 := t28 =i t30
-bgnstmt 16
+bgnstmt 19
 t32 := 2
 t33 := global i
 t34 := t33 []i t32

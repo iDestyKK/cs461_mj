@@ -1,4 +1,6 @@
-/* If Statements Section (CCAND) */
+/* 
+ * If Statements Test w/ CCAND
+ */
 
 main() {
 	int a, b, c;

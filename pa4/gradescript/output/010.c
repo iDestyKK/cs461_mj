@@ -2,15 +2,15 @@ alloc i 64
 func main
 localloc 4
 localloc 4
-bgnstmt 6
+bgnstmt 10
 t1 := local 0
 t2 := 8
 t3 := t1 =i t2
-bgnstmt 7
+bgnstmt 11
 t4 := local 1
 t5 := 2
 t6 := t4 =i t5
-bgnstmt 9
+bgnstmt 13
 t7 := local 1
 t8 := @i t7
 t9 := global i

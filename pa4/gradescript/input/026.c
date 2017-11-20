@@ -1,4 +1,6 @@
-/* If Statements Section (CCOR) */
+/*
+ * If Statements Test w/ CCOR
+ */
 
 main() {
 	int a, b, c;

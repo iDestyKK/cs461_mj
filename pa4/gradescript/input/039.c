@@ -1,5 +1,5 @@
 /*
- * Functions Section (Nested Version)
+ * Functions Test (Nested Version)
  *
  * Hint:
  *     Make sure your sem_recs are being created properly. Nested functions are

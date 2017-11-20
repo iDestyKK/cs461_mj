@@ -1,5 +1,5 @@
 /*
- * While Loop Tests
+ * While Loop Test 2
  */
 
 main() {

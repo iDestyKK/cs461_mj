@@ -1,5 +1,5 @@
 /*
- * For Loop Tests & Functions
+ * For Loop Test w/ Functions
  *
  * Hint:
  *     If you passed 041.c and have functions, you should auto-pass this one.

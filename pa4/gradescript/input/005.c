@@ -1,3 +1,7 @@
+/*
+ * Variable Assignment Test 1
+ */
+
 double i[8];
 int a;
 

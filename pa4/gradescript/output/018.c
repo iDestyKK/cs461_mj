@@ -2,12 +2,12 @@ alloc gl 8
 func cool
 formal 8
 localloc 8
-bgnstmt 5
+bgnstmt 9
 t1 := local 0
 t2 := param 0
 t3 := @f t2
 t4 := t1 =f t3
-bgnstmt 6
+bgnstmt 10
 t5 := local 0
 t6 := @f t5
 t7 := cvi t6
@@ -16,11 +16,11 @@ fend
 func main
 localloc 4
 localloc 8
-bgnstmt 12
+bgnstmt 16
 t8 := local 0
 t9 := 0
 t10 := t8 =i t9
-bgnstmt 13
+bgnstmt 17
 t11 := local 1
 t12 := local 0
 t13 := @i t12
@@ -28,7 +28,7 @@ t14 := 1
 t15 := t13 +i t14
 t16 := cvf t15
 t17 := t11 =f t16
-bgnstmt 14
+bgnstmt 18
 t18 := local 1
 t19 := local 1
 t20 := @f t19
@@ -36,7 +36,7 @@ argf t20
 t21 := global gl
 t22 := ff t21 1
 t23 := t18 =f t22
-bgnstmt 15
+bgnstmt 19
 t24 := "%d %f\n"
 t25 := local 0
 t26 := @i t25

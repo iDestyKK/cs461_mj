@@ -1,5 +1,5 @@
 /*
- * Functions Section
+ * Functions Test 2
  */
 
 add(int a, int b) {

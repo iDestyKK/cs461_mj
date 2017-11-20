@@ -1,3 +1,7 @@
+/*
+ * Function Calling Test 1
+ */
+
 main() {
 	int x;
 	x = 0;

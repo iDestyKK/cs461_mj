@@ -3,11 +3,11 @@ alloc a 4
 func main
 localloc 4
 localloc 4
-bgnstmt 8
+bgnstmt 12
 t1 := local 1
 t2 := 2
 t3 := t1 =i t2
-bgnstmt 9
+bgnstmt 13
 t4 := local 0
 t5 := local 1
 t6 := @i t5

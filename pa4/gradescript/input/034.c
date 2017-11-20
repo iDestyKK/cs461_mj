@@ -1,5 +1,5 @@
 /* 
- * If Statements Section (Casual Test of all operations [1/2])
+ * If Statements Test of all operations (2/2)
  *
  * Hint:
  *     This test was specifically written to auto-pass if you have properly

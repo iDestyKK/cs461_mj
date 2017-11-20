@@ -2,19 +2,19 @@ func main
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 5
+bgnstmt 7
 t1 := local 0
 t2 := 2
 t3 := t1 =i t2
-bgnstmt 6
+bgnstmt 8
 t4 := local 1
 t5 := 3
 t6 := t4 =i t5
-bgnstmt 7
+bgnstmt 9
 t7 := local 2
 t8 := 2
 t9 := t7 =i t8
-bgnstmt 9
+bgnstmt 11
 t10 := local 0
 t11 := @i t10
 t12 := local 1
@@ -32,7 +32,7 @@ bt t19 B3
 br B4
 B2=L1
 label L2
-bgnstmt 10
+bgnstmt 12
 t20 := local 0
 t21 := @i t20
 t22 := local 1
@@ -41,7 +41,7 @@ t24 := t21 ==i t23
 bt t24 B5
 br B6
 label L3
-bgnstmt 11
+bgnstmt 13
 t25 := "a and b match (%d)!\n"
 t26 := local 0
 t27 := @i t26
@@ -52,7 +52,7 @@ t29 := fi t28 2
 label L4
 B5=L3
 B6=L4
-bgnstmt 12
+bgnstmt 14
 t30 := local 1
 t31 := @i t30
 t32 := local 2
@@ -61,7 +61,7 @@ t34 := t31 ==i t33
 bt t34 B7
 br B8
 label L5
-bgnstmt 13
+bgnstmt 15
 t35 := "b and c match (%d)!\n"
 t36 := local 1
 t37 := @i t36
@@ -74,7 +74,7 @@ B7=L5
 B8=L6
 br B9
 label L7
-bgnstmt 16
+bgnstmt 18
 t40 := local 0
 t41 := @i t40
 t42 := local 2
@@ -92,7 +92,7 @@ bt t49 B12
 br B13
 B11=L8
 label L9
-bgnstmt 17
+bgnstmt 19
 t50 := "a and b don't match, but a and c do! (%d)\n"
 t51 := local 0
 t52 := @i t51
@@ -102,8 +102,8 @@ t53 := global printf
 t54 := fi t53 2
 br B14
 label L10
-bgnstmt 19
-bgnstmt 20
+bgnstmt 21
+bgnstmt 22
 t55 := "These pathetic numbers never had a chance...\n"
 argi t55
 t56 := global printf

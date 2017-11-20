@@ -1,3 +1,7 @@
+/*
+ * Nested Function Calling Test 5
+ */
+
 double gl; /* Grenade Launcher */
 
 cool(double x) {

@@ -18,7 +18,7 @@ magic1(int a, int b) {
 		c = 0;
 		do {
 			c += 1; /* c++... No pun intended ;) */
-			magic2();
+			magic2(a, b);
 		}
 		while (c < b);
 	}
@@ -30,22 +30,27 @@ magic2(double a, double b) {
 	int i, j, k, l, m;
 	i = a;
 	j = a * b;
-	k = i * j;
+	if (i == 0 && j != 0)
+		k = j * j;
+	else
+	if (j == 0 && i != 0)
+		k = i * i;
+	else
+		k = 100;
 	l = k;
 
 	do {
-		i += 1;
-		while (k) {
+		j -= 1;
+		while (k > 0) {
 			k -= 1;
 		}
-		printf("%d\n", l - k);
-		l -= 1;
+		printf("%d\n", l - k + m);
 		k = l;
 		m += 1;
 	}
 	while (j > i);
 
-	return i * m;
+	return m;
 }
 
 main() {
@@ -57,7 +62,7 @@ main() {
 
 	for (i = 0; i < j; i += 1) {
 		magic1(i, j);
-		magic2();
+		magic2(i, j);
 	}
 
 	/* The ultimate test */

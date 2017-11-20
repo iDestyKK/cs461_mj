@@ -1,4 +1,6 @@
-/* If Statements Section (CCNOT) */
+/* 
+ * If Statements Test w/ CCNOT 
+ */
 
 main() {
 	int a, b, c;

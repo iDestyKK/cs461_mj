@@ -1,3 +1,7 @@
+/*
+ * Array Indexing Test 1
+ */
+
 double i[8];
 
 main() {

@@ -1,5 +1,5 @@
 /*
- * While Loop Tests (Nested)
+ * While Loop Test (Nested)
  *
  * Hint:
  *     Just support nested while loops... oh and also function calls.

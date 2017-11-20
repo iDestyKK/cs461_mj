@@ -1,10 +1,10 @@
 func main
 localloc 4
-bgnstmt 3
+bgnstmt 7
 t1 := local 0
 t2 := 0
 t3 := t1 =i t2
-bgnstmt 4
+bgnstmt 8
 t4 := "%d\n"
 t5 := local 0
 t6 := @i t5

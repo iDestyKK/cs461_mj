@@ -1,4 +1,6 @@
-/* If Statements Section (CCNOT && CCAND && CCOR) */
+/* 
+ * If Statements Test w/ CCNOT, CCAND, and CCOR
+ */
 
 main() {
 	int a, b, c;
