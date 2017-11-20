@@ -1,90 +1,148 @@
-func main
+func magic1
+formal 4
+formal 4
 localloc 4
 localloc 4
-localloc 4
-bgnstmt 13
+bgnstmt 16
 t1 := local 0
-t2 := 123
-t3 := t1 =i t2
-bgnstmt 14
-t4 := local 1
-t5 := 42
-t6 := t4 =i t5
-bgnstmt 15
-t7 := local 2
-t8 := 666
-t9 := t7 =i t8
+t2 := param 0
+t3 := @i t2
+t4 := t1 =i t3
 bgnstmt 17
-t10 := "%d\n"
-t11 := local 0
-t12 := @i t11
-t13 := local 1
-t14 := @i t13
-t15 := t12 +i t14
-t16 := local 2
-t17 := @i t16
-t18 := t15 -i t17
-argi t10
-argi t18
-t19 := global printf
-t20 := fi t19 2
-bgnstmt 18
-t21 := "%d\n"
-t22 := local 0
-t23 := @i t22
-t24 := local 1
-t25 := @i t24
-t26 := t23 +i t25
-t27 := local 2
-t28 := @i t27
-t29 := t26 &i t28
-argi t21
-argi t29
-t30 := global printf
-t31 := fi t30 2
+label L1
+t5 := "test1\n"
+argi t5
+t6 := global printf
+t7 := fi t6 1
 bgnstmt 19
-t32 := "%d\n"
-t33 := local 0
-t34 := @i t33
-t35 := local 1
-t36 := @i t35
-t37 := local 2
-t38 := @i t37
-t39 := t36 -i t38
-t40 := t34 &i t39
-argi t32
-argi t40
-t41 := global printf
-t42 := fi t41 2
+t8 := local 0
+t9 := 1
+t10 := @i t8
+t11 := t10 +i t9
+t12 := t8 =i t11
 bgnstmt 20
-t43 := "%d\n"
-t44 := local 0
-t45 := @i t44
-t46 := local 1
-t47 := @i t46
-t48 := t45 &i t47
-t49 := local 2
-t50 := @i t49
-t51 := t48 |i t50
-argi t43
-argi t51
-t52 := global printf
-t53 := fi t52 2
+t13 := local 0
+t14 := @i t13
+t15 := param 1
+t16 := @i t15
+t17 := t14 ==i t16
+bt t17 B1
+br B2
+label L2
 bgnstmt 21
-t54 := "%d\n"
-t55 := local 0
-t56 := @i t55
-t57 := local 1
-t58 := @i t57
-t59 := local 2
-t60 := @i t59
-t61 := t58 |i t60
-t62 := t56 &i t61
-t63 := local 0
+br B3
+label L3
+B1=L2
+B2=L3
+bgnstmt 22
+t18 := local 1
+t19 := local 0
+t20 := @i t19
+t21 := t18 =i t20
+bgnstmt 23
+br B4
+bgnstmt 25
+label L4
+B4=L4
+t22 := "B: %d\n"
+t23 := local 1
+t24 := @i t23
+argi t22
+argi t24
+t25 := global printf
+t26 := fi t25 2
+bgnstmt 27
+t27 := local 1
+t28 := 1
+t29 := @i t27
+t30 := t29 -i t28
+t31 := t27 =i t30
+bgnstmt 28
+t32 := local 1
+t33 := @i t32
+t34 := 0
+t35 := t33 ==i t34
+bt t35 B5
+br B6
+label L5
+bgnstmt 29
+br L1
+label L6
+B5=L5
+B6=L6
+bgnstmt 30
+br L4
+bgnstmt 32
+label L7
+B3=L7
+t36 := param 1
+t37 := @i t36
+t38 := param 0
+t39 := @i t38
+t40 := t37 -i t39
+t41 := local 0
+t42 := @i t41
+t43 := t40 *i t42
+reti t43
+fend
+func magic2
+formal 4
+formal 4
+localloc 4
+bgnstmt 38
+t44 := "Total: %d\n"
+t45 := param 0
+t46 := @i t45
+argi t44
+argi t46
+t47 := global printf
+t48 := fi t47 2
+bgnstmt 40
+label L8
+t49 := local 0
+t50 := global rand
+t51 := fi t50 0
+t52 := param 1
+t53 := @i t52
+t54 := param 0
+t55 := @i t54
+t56 := 1
+t57 := t55 +i t56
+t58 := t53 *i t57
+t59 := t51 %i t58
+t60 := t49 =i t59
+bgnstmt 42
+t61 := local 0
+t62 := @i t61
+t63 := param 0
 t64 := @i t63
-t65 := t62 |i t64
-argi t54
-argi t65
-t66 := global printf
-t67 := fi t66 2
+t65 := param 1
+t66 := @i t65
+t67 := t64 *i t66
+t68 := t62 >i t67
+bt t68 B7
+br B8
+label L9
+bgnstmt 43
+br B9
+label L10
+B7=L9
+B8=L10
+bgnstmt 44
+br L8
+bgnstmt 46
+label L11
+B9=L11
+t69 := local 0
+t70 := @i t69
+reti t70
+fend
+func main
+bgnstmt 52
+t71 := 1
+t72 := 42
+argi t71
+argi t72
+t73 := global magic1
+t74 := fi t73 2
 fend

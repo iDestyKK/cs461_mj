@@ -1,90 +1,80 @@
-func main
+func magic
 localloc 4
 localloc 4
-localloc 4
-bgnstmt 13
+bgnstmt 7
 t1 := local 0
-t2 := 123
+t2 := 0
 t3 := t1 =i t2
+bgnstmt 8
+label L1
+t4 := "test1\n"
+argi t4
+t5 := global printf
+t6 := fi t5 1
+bgnstmt 10
+t7 := local 0
+t8 := 1
+t9 := @i t7
+t10 := t9 +i t8
+t11 := t7 =i t10
+bgnstmt 11
+t12 := local 0
+t13 := @i t12
+t14 := 10
+t15 := t13 ==i t14
+bt t15 B1
+br B2
+label L2
+bgnstmt 12
+br B3
+label L3
+B1=L2
+B2=L3
+bgnstmt 13
+t16 := local 1
+t17 := local 0
+t18 := @i t17
+t19 := t16 =i t18
 bgnstmt 14
-t4 := local 1
-t5 := 42
-t6 := t4 =i t5
-bgnstmt 15
-t7 := local 2
-t8 := 666
-t9 := t7 =i t8
-bgnstmt 17
-t10 := "%d\n"
-t11 := local 0
-t12 := @i t11
-t13 := local 1
-t14 := @i t13
-t15 := t12 +i t14
-t16 := local 2
-t17 := @i t16
-t18 := t15 -i t17
-argi t10
-argi t18
-t19 := global printf
-t20 := fi t19 2
+br B4
+bgnstmt 16
+label L4
+B4=L4
+t20 := "B: %d\n"
+t21 := local 1
+t22 := @i t21
+argi t20
+argi t22
+t23 := global printf
+t24 := fi t23 2
 bgnstmt 18
-t21 := "%d\n"
-t22 := local 0
-t23 := @i t22
-t24 := local 1
-t25 := @i t24
-t26 := local 2
-t27 := @i t26
-t28 := t25 *i t27
-t29 := t23 +i t28
-argi t21
-argi t29
-t30 := global printf
-t31 := fi t30 2
+t25 := local 1
+t26 := 1
+t27 := @i t25
+t28 := t27 -i t26
+t29 := t25 =i t28
 bgnstmt 19
-t32 := "%d\n"
-t33 := local 0
-t34 := @i t33
-t35 := local 1
-t36 := @i t35
-t37 := t34 /i t36
-t38 := local 2
-t39 := @i t38
-t40 := t37 -i t39
-argi t32
-argi t40
-t41 := global printf
-t42 := fi t41 2
+t30 := local 1
+t31 := @i t30
+t32 := 0
+t33 := t31 ==i t32
+bt t33 B5
+br B6
+label L5
 bgnstmt 20
-t43 := "%d\n"
-t44 := local 0
-t45 := @i t44
-t46 := local 1
-t47 := @i t46
-t48 := t45 /i t47
-t49 := local 2
-t50 := @i t49
-t51 := t48 *i t50
-argi t43
-argi t51
-t52 := global printf
-t53 := fi t52 2
+br L1
+label L6
+B5=L5
+B6=L6
 bgnstmt 21
-t54 := "%d\n"
-t55 := local 0
-t56 := @i t55
-t57 := local 1
-t58 := @i t57
-t59 := local 2
-t60 := @i t59
-t61 := t58 /i t60
-t62 := t56 *i t61
-t63 := local 0
-t64 := @i t63
-t65 := t62 +i t64
-argi t54
-argi t65
-t66 := global printf
-t67 := fi t66 2
+br L4
+bgnstmt 23
+label L7
+B3=L7
+reti
+fend
+func main
+bgnstmt 28
+t34 := global magic
+t35 := fi t34 0
 fend

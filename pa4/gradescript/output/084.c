@@ -1,34 +1,36 @@
 func main
 localloc 4
-localloc 4
 bgnstmt 7
 label L1
 t1 := local 0
-t2 := 1
-t3 := @i t1
-t4 := t3 +i t2
-t5 := t1 =i t4
+t2 := 0
+t3 := t1 =i t2
 bgnstmt 9
 br B1
-bgnstmt 10
+bgnstmt 11
 label L2
 B1=L2
-t6 := local 1
-t7 := 1
-t8 := @i t6
-t9 := t8 +i t7
-t10 := t6 =i t9
-bgnstmt 12
-br L1
-bgnstmt 14
-t11 := "%d %d\n"
-t12 := local 0
-t13 := @i t12
-t14 := local 1
-t15 := @i t14
+t4 := local 0
+t5 := 1
+t6 := @i t4
+t7 := t6 +i t5
+t8 := t4 =i t7
+bgnstmt 13
+t9 := "%d\n"
+t10 := local 0
+t11 := @i t10
+argi t9
 argi t11
-argi t13
-argi t15
-t16 := global printf
-t17 := fi t16 3
+t12 := global printf
+t13 := fi t12 2
+bgnstmt 14
+br L2
+bgnstmt 17
+t14 := "%d\n"
+t15 := local 0
+t16 := @i t15
+argi t14
+argi t16
+t17 := global printf
+t18 := fi t17 2
 fend

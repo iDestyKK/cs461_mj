@@ -20,86 +20,71 @@ t11 := local 0
 t12 := @i t11
 t13 := local 1
 t14 := @i t13
-t15 := t12 &i t14
+t15 := t12 +i t14
 t16 := local 2
 t17 := @i t16
-t18 := ~i t17
-t19 := t15 |i t18
+t18 := t15 -i t17
 argi t10
-argi t19
-t20 := global printf
-t21 := fi t20 2
+argi t18
+t19 := global printf
+t20 := fi t19 2
 bgnstmt 18
-t22 := "%d\n"
-t23 := local 0
-t24 := @i t23
-t25 := local 1
-t26 := @i t25
-t27 := ~i t26
-t28 := t24 +i t27
-t29 := local 2
-t30 := @i t29
-t31 := local 0
-t32 := @i t31
-t33 := t30 *i t32
-t34 := t28 &i t33
+t21 := "%d\n"
+t22 := local 0
+t23 := @i t22
+t24 := local 1
+t25 := @i t24
+t26 := local 2
+t27 := @i t26
+t28 := t25 *i t27
+t29 := t23 +i t28
+argi t21
+argi t29
+t30 := global printf
+t31 := fi t30 2
+bgnstmt 19
+t32 := "%d\n"
+t33 := local 0
+t34 := @i t33
 t35 := local 1
 t36 := @i t35
-t37 := t34 |i t36
-argi t22
-argi t37
-t38 := global printf
-t39 := fi t38 2
-bgnstmt 19
-t40 := "%d\n"
-t41 := local 0
-t42 := @i t41
-t43 := local 1
-t44 := @i t43
-t45 := local 2
-t46 := @i t45
-t47 := local 1
-t48 := @i t47
-t49 := ~i t48
-t50 := t46 *i t49
-t51 := t44 -i t50
-t52 := t42 &i t51
+t37 := t34 /i t36
+t38 := local 2
+t39 := @i t38
+t40 := t37 -i t39
+argi t32
 argi t40
-argi t52
-t53 := global printf
-t54 := fi t53 2
+t41 := global printf
+t42 := fi t41 2
 bgnstmt 20
-t55 := "%d\n"
-t56 := local 0
-t57 := @i t56
-t58 := ~i t57
-t59 := local 1
-t60 := @i t59
-t61 := t58 &i t60
-t62 := local 2
-t63 := @i t62
-t64 := t61 ^i t63
-argi t55
-argi t64
-t65 := global printf
-t66 := fi t65 2
+t43 := "%d\n"
+t44 := local 0
+t45 := @i t44
+t46 := local 1
+t47 := @i t46
+t48 := t45 /i t47
+t49 := local 2
+t50 := @i t49
+t51 := t48 *i t50
+argi t43
+argi t51
+t52 := global printf
+t53 := fi t52 2
 bgnstmt 21
-t67 := "%d\n"
-t68 := local 0
-t69 := @i t68
-t70 := ~i t69
-t71 := local 1
-t72 := @i t71
-t73 := ~i t72
-t74 := local 2
-t75 := @i t74
-t76 := t73 |i t75
-t77 := t70 &i t76
-t78 := local 0
-t79 := @i t78
-t80 := t77 |i t79
-argi t67
-argi t80
-t81 := global printf
-t82 := fi t81 2
+t54 := "%d\n"
+t55 := local 0
+t56 := @i t55
+t57 := local 1
+t58 := @i t57
+t59 := local 2
+t60 := @i t59
+t61 := t58 /i t60
+t62 := t56 *i t61
+t63 := local 0
+t64 := @i t63
+t65 := t62 +i t64
+argi t54
+argi t65
+t66 := global printf
+t67 := fi t66 2
 fend
