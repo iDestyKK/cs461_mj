@@ -7,6 +7,9 @@
 # define MAXARGS 50
 # define MAXLOCS 50
 
+# define MIN(a,b) (((a)<(b))?(a):(b))
+# define MAX(a,b) (((a)>(b))?(a):(b))
+
 extern int lineno;
 extern int ntmp;
 extern int formalnum;
@@ -21,6 +24,11 @@ extern struct sem_rec **prevtop;
 int nlbl     = 0; //Global for number of labels
 int ngoto    = 0; //Global for number of gotos
 int ret_type = 0; //Global for return type of a function
+
+//Global to keep track of backpatched stuff... because I'm getting annoyed
+//There will be helper functions to assist in this.
+int* branch_table = NULL;
+size_t branch_sz = 0;
 
 /*
  * DEBUG LABELS
@@ -54,6 +62,41 @@ int ret_type = 0; //Global for return type of a function
 	#define LOG_FUNC(str) {}
 #endif
 
+/* 
+ * Helper Functions
+ *
+ * To make my life easier, these functions will assist in the application's
+ * functionality.
+ */
+
+//First off, implement branch_table.
+//This will serve as a pseudo CN_VEC so we don't have to include Handy & CNDS.
+void branch_off() {
+	//If NULL, initialise it.
+	if (branch_table == NULL) {
+		branch_table = (int*) malloc(sizeof(int) * MAX(1, ngoto + 1));
+		branch_sz = MAX(1, ngoto + 1);
+		branch_table[(ngoto == 0) ? 0 : MAX(1, ngoto + 1) - 1] = 0;
+	}
+	else {
+		branch_table = (int*) realloc(branch_table, sizeof(int) * MAX(branch_sz, ngoto + 1));
+		branch_sz = MAX(branch_sz, ngoto + 1);
+		branch_table[branch_sz - 1] = 0;
+	}
+
+}
+
+void branch_set(size_t b, size_t l) {
+	branch_table[b] = l;
+}
+
+int branch_is_set(size_t b) {
+	return !!branch_table[b];
+}
+
+/*
+ * The real deal
+ */
 
 /*
  * backpatch - backpatch list of quadruples starting at p with k
@@ -78,6 +121,7 @@ void backpatch(struct sem_rec *p, int k)
 			//Parametre information
 			p->s_place,k
 		);
+		branch_set(p->s_place, k);
 
 		//Go to the next one if it exists.
 		//printf("[CHECK  ] %d %d %d\n", p->s_false != NULL, p->back.s_true != NULL, p->back.s_link != NULL);
@@ -369,7 +413,16 @@ void docontinue()
 		return NULL;
 	#endif
 
-	n();
+	struct sem_rec* ptr = (*prevtop)->s_false;
+	while (1) {
+		if (ptr->s_false == NULL)
+			break;
+		ptr = ptr->s_false;
+		//printf(" 0x%08x", ptr);
+	}
+
+	ptr->s_false = n();
+	ptr->s_false->s_mode |= (1<<7); //A little hack to force it to work...
 }
 
 /*
@@ -387,10 +440,37 @@ void dodo(int m1, int m2, struct sem_rec *e, int m3)
 	backpatch(e->s_false, m3);
 
 	struct sem_rec* ptr = (*prevtop)->s_false;
-	if (ptr->s_false != NULL && ptr->s_false->s_place <= nlbl) {
+
+	if (ptr->s_false != NULL && ptr->s_place <= MAX(ngoto, nlbl)) {
 		while (1) {
-			printf("B%d=L%d\n", ptr->s_false->s_place, m3);
-			ptr->s_false->s_place = 0;
+			if (ptr->s_false->s_mode == (T_LBL | 0x80)) {
+				if (!branch_is_set(ptr->s_false->s_place)) {
+					printf("B%d=L%d\n", ptr->s_false->s_place, m2);
+					branch_set(ptr->s_false->s_place, m2);
+				}
+				ptr->s_false->s_place = 0;
+			}
+			ptr = ptr->s_false;
+			if (ptr->s_false == NULL)
+				break;
+		}
+	}
+	ptr = (*prevtop)->s_false;
+	if (ptr->s_false != NULL && ptr->s_place <= MAX(ngoto, nlbl)) {
+		while (1) {
+			if (ptr->s_false->s_mode == T_LBL) {
+				//if (ptr->s_false->s_place != e->back.s_true->s_place)
+				if (!branch_is_set(ptr->s_false->s_place)) {
+					printf("B%d=L%d\n", ptr->s_false->s_place, m3);
+					branch_set(ptr->s_false->s_place, m3);
+				}
+
+				//Indicate that it has already been initialised... by cheating.
+				ptr->s_false->s_mode |= 0x100;
+			}
+			/*if (ptr->s_false->s_mode == T_LBL)
+				printf("B%d=L%d\n", ptr->s_false->s_place, m3);
+			ptr->s_false->s_place = 0;*/
 			ptr = ptr->s_false;
 			if (ptr->s_false == NULL)
 				break;
@@ -412,16 +492,47 @@ void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
 		return;
 	#endif
 
+	struct sem_rec* ptr = (*prevtop)->s_false;
+
 	backpatch(e2->back.s_true, m3);
 	backpatch(e2->s_false    , m4);
+
+	//Print out continues
+	if (ptr->s_false != NULL && ptr->s_false->s_place <= ngoto) {
+		while (1) {
+			if (ptr->s_false->s_mode == (T_LBL | 0x80)) {
+				if (ptr->s_false->s_place != e2->back.s_true->s_place)
+					printf("B%d=L%d\n", ptr->s_false->s_place, m2);
+					branch_set(ptr->s_false->s_place, m2);
+
+				//Indicate that it has already been initialised... by cheating.
+				ptr->s_false->s_mode |= 0x100;
+			}
+
+
+			ptr = ptr->s_false;
+			if (ptr->s_false == NULL)
+				break;
+		}
+	}
+
 	backpatch(n1             , m1);
 	backpatch(n2             , m2);
 
-	struct sem_rec* ptr = (*prevtop)->s_false;
-	if (ptr->s_false != NULL && ptr->s_false->s_place <= nlbl) {
+	ptr = (*prevtop)->s_false;
+
+	if (ptr->s_false != NULL && ptr->s_false->s_place <= ngoto) {
 		while (1) {
-			printf("B%d=L%d\n", ptr->s_false->s_place, m4);
-			ptr->s_false->s_place = 0;
+			//if (ptr->s_false->s_mode == T_LBL) {
+			if (ptr->s_false->s_mode == T_LBL) {
+				if (ptr->s_false->s_place != e2->back.s_true->s_place)
+					printf("B%d=L%d\n", ptr->s_false->s_place, m4);
+					branch_set(ptr->s_false->s_place, m4);
+
+				//Indicate that it has already been initialised... by cheating.
+				ptr->s_false->s_mode |= 0x100;
+			}
+
 			ptr = ptr->s_false;
 			if (ptr->s_false == NULL)
 				break;
@@ -450,6 +561,7 @@ void dogoto(char *id)
 	if (lbl != NULL && lbl->i_width == 0) {
 		//This goto hasn't been defined yet.
 		ngoto++;
+		branch_off();
 		
 		//Traverse
 		while (lbl->i_link != NULL) {
@@ -614,8 +726,38 @@ void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
 	struct sem_rec* ptr = (*prevtop)->s_false;
 	if (ptr->s_false != NULL) {
 		while (1) {
-			printf("B%d=L%d\n", ptr->s_false->s_place, m3);
-			ptr->s_false->s_place = 0;
+			if (ptr->s_false->s_mode == (T_LBL | 0x80)) {
+				//if (ptr->s_false->s_place != e->back.s_true->s_place)
+				if (!branch_is_set(ptr->s_false->s_place)) {
+					printf("B%d=L%d\n", ptr->s_false->s_place, m1);
+					branch_set(ptr->s_false->s_place, m1);
+				}
+
+				//Indicate that it has already been initialised... by cheating.
+				ptr->s_false->s_mode |= 0x100;
+			}
+			ptr = ptr->s_false;
+			if (ptr->s_false == NULL)
+				break;
+		}
+	}
+
+	ptr = (*prevtop)->s_false;
+	if (ptr->s_false != NULL) {
+		while (1) {
+			if (ptr->s_false->s_mode == T_LBL) {
+				//if (ptr->s_false->s_place != e->back.s_true->s_place) {
+				if (!branch_is_set(ptr->s_false->s_place)) {
+					printf("B%d=L%d\n", ptr->s_false->s_place, m3);
+					branch_set(ptr->s_false->s_place, m3);
+				}
+
+				//Indicate that it has already been initialised... by cheating.
+				ptr->s_false->s_mode |= 0x100;
+			}
+			/*if (ptr->s_false->s_mode == T_LBL)
+				printf("B%d=L%d\n", ptr->s_false->s_place, m3);
+			ptr->s_false->s_place = 0;*/
 			ptr = ptr->s_false;
 			if (ptr->s_false == NULL)
 				break;
@@ -967,7 +1109,7 @@ int m()
 		"label L%d\n",
 		nlbl
 	);
-	struct sem_rec* rec = node(9999, T_LBL, NULL, NULL);
+	struct sem_rec* rec = node(nlbl, T_LBL, NULL, NULL);
 
 	return nlbl;
 }
@@ -984,6 +1126,7 @@ struct sem_rec *n()
 	#endif
 
 	ngoto++;
+	branch_off();
 
 	printf(
 		#ifdef FUNC_LABEL
@@ -1220,6 +1363,7 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 	
 	//BT Statement (Branch on True)
 	ngoto++;
+	branch_off();
 	#ifdef FUNC_LABEL
 		printf("[REL    ] bt t%d B%d\n", currtemp(), ngoto);
 	#else
@@ -1232,6 +1376,7 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 
 	//BR (Unconditional Branch)
 	ngoto++;
+	branch_off();
 	#ifdef FUNC_LABEL
 		printf("[REL    ] br B%d\n", ngoto);
 	#else
@@ -1412,3 +1557,5 @@ struct sem_rec *string(char *s)
 
 	return node(currtemp(), T_STR, NULL, NULL);
 }
+
+
