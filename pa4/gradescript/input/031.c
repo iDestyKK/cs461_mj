@@ -1,5 +1,9 @@
 /* 
  * If Statements Test w/ CCNOT and CCOR
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, ccexpr, ccnot, ccor, con, doif, exprs, fhead,
+ *     fname, ftail, id, m, op1, rel, set, string
  */
 
 main() {

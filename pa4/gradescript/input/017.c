@@ -1,5 +1,8 @@
 /*
  * Function Calling Test 3
+ *
+ * Required Functions:
+ *     bgnstmt, call, con, exprs, fhead, fname, ftail, id, op1, op2, set, string
  */
 
 main() {

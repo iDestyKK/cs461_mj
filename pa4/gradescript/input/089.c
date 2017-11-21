@@ -1,6 +1,10 @@
 /*
  * Ultimate Goto Test (Brutal)
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dogoto, doif, doret, exprs, fhead, fname,
+ *     ftail, id, labeldcl, m, op1, op2, rel, set, string
+ *
  * Hint:
  *     This one should auto-pass if you got 080-088.c to pass. However, it may
  *     be a bit tricky because of how the function parametre work. Make sure

@@ -1,5 +1,9 @@
 /* 
  * If Statements Test w/ CCEXPR
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, ccexpr, con, doif, exprs, fhead, fname, ftail,
+ *     id, m, op1, rel, set, string
  */
 
 main() {

@@ -1,5 +1,8 @@
 /*
  * Functions Test 4
+ *
+ * Required Functions:
+ *     bgnstmt, call, con, doret, exprs, fhead, fname, ftail, id, op1, op2, set
  */
 
 add(int a, int b) {

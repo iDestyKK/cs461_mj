@@ -1,6 +1,10 @@
 /*
  * All Arithmetic Test w/ Loops 1
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dofor, endloopscope, exprs, fhead,
+ *     fname, ftail, id, m, n, op1, op2, opb, rel, set, startloopscope, string
+ *
  * Hint:
  *     Make sure you pass the first 90 test cases. This is to ensure that your
  *     csem can handle all sorts of cases (just like cexpr). Since the yacc

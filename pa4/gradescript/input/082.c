@@ -1,5 +1,9 @@
 /*
  * Goto Test 3
+ *
+ * Required Functions:
+ *     bgnstmt, call, con, dogoto, doret, exprs, fhead, fname, ftail, id, indx,
+ *     labeldcl, op1, op2, set
  */
 
 add(int a, int b) {

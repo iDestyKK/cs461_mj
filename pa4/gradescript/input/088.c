@@ -1,5 +1,9 @@
 /*
  * Goto Test 9
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dogoto, doif, doret, exprs, fhead, fname,
+ *     ftail, id, labeldcl, m, op1, rel, set, string
  */
 
 magic() {

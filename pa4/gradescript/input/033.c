@@ -1,6 +1,10 @@
 /* 
  * If Statements Test of all operations (1/2)
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, ccand, ccexpr, ccnot, ccor, con, doifelse,
+ *     exprs, fhead, fname, ftail, id, indx, m, n, op1, op2, rel, set, string
+ *
  * Hint:
  *     This test was specifically written to auto-pass if you have properly
  *     written all of the "cc" functions. So if you pass test cases 026.c-033.c

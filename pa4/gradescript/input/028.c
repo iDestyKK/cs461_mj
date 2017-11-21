@@ -1,5 +1,9 @@
 /* 
  * If Statements Test w/ CCAND
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, ccand, con, doif, exprs, fhead, fname, ftail,
+ *     id, m, op1, rel, set, string
  */
 
 main() {

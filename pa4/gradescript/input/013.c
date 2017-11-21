@@ -1,5 +1,8 @@
 /*
  * Array Indexing Test 4
+ *
+ * Required Functions:
+ *     bgnstmt, con, fhead, fname, ftail, id, indx, op1, op2, set
  */
 
 int i[8];

@@ -1,5 +1,8 @@
 /*
  * All Binary Operations Test 1
+ *
+ * Required Functions:
+ *     bgnstmt, con, fhead, fname, ftail, id, op1, op2, opb, set
  */
 
 main() {

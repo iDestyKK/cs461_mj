@@ -1,5 +1,9 @@
 /*
  * While-Loop Continue Test (Multiple)
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, con, docontinue, doif, dowhile, endloopscope, fhead,
+ *     fname, ftail, id, indx, m, n, op1, rel, set, startloopscope
  */
 
 int a[24];

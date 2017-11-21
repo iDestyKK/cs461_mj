@@ -1,6 +1,11 @@
 /*
  * COSC 365/494: Floyd-Warshall (Brutal)
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dofor, doif, doifelse, doret,
+ *     endloopscope, exprs, fhead, fname, ftail, id, indx, m, n, op1, op2, rel,
+ *     set, startloopscope, string
+ *
  * Description:
  *     You have a weighted graph and want to compute the shortest path from any
  *     single point to another. The Floyd-Warshall algorithm is a O(N^3) time

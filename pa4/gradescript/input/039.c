@@ -1,6 +1,10 @@
 /*
  * Functions Test (Nested Version)
  *
+ * Required Functions:
+ *     bgnstmt, call, con, doret, exprs, fhead, fname, ftail, id, op1, op2,
+ *     set, string
+ *
  * Hint:
  *     Make sure your sem_recs are being created properly. Nested functions are
  *     supposed to be supported. If you do this, the gradescript will auto-pass

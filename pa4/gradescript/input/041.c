@@ -1,5 +1,9 @@
 /*
  * For Loop Test 2
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dofor, endloopscope, exprs, fhead, fname,
+ *     ftail, id, m, n, op1, rel, set, startloopscope, string
  */
 
 main() {

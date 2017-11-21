@@ -1,5 +1,9 @@
 /*
  * Nested Function Calling Test 1
+ *
+ * Required Functions:
+ *     bgnstmt, call, con, doret, exprs, fhead, fname, ftail, id, op1, op2,
+ *     set, string
  */
 
 double gl; /* Grenade Launcher */

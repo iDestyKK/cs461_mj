@@ -1,5 +1,9 @@
 /* 
  * If Statements Test 3
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, con, doifelse, fhead, fname, ftail, id, indx, m, n,
+ *     op1, rel, set
  */
 
 int i[8];

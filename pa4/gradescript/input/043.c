@@ -1,6 +1,10 @@
 /*
  * For Loop Test w/ Functions
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dofor, endloopscope, exprs, fhead, fname,
+ *     ftail, id, m, n, op1, op2, rel, set, startloopscope, string
+ *
  * Hint:
  *     If you passed 041.c and have functions, you should auto-pass this one.
  *     It just ensures that you truly have nested loop support along with

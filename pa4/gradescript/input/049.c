@@ -1,6 +1,11 @@
 /*
  * Generic Various Loops Tests (Nested)
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, ccand, con, dodo, dofor, doifelse, doret,
+ *     dowhile, endloopscope, exprs, fhead, fname, ftail, id, m, n, op1, op2,
+ *     rel, set, startloopscope, string
+ *
  * Hint:
  *     Make sure your sem_recs are passed correctly and that you are doing your
  *     backpatches correctly. This should work if you passed 040-048.c. If not,

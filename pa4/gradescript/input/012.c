@@ -1,5 +1,8 @@
 /*
  * Array Indexing Test 3
+ *
+ * Required Functions:
+ *     bgnstmt, con, fhead, fname, ftail, id, indx, op1, op2, set
  */
 
 double i[8];

@@ -1,6 +1,11 @@
 /*
  * Merge Sort in CSEM Subset of C (Brutal)
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, ccand, con, dofor, doifelse, doret, dowhile,
+ *     endloopscope, exprs, fhead, fname, ftail, id, indx, m, n, op1, op2, rel, 
+ *     set, startloopscope, string
+ *
  * Description:
  *     This is an implementation of the Merge Sort algorithm which will sort an
  *     array of integers in the global variable "i".

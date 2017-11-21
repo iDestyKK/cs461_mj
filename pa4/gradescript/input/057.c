@@ -1,5 +1,9 @@
 /*
  * Do-While-Loop Continue Test
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, con, docontinue, dodo, doif, endloopscope, fhead,
+ *     fname, ftail, id, indx, m, n, op1, rel, set, startloopscope
  */
 
 int a[24];

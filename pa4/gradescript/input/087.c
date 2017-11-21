@@ -1,5 +1,9 @@
 /*
  * Goto Test 8
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dogoto, doifelse, exprs, fhead, fname,
+ *     ftail, id, labeldcl, m, n, op1, rel, set, string
  */
 
 main() {

@@ -1,6 +1,11 @@
 /*
  * Loop Break/Continue Test (Super Brutal)
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dobreak, docontinue, dodo, dofor, doif,
+ *     dowhile, endloopscope, exprs, fhead, fname, ftail, id, indx, m, n, op1,
+ *     op2, rel, set, startloopscope, string
+ *
  * Hint:
  *     Like the other XX9.c scripts, this one should auto-pass if you have done
  *     your break/continue functions correctly, as well as your loop functions.

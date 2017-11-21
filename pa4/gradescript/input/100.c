@@ -1,6 +1,9 @@
 /*
  * The Macbrine Special (Literally Impossible)
  *
+ * Required Functions:
+ *     fname
+ *
  * Hint:
  *     You're not supposed to understand how this works...
  *     Nor is it supposed to work with csem. Joke's on you. ;)

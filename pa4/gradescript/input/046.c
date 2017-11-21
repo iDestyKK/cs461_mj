@@ -1,6 +1,10 @@
 /*
  * While Loop Test (Nested)
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dowhile, endloopscope, exprs, fhead,
+ *     fname, ftail, id, m, n, op1, rel, set, startloopscope, string
+ *
  * Hint:
  *     Just support nested while loops... oh and also function calls.
  */

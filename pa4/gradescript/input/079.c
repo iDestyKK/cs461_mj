@@ -1,5 +1,9 @@
 /*
  * All Binary Operations Test 2
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dofor, endloopscope, exprs, fhead, fname,
+ *     ftail, id, m, n, op1, op2, opb, rel, set, startloopscope, string
  */
 
 main() {

@@ -1,5 +1,8 @@
 /*
  * Variable Assignment Test 5
+ *
+ * Required Functions:
+ *     bgnstmt, con, fhead, fname, ftail, id, op1, set
  */
 
 double i[8];

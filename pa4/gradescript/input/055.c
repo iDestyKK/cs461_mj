@@ -1,5 +1,10 @@
 /*
  * While-Loop Break/Continue Test
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, con, dobreak, docontinue, doif, dowhile,
+ *     endloopscope, fhead, fname, ftail, id, indx, m, n, op1, rel, set,
+ *     startloopscope
  */
 
 int a[24];

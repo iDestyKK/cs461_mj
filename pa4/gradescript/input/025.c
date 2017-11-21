@@ -1,5 +1,9 @@
 /*
  * If Statements Test 6
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, doifelse, exprs, fhead, fname, ftail, id,
+ *     m, n, op1, rel, set, string
  */
 
 main() {

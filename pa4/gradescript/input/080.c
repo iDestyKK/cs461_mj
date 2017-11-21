@@ -1,5 +1,8 @@
 /*
  * Goto Test 1
+ *
+ * Required Functions:
+ *     bgnstmt, con, dogoto, fhead, fname, ftail, id, labeldcl, set
  */
 
 main() {

@@ -1,5 +1,9 @@
 /*
  * While Loop Test 2
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, ccexpr, con, dowhile, endloopscope, fhead,
+ *     fname, ftail, id, m, n, rel, set, startloopscope, string
  */
 
 main() {

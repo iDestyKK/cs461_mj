@@ -1,6 +1,10 @@
 /*
  * The Fisher-Yales Shuffle Algorithm (Slightly Brutal)
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, con, dodo, dofor, endloopscope, fhead, fname,
+ *     ftail, id, indx, m, n, op1, op2, rel, set, startloopscope
+ *
  * Hint:
  *     Just implement the functions required and you should be fine. This uses
  *     a do-while loop and a for loop. Make sure your functions work as well.

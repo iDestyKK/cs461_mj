@@ -1,6 +1,11 @@
 /*
  * COSC 462 HW 1-5: Jacobi in CSEM Subset of C (Brutal)
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, ccand, con, docontinue, dofor, doif, doret,
+ *     endloopscope, exprs, fhead, fname, ftail, id, indx, m, n, op1, op2, rel,
+ *     set, startloopscope
+ *
  * Description:
  *     Initialises a 10x10 Matrix in the form of a 1D array and then computes
  *     the Jacobi of it. While this should be done in parallel, csem is serial.

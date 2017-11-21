@@ -1,6 +1,11 @@
 /*
  * COSC 130/140: Quick Sort in CSEM Subset of C (Brutal)
  *
+ * Required Functions:
+ *     backpatch, bgnstmt, call, ccexpr, con, dobreak, dodo, doif, doret,
+ *     endloopscope, exprs, fhead, fname, ftail, id, indx, m, n, op1, op2, rel,
+ *     set, startloopscope
+ *
  * Description:
  *     Just like how Merge Sort was used in 097.c, Quick Sort is a fast sorting
  *     algorithm used to sort values in arrays in a fast and efficient matter.

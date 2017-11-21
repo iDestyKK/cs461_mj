@@ -1,5 +1,9 @@
 /*
  * For-Loop Break/Continue Test (Multiple)
+ *
+ * Required Functions:
+ *     backpatch, bgnstmt, con, dobreak, docontinue, dofor, doif, endloopscope,
+ *     fhead, fname, ftail, id, indx, m, n, op1, rel, set, startloopscope
  */
 
 int a[24];
