@@ -1,13 +1,13 @@
 alloc a 96
 func main
 localloc 4
-bgnstmt 9
+bgnstmt 13
 t1 := local 0
 t2 := 0
 t3 := t1 =i t2
-bgnstmt 10
+bgnstmt 14
 label L1
-bgnstmt 11
+bgnstmt 15
 t4 := local 0
 t5 := @i t4
 t6 := 24
@@ -15,19 +15,19 @@ t7 := t5 >=i t6
 bt t7 B1
 br B2
 label L2
-bgnstmt 12
+bgnstmt 16
 br B3
 label L3
 B1=L2
 B2=L3
-bgnstmt 13
+bgnstmt 17
 t8 := local 0
 t9 := @i t8
 t10 := global a
 t11 := t10 []i t9
 t12 := 0
 t13 := t11 =i t12
-bgnstmt 14
+bgnstmt 18
 t14 := local 0
 t15 := 1
 t16 := @i t14

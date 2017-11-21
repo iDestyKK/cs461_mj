@@ -5,29 +5,29 @@ localloc 4
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 16
+bgnstmt 21
 t1 := local 0
 t2 := 0
 t3 := t1 =i t2
-bgnstmt 17
+bgnstmt 22
 t4 := local 1
 t5 := 0
 t6 := t4 =i t5
-bgnstmt 18
+bgnstmt 23
 t7 := local 2
 t8 := 0
 t9 := t7 =i t8
-bgnstmt 19
+bgnstmt 24
 t10 := local 3
 t11 := 1
 t12 := t10 =i t11
-bgnstmt 20
+bgnstmt 25
 t13 := local 4
 t14 := 0
 t15 := t13 =i t14
-bgnstmt 21
+bgnstmt 26
 label L1
-bgnstmt 22
+bgnstmt 27
 t16 := local 0
 t17 := @i t16
 t18 := global a
@@ -35,13 +35,13 @@ t19 := t18 []i t17
 t20 := local 3
 t21 := @i t20
 t22 := t19 =i t21
-bgnstmt 23
+bgnstmt 28
 t23 := local 0
 t24 := 1
 t25 := @i t23
 t26 := t25 +i t24
 t27 := t23 =i t26
-bgnstmt 24
+bgnstmt 29
 t28 := local 1
 t29 := 0
 t30 := t28 =i t29
@@ -66,13 +66,13 @@ t44 := t43 +i t42
 t45 := t41 =i t44
 br B3
 label L4
-bgnstmt 25
+bgnstmt 30
 t46 := local 2
 t47 := 1
 t48 := @i t46
 t49 := t48 +i t47
 t50 := t46 =i t49
-bgnstmt 26
+bgnstmt 31
 label L5
 t51 := local 2
 t52 := @i t51
@@ -81,13 +81,13 @@ t54 := t52 >i t53
 bt t54 B4
 br B5
 label L6
-bgnstmt 27
+bgnstmt 32
 t55 := local 3
 t56 := 1
 t57 := @i t55
 t58 := t57 +i t56
 t59 := t55 =i t58
-bgnstmt 28
+bgnstmt 33
 t60 := local 2
 t61 := 4
 t62 := @i t60
@@ -98,7 +98,7 @@ label L7
 B4=L6
 B5=L7
 B6=L5
-bgnstmt 30
+bgnstmt 35
 t65 := "%8d - %d * %d = %d\n"
 t66 := local 4
 t67 := @i t66
@@ -118,7 +118,7 @@ argi t71
 argi t76
 t77 := global printf
 t78 := fi t77 5
-bgnstmt 31
+bgnstmt 36
 t79 := local 4
 t80 := 1
 t81 := @i t79

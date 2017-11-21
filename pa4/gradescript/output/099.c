@@ -11,11 +11,11 @@ localloc 4
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 29
+bgnstmt 34
 t1 := local 2
 t2 := 0
 t3 := t1 =i t2
-bgnstmt 32
+bgnstmt 37
 t4 := local 1
 t5 := param 1
 t6 := @i t5
@@ -39,7 +39,7 @@ t19 := t18 +i t17
 t20 := t16 =i t19
 br B3
 label L3
-bgnstmt 33
+bgnstmt 38
 t21 := local 0
 t22 := param 0
 t23 := @i t22
@@ -63,14 +63,14 @@ t36 := t35 +i t34
 t37 := t33 =i t36
 br B6
 label L6
-bgnstmt 34
+bgnstmt 39
 t38 := local 3
 t39 := global rand
 t40 := fi t39 0
 t41 := 100
 t42 := t40 %i t41
 t43 := t38 =i t42
-bgnstmt 35
+bgnstmt 40
 t44 := local 2
 t45 := @i t44
 t46 := global o
@@ -79,7 +79,7 @@ t48 := local 3
 t49 := @i t48
 t50 := cvf t49
 t51 := t47 =f t50
-bgnstmt 36
+bgnstmt 41
 t52 := local 2
 t53 := @i t52
 t54 := global n
@@ -88,7 +88,7 @@ t56 := local 3
 t57 := @i t56
 t58 := cvf t57
 t59 := t55 =f t58
-bgnstmt 37
+bgnstmt 42
 t60 := local 2
 t61 := 1
 t62 := @i t60
@@ -106,7 +106,7 @@ B1=L3
 B2=L8
 B3=L1
 B8=L2
-bgnstmt 47
+bgnstmt 52
 t65 := local 0
 t66 := 0
 t67 := t65 =i t66
@@ -126,7 +126,7 @@ t76 := t75 +i t74
 t77 := t73 =i t76
 br B11
 label L11
-bgnstmt 49
+bgnstmt 54
 t78 := local 0
 t79 := @i t78
 t80 := global o
@@ -150,13 +150,13 @@ bt t93 B14
 br B15
 B12=L12
 label L13
-bgnstmt 50
+bgnstmt 55
 br B16
 label L14
 B14=L13
 B13=L14
 B15=L14
-bgnstmt 51
+bgnstmt 56
 t94 := local 0
 t95 := @i t94
 t96 := global o
@@ -164,7 +164,7 @@ t97 := t96 []f t95
 t98 := 0
 t99 := cvf t98
 t100 := t97 =f t99
-bgnstmt 52
+bgnstmt 57
 t101 := local 0
 t102 := @i t101
 t103 := global n
@@ -179,7 +179,7 @@ B10=L15
 B16=L10
 B11=L9
 B17=L10
-bgnstmt 56
+bgnstmt 61
 t108 := local 3
 t109 := global j_w
 t110 := @i t109
@@ -190,7 +190,7 @@ t114 := global j_w
 t115 := @i t114
 t116 := t113 -i t115
 t117 := t108 =i t116
-bgnstmt 57
+bgnstmt 62
 t118 := local 0
 t119 := local 3
 t120 := @i t119
@@ -214,7 +214,7 @@ t133 := t132 +i t131
 t134 := t130 =i t133
 br B20
 label L18
-bgnstmt 59
+bgnstmt 64
 t135 := local 2
 t136 := @i t135
 t137 := global o
@@ -238,13 +238,13 @@ bt t150 B23
 br B24
 B21=L19
 label L20
-bgnstmt 60
+bgnstmt 65
 br B25
 label L21
 B23=L20
 B22=L21
 B24=L21
-bgnstmt 61
+bgnstmt 66
 t151 := local 0
 t152 := @i t151
 t153 := global o
@@ -252,7 +252,7 @@ t154 := t153 []f t152
 t155 := 0
 t156 := cvf t155
 t157 := t154 =f t156
-bgnstmt 62
+bgnstmt 67
 t158 := local 0
 t159 := @i t158
 t160 := global n
@@ -267,7 +267,7 @@ B19=L22
 B25=L17
 B20=L16
 B26=L17
-bgnstmt 66
+bgnstmt 71
 t165 := local 3
 t166 := global j_w
 t167 := @i t166
@@ -275,7 +275,7 @@ t168 := global j_h
 t169 := @i t168
 t170 := t167 *i t169
 t171 := t165 =i t170
-bgnstmt 67
+bgnstmt 72
 t172 := local 0
 t173 := 0
 t174 := t172 =i t173
@@ -296,7 +296,7 @@ t184 := t183 +i t182
 t185 := t180 =i t184
 br B29
 label L25
-bgnstmt 69
+bgnstmt 74
 t186 := local 2
 t187 := @i t186
 t188 := global o
@@ -320,13 +320,13 @@ bt t201 B32
 br B33
 B30=L26
 label L27
-bgnstmt 70
+bgnstmt 75
 br B34
 label L28
 B32=L27
 B31=L28
 B33=L28
-bgnstmt 71
+bgnstmt 76
 t202 := local 0
 t203 := @i t202
 t204 := global o
@@ -334,7 +334,7 @@ t205 := t204 []f t203
 t206 := 0
 t207 := cvf t206
 t208 := t205 =f t207
-bgnstmt 72
+bgnstmt 77
 t209 := local 0
 t210 := @i t209
 t211 := global n
@@ -349,7 +349,7 @@ B28=L29
 B34=L24
 B29=L23
 B35=L24
-bgnstmt 76
+bgnstmt 81
 t216 := local 3
 t217 := global j_w
 t218 := @i t217
@@ -357,7 +357,7 @@ t219 := global j_h
 t220 := @i t219
 t221 := t218 *i t220
 t222 := t216 =i t221
-bgnstmt 77
+bgnstmt 82
 t223 := local 0
 t224 := global j_w
 t225 := @i t224
@@ -381,7 +381,7 @@ t238 := t237 +i t236
 t239 := t234 =i t238
 br B38
 label L32
-bgnstmt 79
+bgnstmt 84
 t240 := local 2
 t241 := @i t240
 t242 := global o
@@ -405,13 +405,13 @@ bt t255 B41
 br B42
 B39=L33
 label L34
-bgnstmt 80
+bgnstmt 85
 br B43
 label L35
 B41=L34
 B40=L35
 B42=L35
-bgnstmt 81
+bgnstmt 86
 t256 := local 0
 t257 := @i t256
 t258 := global o
@@ -419,7 +419,7 @@ t259 := t258 []f t257
 t260 := 0
 t261 := cvf t260
 t262 := t259 =f t261
-bgnstmt 82
+bgnstmt 87
 t263 := local 0
 t264 := @i t263
 t265 := global n
@@ -447,28 +447,28 @@ localloc 4
 localloc 8
 localloc 8
 localloc 8
-bgnstmt 90
+bgnstmt 95
 t270 := local 2
 t271 := 0
 t272 := t270 =i t271
-bgnstmt 91
+bgnstmt 96
 t273 := local 6
 t274 := 0
 t275 := cvf t274
 t276 := t273 =f t275
-bgnstmt 94
+bgnstmt 99
 t277 := local 4
 t278 := 1
 t279 := cvf t278
 t280 := t277 =f t279
-bgnstmt 95
+bgnstmt 100
 t281 := local 4
 t282 := 4
 t283 := cvf t282
 t284 := @f t281
 t285 := t284 /f t283
 t286 := t281 =f t285
-bgnstmt 98
+bgnstmt 103
 t287 := local 1
 t288 := param 1
 t289 := @i t288
@@ -492,7 +492,7 @@ t302 := t301 +i t300
 t303 := t299 =i t302
 br B47
 label L39
-bgnstmt 99
+bgnstmt 104
 t304 := local 0
 t305 := param 0
 t306 := @i t305
@@ -516,7 +516,7 @@ t319 := t318 +i t317
 t320 := t316 =i t319
 br B50
 label L42
-bgnstmt 101
+bgnstmt 106
 t321 := local 2
 t322 := param 1
 t323 := @i t322
@@ -527,7 +527,7 @@ t327 := param 0
 t328 := @i t327
 t329 := t326 +i t328
 t330 := t321 =i t329
-bgnstmt 104
+bgnstmt 109
 t331 := local 2
 t332 := @i t331
 t333 := global n
@@ -569,7 +569,7 @@ t368 := @f t367
 t369 := t361 +f t368
 t370 := t336 *f t369
 t371 := t334 =f t370
-bgnstmt 109
+bgnstmt 114
 t372 := local 5
 t373 := local 2
 t374 := @i t373
@@ -583,7 +583,7 @@ t381 := t380 []f t379
 t382 := @f t381
 t383 := t377 -f t382
 t384 := t372 =f t383
-bgnstmt 110
+bgnstmt 115
 t385 := local 6
 t386 := local 5
 t387 := @f t386
@@ -605,23 +605,23 @@ B45=L39
 B46=L44
 B47=L37
 B52=L38
-bgnstmt 114
+bgnstmt 119
 t394 := local 6
 t395 := @f t394
 retf t395
 fend
 func main
 localloc 8
-bgnstmt 121
+bgnstmt 126
 t396 := global j_w
 t397 := 10
 t398 := t396 =i t397
-bgnstmt 122
+bgnstmt 127
 t399 := global j_h
 t400 := global j_w
 t401 := @i t400
 t402 := t399 =i t401
-bgnstmt 125
+bgnstmt 130
 t403 := 0
 t404 := 0
 t405 := global j_w
@@ -638,7 +638,7 @@ argi t408
 argi t412
 t413 := global jacobi_generate
 t414 := fi t413 4
-bgnstmt 126
+bgnstmt 131
 t415 := local 0
 t416 := 1
 t417 := 1

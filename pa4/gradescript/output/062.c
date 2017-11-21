@@ -1,7 +1,7 @@
 alloc a 96
 func main
 localloc 4
-bgnstmt 9
+bgnstmt 13
 t1 := local 0
 t2 := 0
 t3 := t1 =i t2
@@ -20,7 +20,7 @@ t11 := t10 +i t9
 t12 := t8 =i t11
 br B3
 label L3
-bgnstmt 10
+bgnstmt 14
 t13 := local 0
 t14 := @i t13
 t15 := 24
@@ -28,19 +28,19 @@ t16 := t14 >=i t15
 bt t16 B4
 br B5
 label L4
-bgnstmt 11
+bgnstmt 15
 br B6
 label L5
 B4=L4
 B5=L5
-bgnstmt 12
+bgnstmt 16
 t17 := local 0
 t18 := @i t17
 t19 := global a
 t20 := t19 []i t18
 t21 := 0
 t22 := t20 =i t21
-bgnstmt 13
+bgnstmt 17
 br B7
 br B8
 label L6
@@ -50,7 +50,7 @@ B6=L2
 B3=L1
 B8=L2
 B7=L6
-bgnstmt 16
+bgnstmt 20
 t23 := local 0
 t24 := 0
 t25 := t23 =i t24
@@ -69,7 +69,7 @@ t33 := t32 +i t31
 t34 := t30 =i t33
 br B11
 label L9
-bgnstmt 17
+bgnstmt 21
 t35 := local 0
 t36 := @i t35
 t37 := 24
@@ -77,19 +77,19 @@ t38 := t36 >=i t37
 bt t38 B12
 br B13
 label L10
-bgnstmt 18
+bgnstmt 22
 br B14
 label L11
 B12=L10
 B13=L11
-bgnstmt 19
+bgnstmt 23
 t39 := local 0
 t40 := @i t39
 t41 := global a
 t42 := t41 []i t40
 t43 := 0
 t44 := t42 =i t43
-bgnstmt 20
+bgnstmt 24
 br B15
 br B16
 label L12
@@ -99,7 +99,7 @@ B14=L8
 B11=L7
 B16=L8
 B15=L12
-bgnstmt 23
+bgnstmt 27
 t45 := local 0
 t46 := 0
 t47 := t45 =i t46
@@ -118,7 +118,7 @@ t55 := t54 +i t53
 t56 := t52 =i t55
 br B19
 label L15
-bgnstmt 24
+bgnstmt 28
 t57 := local 0
 t58 := @i t57
 t59 := 24
@@ -126,19 +126,19 @@ t60 := t58 >=i t59
 bt t60 B20
 br B21
 label L16
-bgnstmt 25
+bgnstmt 29
 br B22
 label L17
 B20=L16
 B21=L17
-bgnstmt 26
+bgnstmt 30
 t61 := local 0
 t62 := @i t61
 t63 := global a
 t64 := t63 []i t62
 t65 := 0
 t66 := t64 =i t65
-bgnstmt 27
+bgnstmt 31
 br B23
 br B24
 label L18

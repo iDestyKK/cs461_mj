@@ -2,19 +2,19 @@ func main
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 7
+bgnstmt 10
 t1 := local 0
 t2 := 1
 t3 := t1 =i t2
-bgnstmt 8
+bgnstmt 11
 t4 := local 1
 t5 := 2
 t6 := t4 =i t5
-bgnstmt 9
+bgnstmt 12
 t7 := local 2
 t8 := 3
 t9 := t7 =i t8
-bgnstmt 11
+bgnstmt 14
 t10 := local 0
 t11 := local 1
 t12 := @i t11
@@ -33,7 +33,7 @@ t24 := t17 &i t23
 t25 := @i t10
 t26 := t25 +i t24
 t27 := t10 =i t26
-bgnstmt 12
+bgnstmt 15
 t28 := local 1
 t29 := local 0
 t30 := @i t29
@@ -50,7 +50,7 @@ t40 := t34 *i t39
 t41 := @i t28
 t42 := t41 +i t40
 t43 := t28 =i t42
-bgnstmt 13
+bgnstmt 16
 t44 := local 2
 t45 := local 2
 t46 := @i t45

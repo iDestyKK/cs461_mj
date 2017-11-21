@@ -1,12 +1,12 @@
 alloc i 16
 func main
-bgnstmt 15
+bgnstmt 19
 t1 := 0
 t2 := global i
 t3 := t2 []i t1
 t4 := 2
 t5 := t3 =i t4
-bgnstmt 16
+bgnstmt 20
 t6 := 3
 t7 := global i
 t8 := t7 []i t6
@@ -17,7 +17,7 @@ t12 := @i t11
 t13 := 2
 t14 := t12 *i t13
 t15 := t8 =i t14
-bgnstmt 17
+bgnstmt 21
 t16 := 2
 t17 := global i
 t18 := t17 []i t16
@@ -31,7 +31,7 @@ t25 := t24 []i t23
 t26 := @i t25
 t27 := t22 *i t26
 t28 := t18 =i t27
-bgnstmt 18
+bgnstmt 22
 t29 := 1
 t30 := global i
 t31 := t30 []i t29
@@ -42,7 +42,7 @@ t35 := @i t34
 t36 := 1
 t37 := t35 +i t36
 t38 := t31 =i t37
-bgnstmt 21
+bgnstmt 25
 t39 := 0
 t40 := global i
 t41 := t40 []i t39
@@ -52,7 +52,7 @@ t44 := t42 !=i t43
 bt t44 B1
 br B2
 label L1
-bgnstmt 22
+bgnstmt 26
 t45 := 1
 t46 := global i
 t47 := t46 []i t45
@@ -65,15 +65,15 @@ t53 := t48 ==i t52
 bt t53 B3
 br B4
 label L2
-bgnstmt 23
+bgnstmt 27
 t54 := "yes\n"
 argi t54
 t55 := global printf
 t56 := fi t55 1
 br B5
 label L3
-bgnstmt 25
-bgnstmt 26
+bgnstmt 29
+bgnstmt 30
 t57 := 2
 t58 := global i
 t59 := t58 []i t57
@@ -112,15 +112,15 @@ br B11
 B8=L5
 B7=L4
 label L6
-bgnstmt 27
+bgnstmt 31
 t84 := "lolwhat\n"
 argi t84
 t85 := global printf
 t86 := fi t85 1
 br B12
 label L7
-bgnstmt 29
-bgnstmt 30
+bgnstmt 33
+bgnstmt 34
 t87 := "no\n"
 argi t87
 t88 := global printf
@@ -137,7 +137,7 @@ B4=L3
 B5=L9
 br B13
 label L10
-bgnstmt 35
+bgnstmt 39
 t90 := 1
 t91 := global i
 t92 := t91 []i t90
@@ -147,7 +147,7 @@ t95 := t93 !=i t94
 bt t95 B14
 br B15
 label L11
-bgnstmt 36
+bgnstmt 40
 t96 := "i[1] (%d) is not 0!\n"
 t97 := 1
 t98 := global i
@@ -159,8 +159,8 @@ t101 := global printf
 t102 := fi t101 2
 br B16
 label L12
-bgnstmt 38
-bgnstmt 39
+bgnstmt 42
+bgnstmt 43
 t103 := "These pathetic numbers never had a chance...\n"
 argi t103
 t104 := global printf

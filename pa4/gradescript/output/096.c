@@ -8,7 +8,7 @@ alloc INFINITY 4
 func c2d_to_1d
 formal 4
 formal 4
-bgnstmt 24
+bgnstmt 29
 t1 := param 1
 t2 := @i t1
 t3 := global matrix_w
@@ -23,7 +23,7 @@ func matrix_init
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 30
+bgnstmt 35
 t9 := local 1
 t10 := 0
 t11 := t9 =i t10
@@ -43,7 +43,7 @@ t20 := t19 +i t18
 t21 := t17 =i t20
 br B3
 label L3
-bgnstmt 31
+bgnstmt 36
 t22 := local 0
 t23 := 0
 t24 := t22 =i t23
@@ -63,7 +63,7 @@ t33 := t32 +i t31
 t34 := t30 =i t33
 br B6
 label L6
-bgnstmt 32
+bgnstmt 37
 t35 := local 2
 t36 := local 0
 t37 := @i t36
@@ -74,7 +74,7 @@ argi t39
 t40 := global c2d_to_1d
 t41 := fi t40 2
 t42 := t35 =i t41
-bgnstmt 33
+bgnstmt 38
 t43 := local 0
 t44 := @i t43
 t45 := local 1
@@ -83,7 +83,7 @@ t47 := t44 ==i t46
 bt t47 B7
 br B8
 label L7
-bgnstmt 34
+bgnstmt 39
 t48 := local 2
 t49 := @i t48
 t50 := global matrix
@@ -92,7 +92,7 @@ t52 := 0
 t53 := t51 =i t52
 br B9
 label L8
-bgnstmt 36
+bgnstmt 41
 t54 := local 2
 t55 := @i t54
 t56 := global matrix
@@ -124,20 +124,20 @@ localloc 4
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 46
+bgnstmt 51
 t61 := global getpid
 t62 := fi t61 0
 argi t62
 t63 := global srand
 t64 := fi t63 1
-bgnstmt 47
+bgnstmt 52
 t65 := local 3
 t66 := global rand
 t67 := fi t66 0
 t68 := 5
 t69 := t67 %i t68
 t70 := t65 =i t69
-bgnstmt 50
+bgnstmt 55
 t71 := local 1
 t72 := 0
 t73 := t71 =i t72
@@ -157,7 +157,7 @@ t82 := t81 +i t80
 t83 := t79 =i t82
 br B14
 label L14
-bgnstmt 51
+bgnstmt 56
 t84 := local 0
 t85 := local 1
 t86 := @i t85
@@ -178,7 +178,7 @@ t96 := t95 +i t94
 t97 := t93 =i t96
 br B17
 label L17
-bgnstmt 52
+bgnstmt 57
 t98 := local 4
 t99 := local 0
 t100 := @i t99
@@ -189,7 +189,7 @@ argi t102
 t103 := global c2d_to_1d
 t104 := fi t103 2
 t105 := t98 =i t104
-bgnstmt 53
+bgnstmt 58
 t106 := local 5
 t107 := local 1
 t108 := @i t107
@@ -200,7 +200,7 @@ argi t110
 t111 := global c2d_to_1d
 t112 := fi t111 2
 t113 := t106 =i t112
-bgnstmt 54
+bgnstmt 59
 t114 := global rand
 t115 := fi t114 0
 t116 := 10
@@ -213,14 +213,14 @@ t122 := t117 >i t121
 bt t122 B18
 br B19
 label L18
-bgnstmt 55
+bgnstmt 60
 t123 := local 2
 t124 := global rand
 t125 := fi t124 0
 t126 := 100
 t127 := t125 %i t126
 t128 := t123 =i t127
-bgnstmt 56
+bgnstmt 61
 t129 := local 4
 t130 := @i t129
 t131 := global matrix
@@ -228,7 +228,7 @@ t132 := t131 []i t130
 t133 := local 2
 t134 := @i t133
 t135 := t132 =i t134
-bgnstmt 57
+bgnstmt 62
 t136 := local 5
 t137 := @i t136
 t138 := global matrix
@@ -239,7 +239,7 @@ t142 := t139 =i t141
 label L19
 B18=L18
 B19=L19
-bgnstmt 60
+bgnstmt 65
 t143 := local 0
 t144 := @i t143
 t145 := local 1
@@ -248,14 +248,14 @@ t147 := t144 ==i t146
 bt t147 B20
 br B21
 label L20
-bgnstmt 61
+bgnstmt 66
 t148 := local 4
 t149 := @i t148
 t150 := global matrix
 t151 := t150 []i t149
 t152 := 0
 t153 := t151 =i t152
-bgnstmt 62
+bgnstmt 67
 t154 := local 5
 t155 := @i t154
 t156 := global matrix
@@ -285,7 +285,7 @@ localloc 4
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 73
+bgnstmt 78
 t160 := local 2
 t161 := 0
 t162 := t160 =i t161
@@ -305,7 +305,7 @@ t171 := t170 +i t169
 t172 := t168 =i t171
 br B26
 label L26
-bgnstmt 74
+bgnstmt 79
 t173 := local 0
 t174 := 0
 t175 := t173 =i t174
@@ -325,7 +325,7 @@ t184 := t183 +i t182
 t185 := t181 =i t184
 br B29
 label L29
-bgnstmt 75
+bgnstmt 80
 t186 := local 1
 t187 := 0
 t188 := t186 =i t187
@@ -345,7 +345,7 @@ t197 := t196 +i t195
 t198 := t194 =i t197
 br B32
 label L32
-bgnstmt 76
+bgnstmt 81
 t199 := local 3
 t200 := local 0
 t201 := @i t200
@@ -356,7 +356,7 @@ argi t203
 t204 := global c2d_to_1d
 t205 := fi t204 2
 t206 := t199 =i t205
-bgnstmt 77
+bgnstmt 82
 t207 := local 4
 t208 := local 0
 t209 := @i t208
@@ -367,7 +367,7 @@ argi t211
 t212 := global c2d_to_1d
 t213 := fi t212 2
 t214 := t207 =i t213
-bgnstmt 78
+bgnstmt 83
 t215 := local 5
 t216 := local 2
 t217 := @i t216
@@ -378,7 +378,7 @@ argi t219
 t220 := global c2d_to_1d
 t221 := fi t220 2
 t222 := t215 =i t221
-bgnstmt 79
+bgnstmt 84
 t223 := local 3
 t224 := @i t223
 t225 := global matrix
@@ -399,7 +399,7 @@ t239 := t227 >i t238
 bt t239 B33
 br B34
 label L33
-bgnstmt 80
+bgnstmt 85
 t240 := local 3
 t241 := @i t240
 t242 := global matrix
@@ -441,34 +441,34 @@ fend
 func main
 localloc 4
 localloc 4
-bgnstmt 90
+bgnstmt 95
 t256 := global INFINITY
 t257 := 99999
 t258 := t256 =i t257
-bgnstmt 91
+bgnstmt 96
 t259 := global list_size
 t260 := 12
 t261 := t259 =i t260
-bgnstmt 94
+bgnstmt 99
 t262 := global matrix_w
 t263 := global list_size
 t264 := @i t263
 t265 := t262 =i t264
-bgnstmt 95
+bgnstmt 100
 t266 := global matrix_h
 t267 := global list_size
 t268 := @i t267
 t269 := t266 =i t268
-bgnstmt 96
+bgnstmt 101
 t270 := global matrix_init
 t271 := fi t270 0
-bgnstmt 99
+bgnstmt 104
 t272 := global matrix_generate
 t273 := fi t272 0
-bgnstmt 100
+bgnstmt 105
 t274 := global floyd_marshall
 t275 := fi t274 0
-bgnstmt 103
+bgnstmt 108
 t276 := local 1
 t277 := 0
 t278 := t276 =i t277
@@ -488,7 +488,7 @@ t287 := t286 +i t285
 t288 := t284 =i t287
 br B40
 label L40
-bgnstmt 104
+bgnstmt 109
 t289 := local 0
 t290 := 0
 t291 := t289 =i t290
@@ -508,7 +508,7 @@ t300 := t299 +i t298
 t301 := t297 =i t300
 br B43
 label L43
-bgnstmt 105
+bgnstmt 110
 t302 := local 0
 t303 := @i t302
 t304 := local 1
@@ -526,14 +526,14 @@ t313 := t310 ==i t312
 bt t313 B44
 br B45
 label L44
-bgnstmt 106
+bgnstmt 111
 t314 := "  INF "
 argi t314
 t315 := global printf
 t316 := fi t315 1
 br B46
 label L45
-bgnstmt 108
+bgnstmt 113
 t317 := "%5d "
 t318 := local 0
 t319 := @i t318
@@ -560,7 +560,7 @@ B41=L43
 B42=L47
 B43=L41
 B47=L42
-bgnstmt 110
+bgnstmt 115
 t329 := "\n"
 argi t329
 t330 := global printf

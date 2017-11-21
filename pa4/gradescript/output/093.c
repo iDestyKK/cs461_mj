@@ -4,19 +4,19 @@ localloc 4
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 13
+bgnstmt 17
 t1 := local 0
 t2 := 123
 t3 := t1 =i t2
-bgnstmt 14
+bgnstmt 18
 t4 := local 1
 t5 := 42
 t6 := t4 =i t5
-bgnstmt 15
+bgnstmt 19
 t7 := local 2
 t8 := 666
 t9 := t7 =i t8
-bgnstmt 17
+bgnstmt 21
 t10 := local 4
 t11 := 0
 t12 := t10 =i t11
@@ -35,7 +35,7 @@ t20 := t19 +i t18
 t21 := t17 =i t20
 br B3
 label L3
-bgnstmt 18
+bgnstmt 22
 t22 := local 3
 t23 := 0
 t24 := t22 =i t23
@@ -54,7 +54,7 @@ t32 := t31 +i t30
 t33 := t29 =i t32
 br B6
 label L6
-bgnstmt 19
+bgnstmt 23
 t34 := "%d\n"
 t35 := local 0
 t36 := @i t35
@@ -76,7 +76,7 @@ argi t34
 argi t50
 t51 := global printf
 t52 := fi t51 2
-bgnstmt 20
+bgnstmt 24
 t53 := "%d\n"
 t54 := local 0
 t55 := @i t54
@@ -101,7 +101,7 @@ argi t53
 argi t72
 t73 := global printf
 t74 := fi t73 2
-bgnstmt 21
+bgnstmt 25
 t75 := "%d\n"
 t76 := local 0
 t77 := @i t76
@@ -122,7 +122,7 @@ argi t75
 argi t90
 t91 := global printf
 t92 := fi t91 2
-bgnstmt 22
+bgnstmt 26
 t93 := "%d\n"
 t94 := local 0
 t95 := @i t94
@@ -145,7 +145,7 @@ argi t93
 argi t110
 t111 := global printf
 t112 := fi t111 2
-bgnstmt 23
+bgnstmt 27
 t113 := "%d\n"
 t114 := local 0
 t115 := @i t114

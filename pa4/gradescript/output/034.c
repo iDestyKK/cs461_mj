@@ -3,13 +3,13 @@ alloc j 32
 func main
 localloc 4
 localloc 4
-bgnstmt 19
+bgnstmt 23
 t1 := 0
 t2 := global i
 t3 := t2 []i t1
 t4 := 2
 t5 := t3 =i t4
-bgnstmt 20
+bgnstmt 24
 t6 := 3
 t7 := global i
 t8 := t7 []i t6
@@ -20,7 +20,7 @@ t12 := @i t11
 t13 := 2
 t14 := t12 *i t13
 t15 := t8 =i t14
-bgnstmt 21
+bgnstmt 25
 t16 := 2
 t17 := global i
 t18 := t17 []i t16
@@ -34,7 +34,7 @@ t25 := t24 []i t23
 t26 := @i t25
 t27 := t22 *i t26
 t28 := t18 =i t27
-bgnstmt 22
+bgnstmt 26
 t29 := 1
 t30 := global i
 t31 := t30 []i t29
@@ -45,7 +45,7 @@ t35 := @i t34
 t36 := 1
 t37 := t35 +i t36
 t38 := t31 =i t37
-bgnstmt 24
+bgnstmt 28
 t39 := local 0
 t40 := 0
 t41 := global i
@@ -67,7 +67,7 @@ t56 := t55 []i t54
 t57 := @i t56
 t58 := t53 +i t57
 t59 := t39 =i t58
-bgnstmt 25
+bgnstmt 29
 t60 := local 1
 t61 := 0
 t62 := global i
@@ -89,7 +89,7 @@ t77 := t76 []i t75
 t78 := @i t77
 t79 := t74 *i t78
 t80 := t60 =i t79
-bgnstmt 28
+bgnstmt 32
 t81 := local 0
 t82 := @i t81
 t83 := local 1
@@ -98,7 +98,7 @@ t85 := t82 ==i t84
 bt t85 B1
 br B2
 label L1
-bgnstmt 29
+bgnstmt 33
 t86 := "a == b (%d)! Therefore, all of \"i\" must be 1!\n"
 t87 := local 0
 t88 := @i t87
@@ -108,7 +108,7 @@ t89 := global printf
 t90 := fi t89 2
 br B3
 label L2
-bgnstmt 32
+bgnstmt 36
 t91 := local 0
 t92 := @i t91
 t93 := local 1
@@ -138,7 +138,7 @@ br B9
 B5=L4
 B6=L4
 label L5
-bgnstmt 33
+bgnstmt 37
 t108 := "a is less than b (%d < %d), but something weird is going on...\n"
 t109 := local 0
 t110 := @i t109
@@ -151,8 +151,8 @@ t113 := global printf
 t114 := fi t113 3
 br B10
 label L6
-bgnstmt 35
-bgnstmt 36
+bgnstmt 39
+bgnstmt 40
 t115 := 0
 t116 := global i
 t117 := t116 []i t115
@@ -162,15 +162,15 @@ t120 := t118 ==i t119
 bt t120 B11
 br B12
 label L7
-bgnstmt 37
+bgnstmt 41
 t121 := "no\n"
 argi t121
 t122 := global printf
 t123 := fi t122 1
 br B13
 label L8
-bgnstmt 39
-bgnstmt 40
+bgnstmt 43
+bgnstmt 44
 t124 := "yes\n"
 argi t124
 t125 := global printf

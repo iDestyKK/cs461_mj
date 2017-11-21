@@ -1,7 +1,7 @@
 func main
 localloc 4
 localloc 4
-bgnstmt 7
+bgnstmt 11
 t1 := local 0
 t2 := 0
 t3 := t1 =i t2
@@ -20,7 +20,7 @@ t11 := t10 +i t9
 t12 := t8 =i t11
 br B3
 label L3
-bgnstmt 8
+bgnstmt 12
 t13 := "%d\n"
 t14 := local 0
 t15 := @i t14

@@ -1,7 +1,7 @@
 func looper
 formal 4
 localloc 4
-bgnstmt 12
+bgnstmt 16
 t1 := local 0
 t2 := 0
 t3 := t1 =i t2
@@ -21,7 +21,7 @@ t12 := t11 +i t10
 t13 := t9 =i t12
 br B3
 label L3
-bgnstmt 13
+bgnstmt 17
 t14 := "yeet\n"
 argi t14
 t15 := global printf
@@ -37,7 +37,7 @@ func main
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 19
+bgnstmt 23
 t17 := local 0
 t18 := 0
 t19 := t17 =i t18
@@ -56,7 +56,7 @@ t27 := t26 +i t25
 t28 := t24 =i t27
 br B7
 label L7
-bgnstmt 22
+bgnstmt 26
 t29 := local 1
 t30 := 0
 t31 := t29 =i t30
@@ -75,7 +75,7 @@ t39 := t38 +i t37
 t40 := t36 =i t39
 br B10
 label L10
-bgnstmt 23
+bgnstmt 27
 t41 := "%d, %d\n"
 t42 := local 0
 t43 := @i t42
@@ -92,7 +92,7 @@ B8=L10
 B9=L11
 B10=L8
 B11=L9
-bgnstmt 27
+bgnstmt 31
 t48 := local 1
 t49 := 0
 t50 := t48 =i t49
@@ -111,7 +111,7 @@ t58 := t57 +i t56
 t59 := t55 =i t58
 br B14
 label L14
-bgnstmt 28
+bgnstmt 32
 t60 := "%d + %d = %d\n"
 t61 := local 0
 t62 := @i t61
@@ -134,7 +134,7 @@ B12=L14
 B13=L15
 B14=L12
 B15=L13
-bgnstmt 32
+bgnstmt 36
 t72 := local 1
 t73 := 0
 t74 := t72 =i t73
@@ -153,7 +153,7 @@ t82 := t81 +i t80
 t83 := t79 =i t82
 br B18
 label L18
-bgnstmt 33
+bgnstmt 37
 t84 := "%d + %d = %d\n"
 t85 := local 0
 t86 := @i t85
@@ -176,7 +176,7 @@ B16=L18
 B17=L19
 B18=L16
 B19=L17
-bgnstmt 37
+bgnstmt 41
 t96 := local 1
 t97 := 0
 t98 := t96 =i t97
@@ -195,7 +195,7 @@ t106 := t105 +i t104
 t107 := t103 =i t106
 br B22
 label L22
-bgnstmt 39
+bgnstmt 43
 t108 := local 2
 t109 := 0
 t110 := t108 =i t109
@@ -215,7 +215,7 @@ t119 := t118 +i t117
 t120 := t116 =i t119
 br B25
 label L25
-bgnstmt 40
+bgnstmt 44
 t121 := "%d * %d + %d = %d\n"
 t122 := local 0
 t123 := @i t122
@@ -238,7 +238,7 @@ argi t127
 argi t135
 t136 := global printf
 t137 := fi t136 5
-bgnstmt 43
+bgnstmt 47
 t138 := 100
 argi t138
 t139 := global looper

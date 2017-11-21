@@ -20,6 +20,8 @@ red=$(tput setaf 1)
 green=$(tput setaf 2)
 normal=$(tput sgr 0)
 
+cd ../
+
 # Check if "ref_csem" exists
 if [[ ! -f "ref_csem" ]]; then
 	printf "[${red}FATAL${normal}] \"ref_cexpr\" doesn't exist in current directoy!\n"

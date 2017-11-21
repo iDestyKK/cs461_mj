@@ -1,7 +1,7 @@
 func add
 formal 4
 formal 4
-bgnstmt 13
+bgnstmt 17
 t1 := param 0
 t2 := @i t1
 t3 := param 1
@@ -12,7 +12,7 @@ fend
 func sub
 formal 4
 formal 4
-bgnstmt 17
+bgnstmt 21
 t6 := param 0
 t7 := @i t6
 t8 := param 1
@@ -23,7 +23,7 @@ fend
 func fmul
 formal 8
 formal 8
-bgnstmt 22
+bgnstmt 26
 t11 := param 0
 t12 := @f t11
 t13 := param 1
@@ -34,7 +34,7 @@ fend
 func imul
 formal 8
 formal 8
-bgnstmt 26
+bgnstmt 30
 t16 := param 0
 t17 := @f t16
 t18 := param 1
@@ -48,7 +48,7 @@ localloc 4
 localloc 4
 localloc 4
 localloc 8
-bgnstmt 32
+bgnstmt 36
 t22 := local 0
 t23 := 2
 t24 := 2
@@ -57,7 +57,7 @@ argi t24
 t25 := global add
 t26 := fi t25 2
 t27 := t22 =i t26
-bgnstmt 33
+bgnstmt 37
 t28 := local 1
 t29 := 1
 t30 := 2
@@ -66,7 +66,7 @@ argi t30
 t31 := global sub
 t32 := fi t31 2
 t33 := t28 =i t32
-bgnstmt 35
+bgnstmt 39
 t34 := local 3
 t35 := local 0
 t36 := @i t35
@@ -77,7 +77,7 @@ argi t38
 t39 := global fmul
 t40 := ff t39 2
 t41 := t34 =f t40
-bgnstmt 36
+bgnstmt 40
 t42 := local 2
 t43 := local 0
 t44 := @i t43
@@ -88,7 +88,7 @@ argi t46
 t47 := global imul
 t48 := fi t47 2
 t49 := t42 =i t48
-bgnstmt 39
+bgnstmt 43
 t50 := local 3
 t51 := local 0
 t52 := @i t51
@@ -100,7 +100,7 @@ t55 := global imul
 t56 := fi t55 2
 t57 := cvf t56
 t58 := t50 =f t57
-bgnstmt 42
+bgnstmt 46
 t59 := "2 + 2 = %d%d - %d = %d\nPRINT: %d"
 t60 := 5
 t61 := local 0

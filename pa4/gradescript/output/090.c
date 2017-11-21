@@ -2,19 +2,19 @@ func main
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 13
+bgnstmt 17
 t1 := local 0
 t2 := 123
 t3 := t1 =i t2
-bgnstmt 14
+bgnstmt 18
 t4 := local 1
 t5 := 42
 t6 := t4 =i t5
-bgnstmt 15
+bgnstmt 19
 t7 := local 2
 t8 := 666
 t9 := t7 =i t8
-bgnstmt 17
+bgnstmt 21
 t10 := "%d\n"
 t11 := local 0
 t12 := @i t11
@@ -28,7 +28,7 @@ argi t10
 argi t18
 t19 := global printf
 t20 := fi t19 2
-bgnstmt 18
+bgnstmt 22
 t21 := "%d\n"
 t22 := local 0
 t23 := @i t22
@@ -42,7 +42,7 @@ argi t21
 argi t29
 t30 := global printf
 t31 := fi t30 2
-bgnstmt 19
+bgnstmt 23
 t32 := "%d\n"
 t33 := local 0
 t34 := @i t33
@@ -56,7 +56,7 @@ argi t32
 argi t40
 t41 := global printf
 t42 := fi t41 2
-bgnstmt 20
+bgnstmt 24
 t43 := "%d\n"
 t44 := local 0
 t45 := @i t44
@@ -70,7 +70,7 @@ argi t43
 argi t51
 t52 := global printf
 t53 := fi t52 2
-bgnstmt 21
+bgnstmt 25
 t54 := "%d\n"
 t55 := local 0
 t56 := @i t55

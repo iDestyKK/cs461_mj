@@ -1,7 +1,7 @@
 func add
 formal 4
 formal 4
-bgnstmt 6
+bgnstmt 9
 t1 := param 0
 t2 := @i t1
 t3 := param 1
@@ -11,7 +11,7 @@ reti t5
 fend
 func main
 localloc 4
-bgnstmt 11
+bgnstmt 14
 t6 := local 0
 t7 := 1
 t8 := 2

@@ -1,7 +1,7 @@
 func add
 formal 4
 formal 4
-bgnstmt 6
+bgnstmt 10
 t1 := param 0
 t2 := @i t1
 t3 := param 1
@@ -11,22 +11,22 @@ reti t5
 fend
 func main
 localloc 16
-bgnstmt 11
+bgnstmt 15
 label L1
 t6 := 0
 t7 := local 0
 t8 := t7 []i t6
 t9 := 2
 t10 := t8 =i t9
-bgnstmt 13
+bgnstmt 17
 t11 := 1
 t12 := local 0
 t13 := t12 []i t11
 t14 := 3
 t15 := t13 =i t14
-bgnstmt 14
+bgnstmt 18
 br B1
-bgnstmt 16
+bgnstmt 20
 label L2
 B1=L2
 t16 := 2
@@ -45,7 +45,7 @@ argi t26
 t27 := global add
 t28 := fi t27 2
 t29 := t18 =i t28
-bgnstmt 18
+bgnstmt 22
 t30 := 3
 t31 := local 0
 t32 := t31 []i t30
@@ -59,9 +59,9 @@ t39 := t38 []i t37
 t40 := @i t39
 t41 := t36 *i t40
 t42 := t32 =i t41
-bgnstmt 19
+bgnstmt 23
 br B2
-bgnstmt 21
+bgnstmt 25
 label L3
 B2=L3
 t43 := "%d %d %d %d\n"

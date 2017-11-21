@@ -5,11 +5,11 @@ formal 4
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 14
+bgnstmt 19
 t1 := local 2
 t2 := 0
 t3 := t1 =i t2
-bgnstmt 15
+bgnstmt 20
 t4 := local 1
 t5 := 0
 t6 := t4 =i t5
@@ -28,7 +28,7 @@ t14 := t13 +i t12
 t15 := t11 =i t14
 br B3
 label L3
-bgnstmt 16
+bgnstmt 21
 t16 := local 0
 t17 := 0
 t18 := t16 =i t17
@@ -47,7 +47,7 @@ t26 := t25 +i t24
 t27 := t23 =i t26
 br B6
 label L6
-bgnstmt 17
+bgnstmt 22
 t28 := "%d\n"
 t29 := param 0
 t30 := @i t29
@@ -69,7 +69,7 @@ argi t28
 argi t44
 t45 := global printf
 t46 := fi t45 2
-bgnstmt 18
+bgnstmt 23
 t47 := "%d\n"
 t48 := param 0
 t49 := @i t48
@@ -94,7 +94,7 @@ argi t47
 argi t66
 t67 := global printf
 t68 := fi t67 2
-bgnstmt 19
+bgnstmt 24
 t69 := "%d\n"
 t70 := param 0
 t71 := @i t70
@@ -115,7 +115,7 @@ argi t69
 argi t84
 t85 := global printf
 t86 := fi t85 2
-bgnstmt 20
+bgnstmt 25
 t87 := "%d\n"
 t88 := param 0
 t89 := @i t88
@@ -138,7 +138,7 @@ argi t87
 argi t104
 t105 := global printf
 t106 := fi t105 2
-bgnstmt 21
+bgnstmt 26
 t107 := "%d\n"
 t108 := param 0
 t109 := @i t108
@@ -161,7 +161,7 @@ argi t107
 argi t124
 t125 := global printf
 t126 := fi t125 2
-bgnstmt 23
+bgnstmt 28
 t127 := local 2
 t128 := param 0
 t129 := @i t128
@@ -266,7 +266,7 @@ B1=L3
 B2=L8
 B3=L1
 B8=L2
-bgnstmt 33
+bgnstmt 38
 t219 := local 2
 t220 := @i t219
 t221 := 0
@@ -274,7 +274,7 @@ t222 := t220 <i t221
 bt t222 B9
 br B10
 label L9
-bgnstmt 34
+bgnstmt 39
 t223 := local 2
 t224 := @i t223
 t225 := -i t224
@@ -282,7 +282,7 @@ reti t225
 label L10
 B9=L9
 B10=L10
-bgnstmt 35
+bgnstmt 40
 t226 := local 2
 t227 := @i t226
 reti t227
@@ -291,21 +291,21 @@ func main
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 40
+bgnstmt 45
 t228 := local 0
 t229 := 123
 t230 := t228 =i t229
-bgnstmt 41
+bgnstmt 46
 t231 := local 1
 t232 := 42
 t233 := t231 =i t232
-bgnstmt 42
+bgnstmt 47
 t234 := local 2
 t235 := 666
 t236 := t234 =i t235
-bgnstmt 43
+bgnstmt 48
 label L11
-bgnstmt 44
+bgnstmt 49
 t237 := local 0
 t238 := local 0
 t239 := @i t238
@@ -319,13 +319,13 @@ argi t243
 t244 := global magic
 t245 := fi t244 3
 t246 := t237 =i t245
-bgnstmt 45
+bgnstmt 50
 t247 := local 1
 t248 := 1
 t249 := @i t247
 t250 := t249 +i t248
 t251 := t247 =i t250
-bgnstmt 46
+bgnstmt 51
 t252 := local 2
 t253 := 2
 t254 := @i t252

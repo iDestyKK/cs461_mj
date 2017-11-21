@@ -1,7 +1,7 @@
 func add
 formal 4
 formal 4
-bgnstmt 6
+bgnstmt 9
 t1 := param 0
 t2 := @i t1
 t3 := param 1
@@ -12,7 +12,7 @@ fend
 func sub
 formal 4
 formal 4
-bgnstmt 10
+bgnstmt 13
 t6 := param 0
 t7 := @i t6
 t8 := param 1
@@ -22,7 +22,7 @@ reti t10
 fend
 func main
 localloc 4
-bgnstmt 15
+bgnstmt 18
 t11 := local 0
 t12 := 2
 t13 := 2
@@ -31,7 +31,7 @@ argi t13
 t14 := global add
 t15 := fi t14 2
 t16 := t11 =i t15
-bgnstmt 16
+bgnstmt 19
 t17 := local 0
 t18 := 1
 t19 := 2

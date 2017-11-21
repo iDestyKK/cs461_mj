@@ -3,19 +3,19 @@ localloc 4
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 7
+bgnstmt 11
 t1 := local 0
 t2 := 1
 t3 := t1 =i t2
-bgnstmt 8
+bgnstmt 12
 t4 := local 1
 t5 := 2
 t6 := t4 =i t5
-bgnstmt 9
+bgnstmt 13
 t7 := local 2
 t8 := 3
 t9 := t7 =i t8
-bgnstmt 11
+bgnstmt 15
 t10 := local 3
 t11 := 0
 t12 := t10 =i t11
@@ -41,7 +41,7 @@ t27 := t26 +i t25
 t28 := t24 =i t27
 br B3
 label L3
-bgnstmt 12
+bgnstmt 16
 t29 := local 0
 t30 := local 1
 t31 := @i t30
@@ -60,7 +60,7 @@ t43 := t36 &i t42
 t44 := @i t29
 t45 := t44 +i t43
 t46 := t29 =i t45
-bgnstmt 13
+bgnstmt 17
 t47 := local 1
 t48 := local 0
 t49 := @i t48
@@ -77,7 +77,7 @@ t59 := t53 *i t58
 t60 := @i t47
 t61 := t60 +i t59
 t62 := t47 =i t61
-bgnstmt 14
+bgnstmt 18
 t63 := local 2
 t64 := local 2
 t65 := @i t64
@@ -105,7 +105,7 @@ B1=L3
 B2=L4
 B3=L1
 B4=L2
-bgnstmt 17
+bgnstmt 21
 t84 := "%d %d %d\n"
 t85 := local 0
 t86 := @i t85

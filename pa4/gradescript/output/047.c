@@ -1,17 +1,17 @@
 func main
 localloc 4
 localloc 4
-bgnstmt 7
+bgnstmt 11
 t1 := local 0
 t2 := 0
 t3 := t1 =i t2
-bgnstmt 8
+bgnstmt 12
 t4 := local 1
 t5 := 10
 t6 := t4 =i t5
-bgnstmt 10
+bgnstmt 14
 label L1
-bgnstmt 11
+bgnstmt 15
 t7 := local 0
 t8 := 1
 t9 := @i t7

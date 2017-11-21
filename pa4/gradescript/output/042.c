@@ -2,7 +2,7 @@ func main
 localloc 4
 localloc 4
 localloc 4
-bgnstmt 11
+bgnstmt 15
 t1 := local 0
 t2 := 0
 t3 := t1 =i t2
@@ -21,7 +21,7 @@ t11 := t10 +i t9
 t12 := t8 =i t11
 br B3
 label L3
-bgnstmt 14
+bgnstmt 18
 t13 := local 1
 t14 := 0
 t15 := t13 =i t14
@@ -40,7 +40,7 @@ t23 := t22 +i t21
 t24 := t20 =i t23
 br B6
 label L6
-bgnstmt 15
+bgnstmt 19
 t25 := "%d, %d\n"
 t26 := local 0
 t27 := @i t26
@@ -57,7 +57,7 @@ B4=L6
 B5=L7
 B6=L4
 B7=L5
-bgnstmt 19
+bgnstmt 23
 t32 := local 1
 t33 := 0
 t34 := t32 =i t33
@@ -76,7 +76,7 @@ t42 := t41 +i t40
 t43 := t39 =i t42
 br B10
 label L10
-bgnstmt 20
+bgnstmt 24
 t44 := "%d + %d = %d\n"
 t45 := local 0
 t46 := @i t45
@@ -99,7 +99,7 @@ B8=L10
 B9=L11
 B10=L8
 B11=L9
-bgnstmt 24
+bgnstmt 28
 t56 := local 1
 t57 := 0
 t58 := t56 =i t57
@@ -118,7 +118,7 @@ t66 := t65 +i t64
 t67 := t63 =i t66
 br B14
 label L14
-bgnstmt 25
+bgnstmt 29
 t68 := "%d + %d = %d\n"
 t69 := local 0
 t70 := @i t69
@@ -141,7 +141,7 @@ B12=L14
 B13=L15
 B14=L12
 B15=L13
-bgnstmt 29
+bgnstmt 33
 t80 := local 1
 t81 := 0
 t82 := t80 =i t81
@@ -160,7 +160,7 @@ t90 := t89 +i t88
 t91 := t87 =i t90
 br B18
 label L18
-bgnstmt 31
+bgnstmt 35
 t92 := local 2
 t93 := 0
 t94 := t92 =i t93
@@ -180,7 +180,7 @@ t103 := t102 +i t101
 t104 := t100 =i t103
 br B21
 label L21
-bgnstmt 32
+bgnstmt 36
 t105 := "%d * %d + %d = %d\n"
 t106 := local 0
 t107 := @i t106

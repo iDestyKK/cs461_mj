@@ -52,8 +52,12 @@ for i in "gradescript/input/"*".c"; do
 	fname=$(printf "%03d.c" $c)
 	let "c++"
 
-	str=$(printf "(%*d/%*d) Checking \"%s\"..." $s $c $s $num $fname)
-	printf "%-48s" "$str"
+	# Get the name of the test case
+	scrname=$(cat "$i" | head -n 2 | tail -n 1 | cut -c 4- | sed 's/ (\(.*Brutal\))//')
+
+	# str=$(printf "(%*d/%*d) Checking \"%s\"..." $s $c $s $num $fname)
+	str=$(printf "(%*d/%*d) Check %s \"%s\"..." $s $c $s $num $fname "$scrname")
+	printf "%-72s" "$str"
 
 	# Run in an isolated instance of bash (catches segfaults and other errors)
 	bash -c "./$exec < \"$i\" > __output.c 2> __eoutput.c" > /dev/null 2> /dev/null
@@ -61,7 +65,9 @@ for i in "gradescript/input/"*".c"; do
 	diff "__output.c" "gradescript/output/$fname" 2> /dev/null > /dev/null
 	if [ $? -ne 0 ]; then
 		printf "[${red}FAILED${normal}]\n"
-		vimdiff "__output.c" "gradescript/output/$fname"
+
+		# Uncomment if you want to be pissed off
+		#vimdiff "__output.c" "gradescript/output/$fname"
 	else
 		printf "[${green}PASSED${normal}]\n"
 		let "correct++"

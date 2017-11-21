@@ -494,7 +494,7 @@ void dodo(int m1, int m2, struct sem_rec *e, int m3) {
 		}
 	}
 
-	leaveblock();
+	endloopscope(0);
 }
 
 /*
@@ -559,7 +559,7 @@ void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
 		}
 	}
 
-	leaveblock();
+	endloopscope(0);
 }
 
 /*
@@ -767,7 +767,7 @@ void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
 		}
 	}
 
-	leaveblock();
+	endloopscope(0);
 }
 
 /*
@@ -873,7 +873,12 @@ void ftail() {
 		return;
 	#endif
 
-	printf("fend\n");
+	printf(
+		#ifdef FUNC_LABEL
+			"[FTAIL  ] "
+		#endif
+		"fend\n"
+	);
 	leaveblock();
 
 }
